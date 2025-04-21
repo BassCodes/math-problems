@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+  
+<html lang="en">
+  <head>
+    <title>Django blog</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      window.MathJax = {
+  tex: {
+    inlineMath: [ ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    ignoreHtmlClass: ".*",
+    processHtmlClass: "arithmatex"
+  }
+};
+    </script>
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li>
+          <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li>
+          <a href="{% url 'problem_list' %}">Problems</a>
+        </li>
+        <!-- <li> -->
+          <!-- <a href="{% url 'about' %}">About</a> -->
+        <!-- </li> -->
+        <li>
+          <a href="{% url 'source_list'%}">Sources</a>
+        </li>
+      </ul>
+    </nav>
+      {% block content %} {% endblock content %}
+    </body>
+</html>

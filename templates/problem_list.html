@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+{% load markdown_extras %}
+{% load static %}
+
+<header>
+    <h1 id="page-title">
+       Problems
+    </h1>
+</header>
+
+
+<div id="sidebar" class="left">
+    <div class="flex-right">
+        <div id="sidebar-search">
+
+            <div class="search-databox" data-type="source">
+                <h2>Sources</h2>
+                <input type="search" name="" id="">
+                <ul>
+                    {% for s in sources %}
+                    <li data-id="{{s.pk}}"  title="{{s.name}}"> 
+                        <input type="checkbox" {% if s.pk in sources_active %}checked{% endif %} name="{{s.name}}" id="source{{s.pk}}">
+                        <label for="source{{s.pk}}">
+                            {% if s.shortname %}{{ s.shortname  }} 
+                            {% else %}{{ s.name  }}
+                            {% endif %}
+                        </span>
+                        <span id="count">
+<!-- TODO problem count -->
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <input type="checkbox" checked name="Show Source" id="show_source">
+            <label for="show_source">Show Source</label>
+        </div>
+    </div>
+</div>
+
+</div>
+
+{% regroup problems by source as grouped_problems  %}
+
+
+<main>
+    {% for source,problemos in grouped_problems %}
+    
+    <h2 id="source-name">{{ source.name }}</h2>
+    
+    <ul class="problem-list">
+    {% for problem in problemos %}
+        <li class="problem-list-problem">
+            <a href="{{ problem.get_absolute_url }}">
+                {% if problem.number %}
+                <div id="problem-number">
+                    {{ problem.number }}.
+                </div>
+                {% endif %}
+                <div id="problem-statement">
+                    {{ problem.problem_text | markdown | safe }}
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+        {% endfor %}
+</main>
+
+<script src="{% static 'problemlist.js' %}"></script>
+
+{% endblock content %}
+

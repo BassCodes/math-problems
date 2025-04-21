@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% load markdown_extras %}
+
+<header>
+    <h1 id="page-title">
+       Sources
+    </h1>
+</header>
+
+
+
+
+
+{% regroup source_list by parent as grouped_sources  %}
+<main>
+    <ul>
+        {% for source_group,sources in grouped_sources %}
+        <h2>
+            {% if source_group %}
+                {{source_group}} - <a href="{{ source_group.get_absolute_url}}">details</a>
+            {% else %}
+                Other
+            {% endif %}
+        </h2>
+
+        {% for source in sources %}
+        <li>
+            <a href="{{ source.get_absolute_url }}">
+                {{ source.name }}
+            </a>
+        </li>
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</main>
+{% endblock content %}
+

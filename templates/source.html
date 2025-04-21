@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block content %}
+{% load markdown_extras %}
+
+<header>
+    <h1 id="page-title">
+        {{source.name}}
+    </h1>
+</header>
+
+
+<main>
+    <!-- TODO: Check null -->
+    <p><a href="{{source.parent.get_absolute_url}}">Parent: {{source.parent}}</a></p>
+    <p><a href="{{source.url}}">URL</a></p>
+
+    <ol>
+        {% for problem in source.problems.all %}
+        <li value="{{problem.number}}" >
+            <a href="{{problem.get_absolute_url}}">
+                {{ problem.problem_text | markdown | safe}}
+
+            </a>
+        </li>
+            
+        {% endfor %}
+    </ol>
+</main>
+
+{%endblock%}

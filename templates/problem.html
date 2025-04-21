@@ -1,0 +1,105 @@
+{% extends "base.html" %} {% block content %}
+{% load markdown_extras %}
+
+
+
+
+
+    <header>
+        
+            <h1 id="problem-id-text">
+                {{problem.source.name}}
+            </h1>
+            <div id="problem-source-box">
+                    {% if problem.source.subtitle %}
+                    <div id="problem-source-subtitle">
+                        {{ problem.source.subtitle }}
+                    </div>
+                    {% endif %}
+                    <div id="problem-number">
+                        {% if problem.number %}
+                            Problem &numero;
+                          {{problem.number}}.
+                        {% endif %}
+                </div>
+            </div>
+        
+    </header>
+
+    <main>
+        <h1>Problem Statement</h1>
+        
+        {{ problem.problem_text | markdown | safe  }}
+        
+        <h2>Solution</h2>
+        
+        {{ problem.solution_text | markdown | safe  }}
+        
+        <h2>Answer</h2>
+        
+        {{ problem.answer_text | markdown | safe  }}
+    </main>
+    
+<div id="sidebar" class="left">
+    <div class="flex-right">
+    <div id="sidebar-meta-container">
+
+
+       
+    <div id="meta-sidebar-title">
+        From: <a href="{{ problem.source.get_absolute_url }}">Source</a>
+    </div>
+
+    <ol id="meta-source-problem-list">
+        {% for p in problem.get_problems_of_same_source %}
+
+        <li value="{{p.number}}"{% if p.number == problem.number %}id="meta-current-problem-no"{% endif %}>
+        <a href="{{ p.get_absolute_url }}" {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
+        </li> 
+        {% endfor %}
+    </ol>
+    <a href="{{ problem.get_prev.get_absolute_url}}" {%if problem.get_prev.get_absolute_url is None%}inert{%endif%}>Previous</a>
+    <a href="{{ problem.get_next.get_absolute_url}}" {%if problem.get_next.get_absolute_url is None%}inert{%endif%}>Next</a>
+
+    <hr>
+
+    <div id="meta-sidebar-title">
+        {% if problem.categories.all|length != 1%}
+        Categories:
+        {% else %}
+        Category:
+        {% endif %}
+    </div>
+
+
+    <ul id="meta-problem-categories">
+        {% for category in problem.categories.all %}
+        <li>
+            {{ category }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <div id="meta-sidebar-title">
+        {% if problem.techniques.all|length != 1%}
+        Techniques:
+        {% else %}
+        Technique:
+        {% endif %}
+    </div>
+    <ul id="meta-problem-techniques">
+        {% for technique in problem.techniques.all %}
+        <li>
+            {{ technique }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+</div>
+
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,221 @@
+/* Reset default styles */
+/* prettier-ignore */
+html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  font-size: 120%;
+  font-family: Palatino Linotype, Palatino LT STD, bitstream charter, charter,
+    Georgia, serif;
+}
+
+body {
+  height: 100%;
+  background-color: #fbfbfb;
+}
+
+/* GRID LAYOUT */
+/* Entire page layout is blocked out using CSS grid. */
+/* This is to avoid ugly css hacks*/
+body {
+  display: grid;
+  grid-template-columns: 1fr calc(650px + 10em) 1fr;
+  grid-template-rows: repeat(5, min-content);
+  row-gap: 0.1em;
+  column-gap: 1.2em;
+  grid-template-areas:
+    ".      .        .    "
+    "nav    header   .    "
+    ".      l-over   .    "
+    "left   main     right"
+    "left   r-over   right";
+}
+
+main {
+  width: 100%;
+  grid-area: main;
+}
+
+nav {
+  grid-area: nav;
+}
+
+#sidebar.right {
+  width: 100%;
+  grid-area: right;
+}
+#sidebar.left {
+  justify-content: right;
+  grid-area: left;
+}
+
+header {
+  width: 100%;
+  grid-area: header;
+  align-self: baseline;
+}
+
+/* END GRID LAYOUT */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+nav ul {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  list-style: none;
+  gap: 1em;
+  li {
+    background-color: #ffffff;
+    border: 1px solid lightgray;
+    padding: 0.5em;
+  }
+  a {
+    color: inherit;
+    text-decoration-style: dotted;
+    /* TODO need a better font */
+    /* font-variant: small-caps; */
+  }
+}
+
+h1,
+h2,
+h3 {
+  font-size: x-large;
+  font-weight: 500;
+  margin-block: 0.5em;
+
+  text-decoration: dashed;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.2em;
+
+  h1 {
+    margin: 0;
+    font-style: italic;
+  }
+  #problem-source-box {
+    text-align: right;
+    color: gray;
+  }
+}
+
+main {
+  border: 1px solid black;
+  background-color: #fefefe;
+  padding-block: 1em;
+  padding-inline: 5em;
+}
+
+mjx-container {
+  overflow-x: scroll;
+  /* Exponents seem to be cut off by 1 pixel without this. Don't ask me why. I got tired of googling. */
+  padding: 1px !important;
+}
+
+#sidebar-meta-container {
+  width: 15em;
+  line-break: anywhere;
+  word-break: break-all;
+  border: 1px solid gray;
+  padding-block: 1em;
+  padding-inline: 0.5em;
+  #meta-source-problem-list {
+    list-style: none;
+  }
+  #meta-source-problem-list #meta-current-problem-no::before {
+    content: "–";
+  }
+}
+
+ul {
+  list-style-position: inside;
+}
+
+a[inert] {
+  color: gray;
+}
+
+.flex-right {
+  display: flex;
+  justify-content: right;
+}
+
+#sidebar-search {
+  max-width: 20em;
+  min-width: 10em;
+  width: 100%;
+  line-break: anywhere;
+  word-break: break-all;
+  border: 1px solid gray;
+  padding-block: 1em;
+  padding-inline: 0.5em;
+}
+
+.search-databox {
+  input[type="search"] {
+    width: 100%;
+    padding: 0 8px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom: none;
+    min-height: 36px;
+    background-color: #ffffff;
+    border: 1px solid rgba(36, 28, 21, 0.3);
+    font-weight: normal;
+    /* line-height: 18px; */
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-flow: column wrap;
+    flex-direction: row;
+    background-color: rgb(235, 235, 235);
+    border-radius: 0.4em;
+  }
+  li {
+    background-color: rgb(191, 216, 250);
+    /* border-radius: 0.4em; */
+    margin: 0.3em;
+    padding-inline: 0.41em;
+    /* margin-block: 20px; */
+  }
+  li * {
+    display: inline !important;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+ul.problem-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+  a {
+    color: inherit;
+    flex-direction: row;
+    text-decoration: inherit;
+    display: flex;
+    gap: 0.25em;
+  }
+  #problem-statement {
+    flex-grow: 1;
+  }
+}
