@@ -34,8 +34,6 @@ class Source(models.Model):
     publish_date = models.DateField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
 
-    numbered_problems = models.BooleanField(default=True)
-
     def __str__(self):
         return self.name[:50] + " " + str(self.publish_date)
 
@@ -45,7 +43,7 @@ class Source(models.Model):
 
 class Category(models.Model):
     name = models.TextField()
-    description_text = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -56,7 +54,7 @@ class Category(models.Model):
 
 class Technique(models.Model):
     name = models.TextField()
-    description_text = models.TextField(blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name[:50]
@@ -75,10 +73,11 @@ class Problem(models.Model):
     source = models.ForeignKey(
         Source, on_delete=models.CASCADE, related_name="problems"
     )
-    number = models.PositiveSmallIntegerField(blank=True, null=True)
+    number = models.PositiveSmallIntegerField()
     categories = models.ManyToManyField(Category, blank=True, related_name="problems")
     techniques = models.ManyToManyField(Technique, blank=True, related_name="problems")
 
+    # Two problems can not share the same problem number and the same source
     class Meta:
         unique_together = ("source", "number")
 

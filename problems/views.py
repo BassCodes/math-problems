@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Q
+from django.db.models import Q, Count, Subquery
 
 from .models import Problem, Category, Technique, Source, SourceGroup
 
@@ -30,7 +30,6 @@ class ProblemListView(ListView):
 def problem_list(request):
     print(request.GET)
     sources_query_request = json.loads(request.GET.get("sou", "[]"))
-
     final_query = Q()
 
     tq = Q()
@@ -40,10 +39,23 @@ def problem_list(request):
 
     problems = Problem.objects.all().filter(final_query)
 
+    # Todo: this doesn't work at all right. figure out what the hell you were doing.
+    sources = (
+        Source.objects.filter(
+            id__in=Subquery(
+                problems.values("source__id")
+                .annotate(count=Count("source__id"))
+                .values("id")
+            )
+        )
+        .annotate(count=Count("problems"))
+        .order_by("shortname", "name")
+    )
+
     context = {}
     context["sources_active"] = sources_query_request
     context["problems"] = problems
-    context["sources"] = Source.objects.all().order_by("shortname", "name")
+    context["sources"] = sources
     context["categories"] = Category.objects.all()
     context["techniques"] = Technique.objects.all()
     return render(request, "problem_list.html", context)
