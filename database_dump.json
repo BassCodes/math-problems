@@ -1,0 +1,268 @@
+[
+    {
+        "model": "problems.sourcegroup",
+        "pk": 1,
+        "fields": {
+            "name": "University of North Georgia Mathematics Tournament",
+            "description": "",
+            "url": "https://ung.edu/mathematics/tournament/index.php"
+        }
+    },
+    {
+        "model": "problems.sourcegroup",
+        "pk": 2,
+        "fields": {
+            "name": "NCMATYC Mathematics Competition",
+            "description": "Many problems can be found here https://drive.google.com/drive/folders/1AJ887ZjYl4nC7X_XbJ5j_zskftANGRIB",
+            "url": "http://ncmatyc.matyc.org"
+        }
+    },
+    {
+        "model": "problems.source",
+        "pk": 1,
+        "fields": {
+            "name": "26th University of North Georgia Mathematics Tournament",
+            "shortname": "26th UNG Tournament",
+            "subtitle": "Calculus Test",
+            "parent": 1,
+            "description": "",
+            "publish_date": "2023-04-15",
+            "url": "https://ung.edu/mathematics/_uploads/files/math-tournament/2023-morning-test.pdf"
+        }
+    },
+    {
+        "model": "problems.source",
+        "pk": 2,
+        "fields": {
+            "name": "13th NCMATYC Mathematics Competition",
+            "shortname": "13th NCMATYC Competition",
+            "subtitle": "Calculus Test",
+            "parent": 2,
+            "description": "",
+            "publish_date": "2024-11-02",
+            "url": null
+        }
+    },
+    {
+        "model": "problems.source",
+        "pk": 3,
+        "fields": {
+            "name": "Assorted",
+            "shortname": null,
+            "subtitle": "",
+            "parent": null,
+            "description": null,
+            "publish_date": null,
+            "url": null
+        }
+    },
+    {
+        "model": "problems.source",
+        "pk": 4,
+        "fields": {
+            "name": "28th University of North Georgia Mathematics Tournament",
+            "shortname": "28th UNG Tournament",
+            "subtitle": "Calculus Test",
+            "parent": 1,
+            "description": "",
+            "publish_date": "2025-04-05",
+            "url": null
+        }
+    },
+    {
+        "model": "problems.source",
+        "pk": 5,
+        "fields": {
+            "name": "8th NCMATYC Mathematics Competition",
+            "shortname": "8th NCMATYC Competition",
+            "subtitle": "Calculus Test",
+            "parent": 2,
+            "description": "",
+            "publish_date": "2018-11-10",
+            "url": null
+        }
+    },
+    {
+        "model": "problems.source",
+        "pk": 6,
+        "fields": {
+            "name": "15th University of North Georgia Mathematics Tournament",
+            "shortname": "15th UNG Tournament",
+            "subtitle": "Calculus Test",
+            "parent": 1,
+            "description": "",
+            "publish_date": "2009-04-09",
+            "url": "https://ung.edu/mathematics/_uploads/files/math-tournament/questions/2009/math-tournament-2009-morning-questions-_a.pdf"
+        }
+    },
+    {
+        "model": "problems.category",
+        "pk": 1,
+        "fields": {
+            "name": "Calculus",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.category",
+        "pk": 2,
+        "fields": {
+            "name": "Algebra",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.category",
+        "pk": 3,
+        "fields": {
+            "name": "Number Theory",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.category",
+        "pk": 4,
+        "fields": {
+            "name": "Combinatorics",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.category",
+        "pk": 5,
+        "fields": {
+            "name": "Geometry",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.category",
+        "pk": 6,
+        "fields": {
+            "name": "Trigonometry",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.technique",
+        "pk": 1,
+        "fields": {
+            "name": "Integration from zero to zero",
+            "description": "An integral from lower bound 0 to upper bound 0 will naturally have a final result of zero (assuming it is defined)"
+        }
+    },
+    {
+        "model": "problems.technique",
+        "pk": 2,
+        "fields": {
+            "name": "L'Hopital's Rule",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.technique",
+        "pk": 3,
+        "fields": {
+            "name": "Fundamental Theorem Of Calculus",
+            "description": ""
+        }
+    },
+    {
+        "model": "problems.problem",
+        "pk": 1,
+        "fields": {
+            "problem_text": "Compute limit\r\n\r\n$$\r\n\\lim_{x\\to -\\infty} \\frac{x^2(\\sin{x}+\\cos^3{x})}{(x^2+1)(x-3)}\r\n$$",
+            "solution_text": "Notice\r\n\r\n$$\r\n-2 \\leq (\\sin{x}+\\cos^3{x}) \\leq 2\r\n$$\r\n\r\nThus, the only part of the limit which grows is the polynomial part.\r\nConsider only the polynomial part\r\n\r\n$$\r\n\\lim_{x\\to -\\infty} \\frac{x^2}{(x^2+1)(x-3)}\r\n$$\r\n\r\nNotice the denominator has a 3rd order polynomial while the numerator only has a 2nd order. Limit will approach zero.",
+            "answer_text": "$$\r\n\\boxed{\r\n    0\r\n}\r\n$$",
+            "contributor": [
+                "admin"
+            ],
+            "source": 1,
+            "number": 1,
+            "categories": [
+                1
+            ],
+            "techniques": []
+        }
+    },
+    {
+        "model": "problems.problem",
+        "pk": 2,
+        "fields": {
+            "problem_text": "Compute limit\r\n\r\n$$\r\n\\lim_{x\\to0} \\left(\\frac{\\lvert x\\rvert}{x}-5e^x+6  \\right)\r\n$$",
+            "solution_text": "todo",
+            "answer_text": "todo",
+            "contributor": [
+                "admin"
+            ],
+            "source": 1,
+            "number": 3,
+            "categories": [
+                1
+            ],
+            "techniques": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "problems.problem",
+        "pk": 4,
+        "fields": {
+            "problem_text": "Compute limit\r\n\r\n$$\r\n\\lim_{h\\to0} \\frac{f(x+2h)-f(x-2h)}{h}\r\n$$\r\n\r\nGiven $f(x)$ is differentiable at $x$",
+            "solution_text": "Apply L'Hopital's rule\r\n\r\n$$\r\n\\lim_{h\\to 0} 2f'(x+2h)+2f'(x-2h)\r\n$$\r\n\r\nEvaluate limit\r\n\r\n$$\r\n 4f'(x)\r\n$$",
+            "answer_text": "$$\r\n\\boxed{4f'(x)}\r\n$$",
+            "contributor": [
+                "admin"
+            ],
+            "source": 2,
+            "number": 39,
+            "categories": [
+                1
+            ],
+            "techniques": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "problems.problem",
+        "pk": 5,
+        "fields": {
+            "problem_text": "Compute limit\r\n\r\n$$\r\n\\lim_{x\\to\\infty} \\left(\\frac{1}{x^2}\\int_{1}^{x}t^2\\,dt\\right)\r\n$$",
+            "solution_text": "Restate limit as fraction\r\n\r\n$$\r\n\\lim_{x\\to\\infty} \\frac{\\int_{1}^{x}t^2\\,dt}{x^2}\r\n$$\r\n\r\nApply L'Hopital's rule\r\n\r\n$$\r\n\\lim_{x\\to\\infty} \\frac{\\frac{d}{dx}\\int_{1}^{x}t^2dt}{2x}\r\n$$\r\n\r\nIntegrate\r\n\r\n$$\r\n\\lim_{x\\to\\infty} \\frac{\\frac{d}{dx}\\left(\\frac{x^3}{3}-\\frac{1}{3}\\right)}{2x}\r\n$$\r\n\r\nSimplify\r\n\r\n$$\r\n\\lim_{x\\to\\infty} \\frac{x}{2}\r\n$$\r\n\r\nDiverges to $\\infty$",
+            "answer_text": "$$\r\n\\infty\r\n$$",
+            "contributor": [
+                "admin"
+            ],
+            "source": 4,
+            "number": 26,
+            "categories": [
+                1
+            ],
+            "techniques": [
+                2,
+                3
+            ]
+        }
+    },
+    {
+        "model": "problems.problem",
+        "pk": 6,
+        "fields": {
+            "problem_text": "A particle is moving in the first quadrant downward on the hyperbola $\\frac{x^2}{16}-\\frac{y^2}{64}=1$.\r\n\r\nIt leaves the hyperbolic path at the point $(5,6)$ and continues along a straight line. At what point does the particle cross the $x$-axis?",
+            "solution_text": "TODO",
+            "answer_text": "$$\r\n\\boxed{\\left(\r\n\\frac{16}{5},0\r\n\\right)}\r\n$$",
+            "contributor": [
+                "admin"
+            ],
+            "source": 6,
+            "number": 6,
+            "categories": [
+                1,
+                2
+            ],
+            "techniques": []
+        }
+    }
+]
