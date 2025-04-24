@@ -1,0 +1,42 @@
+/* STYLE SHEET FOR PROBLEM LISTS */
+/* USED IN: problem_list, source_detail */
+
+#problem-list {
+  & > ol,
+  & > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85em;
+    & > li {
+      padding-left: 1em;
+      border-left: 1px solid lightgray;
+      border-block: 1px solid rgb(250, 250, 250);
+      min-height: 5ch;
+    }
+    & > li::marker {
+      color: gray;
+      font-size: 0.8em;
+    }
+  }
+
+  p {
+    margin: 0;
+    display: inline;
+  }
+  a {
+    text-decoration: none;
+  }
+  mjx-container[display] {
+    margin: 0.1em;
+  }
+  * + p {
+    margin-top: 0.1em;
+  }
+
+  h2 {
+    color: #494949;
+    font-size: 0.9em;
+    margin-block: 1em;
+    text-align: center;
+  }
+}

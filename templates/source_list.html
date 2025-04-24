@@ -10,9 +10,6 @@
 </header>
 
 
-
-
-
 {% regroup source_list by parent as grouped_sources  %}
 <main>
     <ul>
@@ -28,7 +25,7 @@
         {% for source in sources %}
         <li>
             <a href="{{ source.get_absolute_url }}">
-                {{ source.name }}
+                {{ source.full_name }}
             </a>
         </li>
         {% endfor %}

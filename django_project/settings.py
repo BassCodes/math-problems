@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-k3_4k%!rnr=mhomi$ycvyr591dw$vt^kt)fpbp@b)15*ew#dmr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     "livereload",
     "django.contrib.staticfiles",
     # Local
+    "accounts",
     "problems",
+    "editor",
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,10 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Auth
+
+AUTH_USER_MODEL = "accounts.CustomUser"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "logout-page"

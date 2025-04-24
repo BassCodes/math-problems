@@ -1,68 +1,85 @@
 {% extends "base.html" %} {% block content %}
 {% load markdown_extras %}
 
+<header>
+    <h1 id="page-title">{{problem.source.name}}</h1>
+    <div id="problem-source-box">
+        {% if problem.source.subtitle %}
+        <div id="problem-source-subtitle">{{ problem.source.subtitle }}</div>
+        {% endif %}
+        <div id="problem-number">
+            {% if problem.number %}
+                Problem &numero;
+                {{problem.number}}.
+            {% endif %}
+        </div>
+    </div>
+</header>
 
+<main>
+    {% if user.is_authenticated %}
+    <span id="problem-edit-box">
+        <span>
+            <a href="{% url 'edit_problem' pk=problem.pk %}" title="Edit">✐</a>
+        </span>
+    </span>
+    {% endif %}
 
+    {% if not problem.is_published %}
+    <div id="unpublished-problem-warning">
+        <div>
+            This is a draft which is only visible to logged-in users
 
+        </div>
+    </div>
+    {% endif %}
 
-    <header>
-        
-            <h1 id="problem-id-text">
-                {{problem.source.name}}
-            </h1>
-            <div id="problem-source-box">
-                    {% if problem.source.subtitle %}
-                    <div id="problem-source-subtitle">
-                        {{ problem.source.subtitle }}
-                    </div>
-                    {% endif %}
-                    <div id="problem-number">
-                        {% if problem.number %}
-                            Problem &numero;
-                          {{problem.number}}.
-                        {% endif %}
-                </div>
-            </div>
-        
-    </header>
+    <h1>Problem Statement</h1>    
+    {{ problem.problem_text | markdown | safe  }}
+    
+    <details>
+    <summary><h2>Solution</h2></summary>    
+    {{ problem.solution_text | markdown | safe  }}
+    </details>
 
-    <main>
-        <h1>Problem Statement</h1>
-        
-        {{ problem.problem_text | markdown | safe  }}
-        
-        <h2>Solution</h2>
-        
-        {{ problem.solution_text | markdown | safe  }}
-        
-        <h2>Answer</h2>
-        
-        {{ problem.answer_text | markdown | safe  }}
-    </main>
+    <details>
+    <summary><h2>Answer</h2></summary>    
+    {{ problem.answer_text | markdown | safe  }}
+    </details>
+</main>
+   
     
 <div id="sidebar" class="left">
     <div class="flex-right">
     <div id="sidebar-meta-container">
 
-
-       
+    {% if problem.source.pk == problem.source.get_default_pk %}
+    
+    {% else %}
     <div id="meta-sidebar-title">
-        From: <a href="{{ problem.source.get_absolute_url }}">Source</a>
+        Other Problems
     </div>
 
     <ol id="meta-source-problem-list">
-        {% for p in problem.get_problems_of_same_source %}
+        {% for p in problem.source.get_problems %}
 
         <li value="{{p.number}}"{% if p.number == problem.number %}id="meta-current-problem-no"{% endif %}>
         <a href="{{ p.get_absolute_url }}" {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
         </li> 
         {% endfor %}
     </ol>
-    <a href="{{ problem.get_prev.get_absolute_url}}" {%if problem.get_prev.get_absolute_url is None%}inert{%endif%}>Previous</a>
-    <a href="{{ problem.get_next.get_absolute_url}}" {%if problem.get_next.get_absolute_url is None%}inert{%endif%}>Next</a>
+    <div>
+    <a href="{{ problem.source.get_absolute_url }}">View Source</a>
+    </div>
 
-    <hr>
+    <div id="next-prev-button-box">
+        <a href="{{ problem.get_prev.get_absolute_url}}" class="next button" {%if problem.get_prev.get_absolute_url is None%}inert{%endif%}>Previous</a>
+        <a href="{{ problem.get_next.get_absolute_url}}" class="prev button" {%if problem.get_next.get_absolute_url is None%}inert{%endif%}>Next</a>
+    </div>
+    {% endif %}
+       
 
+    {% if problem.categories.all|length != 0%}
     <div id="meta-sidebar-title">
         {% if problem.categories.all|length != 1%}
         Categories:
@@ -79,9 +96,9 @@
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
 
-    <hr>
-
+    {% if problem.techniques.all|length != 0%}
     <div id="meta-sidebar-title">
         {% if problem.techniques.all|length != 1%}
         Techniques:
@@ -96,6 +113,8 @@
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
+
 </div>
 </div>
 

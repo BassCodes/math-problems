@@ -1,0 +1,51 @@
+/* EDITOR Form styling */
+/* Used in: create_problem, edit_problem */
+
+#source-number-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+  #number-box {
+    input {
+      max-width: 10ch;
+      min-width: unset;
+    }
+  }
+}
+
+#problem-form {
+  max-width: 100%;
+  * {
+    max-width: 100%;
+  }
+}
+.form-box {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#problem-box,
+#answer-box,
+#solution-box {
+  textarea {
+    min-width: 100%;
+    min-height: 15ch;
+  }
+}
+
+select {
+  font-size: 0.8em;
+  font-family: sans-serif;
+}
+.select2-results__options,
+.select2-selection__rendered {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+
+  font-size: 0.8em;
+}

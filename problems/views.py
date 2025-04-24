@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Q, Count, Subquery
-
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from .models import Problem, Category, Technique, Source, SourceGroup
-
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
+from django.shortcuts import redirect
 import json
 
 
@@ -11,59 +12,71 @@ class HomePageView(TemplateView):
     template_name = "home.html"
 
 
-class AboutPageView(TemplateView):
-    template_name = "about.html"
+def problem_list_view(request):
+    # Filters for source, category, and technique are sent in the url search
+    # parameter in the following format: "?sou=[1,2]&cat=[8,3]"
+    # where "sou" -> "source" and the list after the equals contains a list
+    # of ids for the respective model to filter by
+    try:
+        sources_query_request = json.loads(request.GET.get("sou", "[]"))
+        category_query_request = json.loads(request.GET.get("cat", "[]"))
+        technique_query_request = json.loads(request.GET.get("tec", "[]"))
+    except json.JSONDecodeError:
+        return redirect(problem_list_view)
 
-
-class ProblemListView(ListView):
-    model = Problem
-    template_name = "problem_list.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["sources"] = Source.objects.all().order_by("shortname", "name")
-        context["categories"] = Category.objects.all()
-        context["techniques"] = Technique.objects.all()
-        return context
-
-
-def problem_list(request):
-    print(request.GET)
-    sources_query_request = json.loads(request.GET.get("sou", "[]"))
+    # Create a Q-query object to contain filter
     final_query = Q()
 
+    # Add source filter to final query
+    # Sources are filtered by union, e.g. a source can pass the filter when it
+    # matches any one of the requested ids.
     tq = Q()
     for sid in sources_query_request:
         tq |= Q(source__exact=sid)
     final_query &= tq
 
-    problems = Problem.objects.all().filter(final_query)
+    # Add Category filter to final query
+    # Categories are filtered by intersection, e.g. a category can pass the filter when it
+    # matches *ALL* of the requested ids.
+    tq = Q()
+    for item in category_query_request:
+        tq |= ~Q(categories__id=item)
+    final_query &= ~tq
 
-    # Todo: this doesn't work at all right. figure out what the hell you were doing.
-    sources = (
-        Source.objects.filter(
-            id__in=Subquery(
-                problems.values("source__id")
-                .annotate(count=Count("source__id"))
-                .values("id")
-            )
-        )
-        .annotate(count=Count("problems"))
-        .order_by("shortname", "name")
-    )
+    # Add Technique filter to final query
+    # Techniques are filtered by intersection
+    tq = Q()
+    for item in technique_query_request:
+        tq |= ~Q(techniques__id=item)
+    final_query &= ~tq
+
+    # Filter problems
+    problems = Problem.objects.filter(final_query).distinct()
+
+    # FUTURE WORK: Only show categories and techniques which are within the
+    # filtered `problems` variable
 
     context = {}
     context["sources_active"] = sources_query_request
-    context["problems"] = problems
-    context["sources"] = sources
+    context["categories_active"] = category_query_request
+    context["techniques_active"] = technique_query_request
+    context["problems"] = problems.order_by("source", "number")
+    context["sources"] = Source.objects.all()
     context["categories"] = Category.objects.all()
     context["techniques"] = Technique.objects.all()
     return render(request, "problem_list.html", context)
 
 
-class ProblemDetailView(DetailView):
-    model = Problem
-    template_name = "problem.html"
+def problem_detail_view(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    if not problem.is_published() and not request.user.is_authenticated:
+        return HttpResponseForbidden(
+            "This problem is a draft. Only logged-in users can view it."
+        )
+
+    context = {}
+    context["problem"] = problem
+    return render(request, "problem.html", context)
 
 
 class SourceListView(ListView):
@@ -84,10 +97,3 @@ class SourceDetailView(DetailView):
 class SourceGroupDetailView(DetailView):
     model = SourceGroup
     template_name = "source_group.html"
-
-
-def source_detail(request):
-    sources = Source.objects.exclude(parent__isnull=False)
-    groups = SourceGroup.objects.all()
-    context = {"sources": sources, "groups": groups}
-    return render(request, "view_item.html", context)

@@ -1,3 +1,5 @@
+/* GLOBAL STYLE SHEET */
+
 /* Reset default styles */
 /* prettier-ignore */
 html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
@@ -19,6 +21,7 @@ html {
 body {
   height: 100%;
   background-color: #fbfbfb;
+  color: black;
 }
 
 /* GRID LAYOUT */
@@ -32,7 +35,7 @@ body {
   column-gap: 1.2em;
   grid-template-areas:
     ".      .        .    "
-    "nav    header   .    "
+    "nav    header   authbar"
     ".      l-over   .    "
     "left   main     right"
     "left   r-over   right";
@@ -62,28 +65,64 @@ header {
   align-self: baseline;
 }
 
+#authbar {
+  grid-area: authbar;
+}
+
 /* END GRID LAYOUT */
+
 nav {
   display: flex;
   align-items: center;
   justify-content: right;
-}
-nav ul {
-  display: flex;
-  justify-content: center;
-  /* align-items: center; */
-  list-style: none;
-  gap: 1em;
-  li {
-    background-color: #ffffff;
-    border: 1px solid lightgray;
-    padding: 0.5em;
+  ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 1em;
+    li {
+      background-color: #ffffff;
+      border: 1px solid lightgray;
+      padding: 0.5em;
+    }
   }
   a {
-    color: inherit;
+    color: black;
     text-decoration-style: dotted;
-    /* TODO need a better font */
+    /* FUTURE WORK: Better font with small caps would look nice here */
     /* font-variant: small-caps; */
+  }
+}
+#authbar {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  div {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    div {
+      background-color: #ffffff;
+      border: 1px solid lightgray;
+      padding: 0.5em;
+      color: black;
+    }
+  }
+  a {
+    text-decoration-style: dotted;
+    color: black;
+  }
+  button {
+    background: none !important;
+    padding: 0 !important;
+    border: none;
+
+    font-family: inherit;
+    font-size: inherit;
+    color: black;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    cursor: pointer;
   }
 }
 
@@ -126,6 +165,49 @@ mjx-container {
   padding: 1px !important;
 }
 
+ul {
+  list-style-position: inside;
+}
+
+p {
+  margin-bottom: 0.6em;
+  line-height: 1.55;
+}
+
+.muted {
+  color: gray;
+}
+
+a {
+  text-decoration-style: dotted;
+  color: black;
+}
+
+a[inert] {
+  color: gray;
+  text-decoration: none;
+}
+
+.flex-right {
+  display: flex;
+  justify-content: right;
+}
+
+.hidden {
+  display: none;
+}
+
+div#unpublished-problem-warning {
+  background-color: rgb(255, 255, 136);
+  padding-block: 2em;
+  text-align: center;
+  margin-inline: -5em;
+  border-block: 2px solid rgb(255, 247, 136);
+  div {
+    font-size: 1.5em;
+  }
+}
+
 #sidebar-meta-container {
   width: 15em;
   line-break: anywhere;
@@ -134,88 +216,73 @@ mjx-container {
   padding-block: 1em;
   padding-inline: 0.5em;
   #meta-source-problem-list {
-    list-style: none;
+    li {
+      list-style: disc;
+    }
+    #meta-current-problem-no {
+      list-style: circle;
+    }
+    margin-bottom: 0.3em;
   }
-  #meta-source-problem-list #meta-current-problem-no::before {
-    content: "–";
-  }
-}
-
-ul {
-  list-style-position: inside;
-}
-
-a[inert] {
-  color: gray;
-}
-
-.flex-right {
-  display: flex;
-  justify-content: right;
-}
-
-#sidebar-search {
-  max-width: 20em;
-  min-width: 10em;
-  width: 100%;
-  line-break: anywhere;
-  word-break: break-all;
-  border: 1px solid gray;
-  padding-block: 1em;
-  padding-inline: 0.5em;
-}
-
-.search-databox {
-  input[type="search"] {
-    width: 100%;
-    padding: 0 8px;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    border-bottom: none;
-    min-height: 36px;
-    background-color: #ffffff;
-    border: 1px solid rgba(36, 28, 21, 0.3);
-    font-weight: normal;
-    /* line-height: 18px; */
-  }
-
-  ul {
-    list-style: none;
+  #next-prev-button-box {
     display: flex;
-    flex-flow: column wrap;
-    flex-direction: row;
-    background-color: rgb(235, 235, 235);
-    border-radius: 0.4em;
+    justify-content: space-evenly;
+    margin-block: 0.5em;
+    margin-bottom: 0.6em;
+  }
+  #meta-sidebar-title {
+    font-size: 1.2em;
+    margin-bottom: 0.2em;
+  }
+
+  #meta-sidebar-title:is(* + #meta-sidebar-title) {
+    margin-block: 0.2em;
+  }
+
+  a.button {
+    min-width: 10ch;
   }
   li {
-    background-color: rgb(191, 216, 250);
-    /* border-radius: 0.4em; */
-    margin: 0.3em;
-    padding-inline: 0.41em;
-    /* margin-block: 20px; */
-  }
-  li * {
-    display: inline !important;
+    margin-left: 3ch;
+    list-style-position: outside;
+    list-style: circle;
   }
 }
 
-.hidden {
+a.button {
+  text-align: center;
+  padding: 0.8ch;
+  padding-inline: 1ch;
+  background-color: rgb(228, 228, 228);
+  border: 1px solid lightgray;
+  text-decoration-style: dotted;
+}
+a.button[inert] {
+  border: 1px solid white;
+}
+
+details:not([open]) summary h2::after {
+  content: "(click to reveal)";
+  font-size: 0.58em;
+  margin-inline-start: 1em;
+  color: gray;
+}
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
   display: none;
 }
 
-ul.problem-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  row-gap: 1em;
-  a {
-    color: inherit;
-    flex-direction: row;
-    text-decoration: inherit;
-    display: flex;
-    gap: 0.25em;
+#problem-edit-box {
+  position: absolute;
+  span {
+    position: relative;
+    right: 5em;
+    top: -1em;
   }
-  #problem-statement {
-    flex-grow: 1;
+  a {
+    font-size: 1.5em;
+    text-decoration: none;
   }
 }

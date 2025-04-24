@@ -7,11 +7,15 @@
 </header>
 
 <main>
-
-    {{ sourcegroup.description | markdown | safe }}
-
+    <h2>Description</h2>
+    {% if sourcegroup.description %}
+        {{ sourcegroup.description | markdown | safe }}
+    {% else %}
+        <p class="muted">
+            (this source group has no description)
+        </p>
+    {% endif %}
     <a href="{{sourcegroup.url}}">Source URL</a>
-    
     <ul>
         {% for source in sourcegroup.sources.all %}
         <li>

@@ -2,20 +2,16 @@ from django.urls import path
 
 from .views import (
     HomePageView,
-    AboutPageView,
-    ProblemListView,
-    ProblemDetailView,
+    problem_detail_view,
     SourceListView,
     SourceDetailView,
     SourceGroupDetailView,
-    problem_list,
+    problem_list_view,
 )
 
 urlpatterns = [
-    path("about/", AboutPageView.as_view(), name="about"),
-    path("problems/<int:pk>/", ProblemDetailView.as_view(), name="problem_detail"),
-    # path("problems/", ProblemListView.as_view(), name="problem_list"),
-    path("problems/", problem_list, name="problem_list"),
+    path("problems/<int:pk>/", problem_detail_view, name="problem_detail"),
+    path("problems/", problem_list_view, name="problem_list"),
     path(
         "sources/group/<int:pk>",
         SourceGroupDetailView.as_view(),

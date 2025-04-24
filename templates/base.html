@@ -3,17 +3,20 @@
   
 <html lang="en">
   <head>
-    <title>Django blog</title>
+    <title>Math Problem Site</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
       window.MathJax = {
+      loader: {load: ['[tex]/cancel']},
   tex: {
+
     inlineMath: [ ["\\(","\\)"] ],
     displayMath: [ ["\\[","\\]"] ],
     processEscapes: true,
-    processEnvironments: true
+    processEnvironments: true,
+    packages: {'[+]': ['cancel']}
   },
   options: {
     ignoreHtmlClass: ".*",
@@ -21,9 +24,32 @@
   }
 };
     </script>
+    {% block pagehead %} {% endblock pagehead %}
   </head>
 
   <body>
+    <div id="authbar">
+      <div>
+        {% if user.is_authenticated %}
+        <div>  
+          Logged in: {{ user.username }}
+        </div>
+        <div>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Log Out</button>
+        </form>
+        </div>
+        <div>
+          <a href="{% url 'create_problem' %}">+</a>
+        </div>
+        {% else %}
+        <div>
+          <a href="{% url 'login' %}">Log In</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
     <nav>
       <ul>
         <li>
@@ -32,9 +58,6 @@
         <li>
           <a href="{% url 'problem_list' %}">Problems</a>
         </li>
-        <!-- <li> -->
-          <!-- <a href="{% url 'about' %}">About</a> -->
-        <!-- </li> -->
         <li>
           <a href="{% url 'source_list'%}">Sources</a>
         </li>
