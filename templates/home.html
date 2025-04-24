@@ -1,10 +1,17 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block pagehead %}
+<link rel="stylesheet" href="{% static 'problemlist.css' %}">
+{% endblock pagehead %}
+
+{% block content %}
 {% load markdown_extras %}
 
 
 <header>
     <h1 id="page-title">
-       Problem Site Name
+       Math Problem Site
     </h1>
 </header>
 
@@ -12,7 +19,17 @@
 
 
 <main>
-    <h2>Hello</h2>
+    <h2>Welcome</h2>
+    <p>This website contains math problems, their answers, and their solutions</p>
+
+    <p>Most problems are sources from math competition test documents.
+       A list of problems are found on the
+       <a href="{% url 'problem_list' %}">Problems page</a>.
+       Problem sources are found on the
+       <a href="{% url 'source_list' %}">Sources page</a>
+    </p>
+
+    <p>This project is still under active development. Check <a href="https://github.com/BassCodes/math-problems">the GitHub page</a> for updates</p>
 </main>
 
 {% endblock content %}
