@@ -8,6 +8,7 @@ html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
 }
 
 * {
+  /* font-variant-emoji: text; */
   box-sizing: border-box;
 }
 
@@ -72,6 +73,7 @@ header {
 /* END GRID LAYOUT */
 
 nav {
+  user-select: none;
   display: flex;
   align-items: center;
   justify-content: right;
@@ -183,6 +185,10 @@ a {
   color: black;
 }
 
+a:hover {
+  text-decoration-style: solid;
+}
+
 a[inert] {
   color: gray;
   text-decoration: none;
@@ -229,6 +235,7 @@ div#unpublished-problem-warning {
     justify-content: space-evenly;
     margin-block: 0.5em;
     margin-bottom: 0.6em;
+    user-select: none;
   }
   #meta-sidebar-title {
     font-size: 1.2em;
@@ -284,5 +291,10 @@ details > summary::-webkit-details-marker {
   a {
     font-size: 1.5em;
     text-decoration: none;
+    color: gray;
+    &:hover {
+      color: black;
+    }
   }
+  user-select: none;
 }

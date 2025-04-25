@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+
+<header>
+    <h1 id="page-title">
+       Delete Problem
+    </h1>
+</header>
+
+
+<main>
+    <h2>Confirm</h2>
+    <form method="post">{% csrf_token %}
+        <p>Do you really want to delete "{{ object }}"?</p>
+        {{ form }}
+        <input type="submit" value="Confirm">
+    </form>
+</main>
+
+{% endblock content %}
+

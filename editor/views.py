@@ -1,9 +1,6 @@
-from django.views.generic import (
-    TemplateView,
-    CreateView,
-    UpdateView,
-)
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 import datetime
 import problems
@@ -28,6 +25,7 @@ class EditorCreateProblemView(LoginRequiredMixin, CreateView):
     ]
 
     def form_valid(self, form):
+        # FUTURE WORK: Add drafts system
         form.instance.pub_date = datetime.date.today()
         form.instance.contributor = self.request.user
         return super().form_valid(form)
@@ -45,3 +43,9 @@ class EditorUpdateProblemView(LoginRequiredMixin, UpdateView):
         "categories",
         "techniques",
     )
+
+
+class EditorProblemDeleteView(LoginRequiredMixin, DeleteView):
+    model = problems.models.Problem
+    template_name = "editor/problem_confirm_delete.html"
+    success_url = reverse_lazy("editor_home")

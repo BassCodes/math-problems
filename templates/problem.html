@@ -21,6 +21,7 @@
     <span id="problem-edit-box">
         <span>
             <a href="{% url 'edit_problem' pk=problem.pk %}" title="Edit">✐</a>
+            <a href="{% url 'delete_problem' pk=problem.pk %}" title="Delete">␥</a>
         </span>
     </span>
     {% endif %}

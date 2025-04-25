@@ -50,6 +50,11 @@
     font-size: 0.85em;
     margin: 0.3em;
     padding-inline: 0.41em;
+    border-left: 1px solid transparent;
+    &:hover {
+      border-left: 1px solid black;
+      /* margin-left: -1px; */
+    }
   }
   li * {
     display: inline !important;
