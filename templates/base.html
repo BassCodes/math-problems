@@ -28,28 +28,8 @@
   </head>
 
   <body>
-    <div id="authbar">
-      <div>
-        {% if user.is_authenticated %}
-        <div>  
-          Logged in: {{ user.username }}
-        </div>
-        <div>
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit">Log Out</button>
-        </form>
-        </div>
-        <div>
-          <a href="{% url 'create_problem' %}">+</a>
-        </div>
-        {% else %}
-        <div>
-          <a href="{% url 'login' %}">Log In</a>
-        </div>
-        {% endif %}
-      </div>
-    </div>
+    <span id="gridContainer">
+
     <nav>
       <ul>
         <li>
@@ -61,8 +41,28 @@
         <li>
           <a href="{% url 'source_list'%}">Sources</a>
         </li>
+        {% if user.is_authenticated %}
+        <li>  
+          Logged in: {{ user.username }}
+        </li>
+        <li>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button class="link" type="submit">Log Out</button>
+        </form>
+        </li>
+        <li>
+          <a href="{% url 'editor_home' %}">+</a>
+        </li>
+        {% else %}
+        <li>
+          <a href="{% url 'login' %}">Log In</a>
+        </li>
+        {% endif %}
       </ul>
     </nav>
       {% block content %} {% endblock content %}
+  </span>
+
     </body>
 </html>

@@ -1,5 +1,16 @@
 /* GLOBAL STYLE SHEET */
 
+/* TODO rework dark colors */
+:root {
+  --text-color: light-dark(black, #fafafa);
+  --text-muted-color: light-dark(gray, rgb(168, 168, 168));
+  --background-color: light-dark(#fbfbfb, #0a0a0a);
+  --background-primary-color: light-dark(#fefefe, #0f0f0f);
+  --background-secondary-color: light-dark(#fefefe, #0f0f0f);
+  --border-primary-color: light-dark(black, #2b2e30);
+  --border-secondary-color: light-dark(gray, #1c1e1f);
+}
+
 /* Reset default styles */
 /* prettier-ignore */
 html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
@@ -8,38 +19,43 @@ html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
 }
 
 * {
-  /* font-variant-emoji: text; */
+  font-variant-emoji: text;
   box-sizing: border-box;
 }
 
 html {
+  color-scheme: light dark;
   height: 100%;
   font-size: 120%;
   font-family: Palatino Linotype, Palatino LT STD, bitstream charter, charter,
     Georgia, serif;
+  margin-inline: auto;
 }
 
 body {
   height: 100%;
-  background-color: #fbfbfb;
-  color: black;
+  display: flex;
+  justify-content: center;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* GRID LAYOUT */
 /* Entire page layout is blocked out using CSS grid. */
 /* This is to avoid ugly css hacks*/
-body {
+body > #gridContainer {
   display: grid;
-  grid-template-columns: 1fr calc(650px + 10em) 1fr;
+  grid-template-columns: 15em calc(650px + 10em) 15em;
   grid-template-rows: repeat(5, min-content);
   row-gap: 0.1em;
   column-gap: 1.2em;
   grid-template-areas:
-    ".      .        .    "
+    ".      .        .      "
+    ".      .        .      "
     "nav    header   authbar"
-    ".      l-over   .    "
-    "left   main     right"
-    "left   r-over   right";
+    ".      l-over   .      "
+    "left   main     right  "
+    "left   r-over   right  ";
 }
 
 main {
@@ -52,7 +68,6 @@ nav {
 }
 
 #sidebar.right {
-  width: 100%;
   grid-area: right;
 }
 #sidebar.left {
@@ -74,58 +89,40 @@ header {
 
 nav {
   user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: right;
+  /* display: flex; */
+  /* align-items: center; */
   ul {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    row-gap: 0.25em;
     list-style: none;
-    gap: 1em;
     li {
-      background-color: #ffffff;
-      border: 1px solid lightgray;
+      background-color: var(--background-secondary-color);
+      border: 1px solid var(--border-secondary-color);
       padding: 0.5em;
     }
   }
   a {
-    color: black;
+    color: var(--text-color);
     text-decoration-style: dotted;
     /* FUTURE WORK: Better font with small caps would look nice here */
     /* font-variant: small-caps; */
   }
 }
-#authbar {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  div {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    div {
-      background-color: #ffffff;
-      border: 1px solid lightgray;
-      padding: 0.5em;
-      color: black;
-    }
-  }
-  a {
-    text-decoration-style: dotted;
-    color: black;
-  }
-  button {
-    background: none !important;
-    padding: 0 !important;
-    border: none;
 
-    font-family: inherit;
-    font-size: inherit;
-    color: black;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    cursor: pointer;
-  }
+button.link {
+  background: none !important;
+  padding: 0 !important;
+  border: none;
+
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
 }
 
 h1,
@@ -150,13 +147,13 @@ header {
   }
   #problem-source-box {
     text-align: right;
-    color: gray;
+    color: var(--text-muted-color);
   }
 }
 
 main {
-  border: 1px solid black;
-  background-color: #fefefe;
+  border: 1px solid var(--border-primary-color);
+  background-color: var(--background-primary-color);
   padding-block: 1em;
   padding-inline: 5em;
 }
@@ -177,12 +174,12 @@ p {
 }
 
 .muted {
-  color: gray;
+  color: var(--text-muted-color);
 }
 
 a {
   text-decoration-style: dotted;
-  color: black;
+  color: var(--text-color);
 }
 
 a:hover {
@@ -190,14 +187,14 @@ a:hover {
 }
 
 a[inert] {
-  color: gray;
+  color: var(--text-muted-color);
   text-decoration: none;
 }
 
-.flex-right {
+/* .flex-right {
   display: flex;
   justify-content: right;
-}
+} */
 
 .hidden {
   display: none;
@@ -215,10 +212,10 @@ div#unpublished-problem-warning {
 }
 
 #sidebar-meta-container {
-  width: 15em;
   line-break: anywhere;
   word-break: break-all;
-  border: 1px solid gray;
+  border: 1px solid var(--border-secondary-color);
+  background-color: var(--background-secondary-color);
   padding-block: 1em;
   padding-inline: 0.5em;
   #meta-source-problem-list {
@@ -260,19 +257,18 @@ a.button {
   text-align: center;
   padding: 0.8ch;
   padding-inline: 1ch;
-  background-color: rgb(228, 228, 228);
-  border: 1px solid lightgray;
+  border: 1px solid var(--text-muted-color);
   text-decoration-style: dotted;
 }
 a.button[inert] {
-  border: 1px solid white;
+  border: 1px solid var(--border-secondary-color);
 }
 
 details:not([open]) summary h2::after {
   content: "(click to reveal)";
   font-size: 0.58em;
   margin-inline-start: 1em;
-  color: gray;
+  color: var(--border-secondary-color);
 }
 details > summary {
   list-style: none;
@@ -291,9 +287,9 @@ details > summary::-webkit-details-marker {
   a {
     font-size: 1.5em;
     text-decoration: none;
-    color: gray;
+    color: var(--text-muted-color);
     &:hover {
-      color: black;
+      color: var(--text-color);
     }
   }
   user-select: none;

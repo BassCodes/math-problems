@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<header>
+    <h1 id="page-title">
+       Missing Problems
+    </h1>
+</header>
+
+<main>
+    <p>
+        The following sources have problems which are not entered into the database.
+    </p>
+    {{ source.name }}
+
+    <ol>
+        
+        {% for a in listicle %}
+        <li>
+            {% if a is not None %}
+            <a href="{{ a.get_absolute_url }}">Exists. View problem</a>    
+            {% else %}
+            <a href="{% url 'create_problem' %}?src={{ source.pk }}&no={{ forloop.counter  }}">Create problem</a>    
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</main>
+{% endblock content %}

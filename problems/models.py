@@ -1,10 +1,10 @@
 from django.db import models
 from django.urls import reverse
-
+from django.core.exceptions import ValidationError
 
 class SourceGroup(models.Model):
     """
-    A SourceGroup represents an overall category for many different sources.
+    A SourceGroup represents an overall Branch for many different sources.
     For example, a math competition occurs every year.
     Individual problems will reference the Source for that years competition.
     That year's competition source will reference a SourceGroup for the overall competition
@@ -36,12 +36,15 @@ class Source(models.Model):
         null=True,
         related_name="sources",
     )
+    problem_count = models.PositiveSmallIntegerField(blank=True, null=True)
+
     description = models.TextField(blank=True, null=True)
     publish_date = models.DateField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ["parent", "name"]
+        unique_together = ["parent", "shortname", "subtitle"]
 
     # Source https://stackoverflow.com/a/62697872
     @classmethod
@@ -76,9 +79,9 @@ class Source(models.Model):
         return reverse("source_detail", kwargs={"pk": self.pk})
 
 
-class Category(models.Model):
+class Branch(models.Model):
     """
-    A category represents a branch of mathematics like Calculus or Algebra
+    A Branch represents a branch of mathematics like Calculus or Algebra
     """
 
     name = models.TextField()
@@ -89,6 +92,17 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name[:50]
+
+class Type(models.Model):
+    """
+    A Type represents the general class of a problem. E.g. Word Problem, or Integration
+    """
+    name = models.TextField()
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name[:50]
+
 
 
 class Technique(models.Model):
@@ -105,11 +119,10 @@ class Technique(models.Model):
 
 class Problem(models.Model):
     """
-    A Problem represents the entire description of a problem, including statement, solution, and answer
+    A Problem represents the description of a problem, including statement and answer
     """
 
     problem_text = models.TextField()
-    solution_text = models.TextField()
     answer_text = models.TextField()
 
     contributor = models.ForeignKey(
@@ -125,13 +138,21 @@ class Problem(models.Model):
         default=Source.get_default_pk,
         related_name="problems",
     )
-    number = models.PositiveSmallIntegerField(blank=True, null=True)
-    categories = models.ManyToManyField(Category, blank=True, related_name="problems")
-    techniques = models.ManyToManyField(Technique, blank=True, related_name="problems")
+    number = models.PositiveSmallIntegerField()
+    categories = models.ManyToManyField(Branch, blank=True, related_name="problems")
+    types = models.ManyToManyField(Type, blank=True, related_name="problems")
 
     # Two problems can not share the same problem number and the same source
     class Meta:
-        unique_together = ("source", "number")
+        unique_together = ["source", "number"]
+
+    @property
+    def techniques(self):
+        return Technique.objects.filter(pk__in=self.solutions.all().values("techniques"))
+
+    def is_published(self):
+        return self.pub_date is not None
+
 
     def get_next(self):
         if self.source is None:
@@ -167,5 +188,16 @@ class Problem(models.Model):
     def get_absolute_url(self):
         return reverse("problem_detail", kwargs={"pk": self.pk})
 
-    def is_published(self):
-        return self.pub_date is not None
+
+class Solution(models.Model):
+    problem = models.ForeignKey(
+        Problem, on_delete=models.CASCADE, related_name="solutions"
+    )
+    techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
+    solution_text = models.TextField()
+
+    def __str__(self):
+        return self.solution_text[:50]
+
+    def get_absolute_url(self):
+        return reverse("problem_detail", kwargs={"pk": self.problem.pk})

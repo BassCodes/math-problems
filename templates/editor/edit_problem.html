@@ -21,51 +21,73 @@
 
 
 
-<main>
-    <form id="problem-form" action="" method="post">
-        <h2>Metadata</h2>
-            {% csrf_token %}
-            <div id="source-number-box" >
-                <div id="source-box">
-                    {{ form.source.label_tag }} {{ form.source }}
-                    {{ form.source.errors }}
-                </div>
-                <div id="number-box" class="form-box">
-                    {{ form.number.label_tag }} {{ form.number }}
-                    {{ form.number.errors }}
-                </div>
-            </div>
-            <h2>Problem Statement </h2>
-            <div id="problem-box" class="form-box">
-                {{ form.problem_text.label_tag }} {{ form.problem_text }}
-                {{ form.problem_text.errors }}
-            </div>
-            <div id="solution-box" class="form-box">
-                {{ form.solution_text.label_tag }} {{ form.solution_text }}
-                {{ form.solution_text.errors }}
-            </div>
-            <div id="answer-box" class="form-box">
-                {{ form.answer_text.label_tag }} {{ form.answer_text }}
-                {{ form.answer_text.errors }}
-            </div>
-
-            <h2>Tags</h2>
-
-            <div id="category-box" class="form-box">
-                {{ form.categories.label_tag }} {{ form.categories }}
-                {{ form.categories.errors }}
-            </div>
-            <div id="technique-box" class="form-box">
-                {{ form.techniques.label_tag }} {{ form.techniques }}
-                {{ form.techniques.errors }}
-            </div>
+<main class="wideMain">
 
 
+
+    <form method="post">
+        {% csrf_token %}
+        <div id="sourceBox">
+            <div class="fieldWrapper" id="sourceInput">
+                {{ problem_form.source.as_field_group }}
+            </div>
+            <div class="fieldWrapper" id="numberInput">
+                {{ problem_form.number.as_field_group }}
+            </div>
+        </div>
+        {{ problem_form.non_field_errors }}
+        <div class="fieldWrapper">
+            {{ problem_form.problem_text.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ problem_form.answer_text.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ problem_form.categories.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ problem_form.types.as_field_group }}
+        </div>
+
+ 
+        <h2>Solution</h2>
+
+        {% for solution_form in solution_forms %}
+        <div class="solutionWrapper" data-solution-no="{{ solution_form.x_form_no }}">
+            {{ solution_form.non_field_errors }}
+
+            <div class="fieldWrapper">
+                {{ solution_form.solution_text.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ solution_form.techniques.as_field_group }}
+            </div>
+        </div>
+        {% endfor %}
+
+
+        <input type="number" style="display: none;" name="additional_solutions" id="additional_solutions" value="0">
+
+
+        <button type="button" id="newSolutionButton">New Solution</button>
 
         <button  type="submit">Publish</button>
     </form>
-
 </main>
+
+<div style="display: none;" id="dummySolutionHolder">
+    <div class="solutionWrapper">
+        {{ dummy_solution.non_field_errors }}
+
+        <div class="fieldWrapper">
+            {{ dummy_solution.solution_text.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ dummy_solution.techniques.as_field_group }}
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 
 

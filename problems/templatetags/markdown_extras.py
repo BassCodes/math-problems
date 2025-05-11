@@ -1,6 +1,9 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
+import bleach
+from bleach_whitelist import markdown_tags, markdown_attrs
+
 import markdown as md
 
 register = template.Library()
@@ -12,6 +15,8 @@ extension_configs = {"pymdownx.arithmatex": {"generic": "True"}}
 @register.filter()
 @stringfilter
 def markdown(value):
-    return md.markdown(
+    dirty_html = md.markdown(
         value, extensions=extensions, extension_configs=extension_configs
     )
+    clean_html = bleach.clean(dirty_html, markdown_tags, markdown_attrs)
+    return clean_html

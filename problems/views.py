@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Q
+from django.db.models import Q,F
 from django.shortcuts import get_object_or_404
-from .models import Problem, Category, Technique, Source, SourceGroup
+from .models import Problem, Branch, Technique, Source, SourceGroup, Solution, Type
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.shortcuts import redirect
 import json
@@ -13,13 +13,13 @@ class HomePageView(TemplateView):
 
 
 def problem_list_view(request):
-    # Filters for source, category, and technique are sent in the url search
+    # Filters for source, branch, and technique are sent in the url search
     # parameter in the following format: "?sou=[1,2]&cat=[8,3]"
     # where "sou" -> "source" and the list after the equals contains a list
     # of ids for the respective model to filter by
     try:
         sources_query_request = json.loads(request.GET.get("sou", "[]"))
-        category_query_request = json.loads(request.GET.get("cat", "[]"))
+        branch_query_request = json.loads(request.GET.get("cat", "[]"))
         technique_query_request = json.loads(request.GET.get("tec", "[]"))
     except json.JSONDecodeError:
         return redirect(problem_list_view)
@@ -35,34 +35,37 @@ def problem_list_view(request):
         tq |= Q(source__exact=sid)
     final_query &= tq
 
-    # Add Category filter to final query
-    # Categories are filtered by intersection, e.g. a category can pass the filter when it
+    # Add branch filter to final query
+    # Categories are filtered by intersection, e.g. a branch can pass the filter when it
     # matches *ALL* of the requested ids.
     tq = Q()
-    for item in category_query_request:
+    for item in branch_query_request:
         tq |= ~Q(categories__id=item)
     final_query &= ~tq
 
     # Add Technique filter to final query
     # Techniques are filtered by intersection
-    tq = Q()
-    for item in technique_query_request:
-        tq |= ~Q(techniques__id=item)
-    final_query &= ~tq
+    # TODO, broke this
+    # tq = Q()
+    # for item in technique_query_request:
+    #     tq |= ~Q(techniques__id=item)
+    # final_query &= ~tq
 
+    # Technique.objects.filter(pk__in=self.solutions.all().values("techniques"))
     # Filter problems
     problems = Problem.objects.filter(final_query).distinct()
-
+    print(problems.query)
     # FUTURE WORK: Only show categories and techniques which are within the
     # filtered `problems` variable
 
     context = {}
     context["sources_active"] = sources_query_request
-    context["categories_active"] = category_query_request
+    context["categories_active"] = branch_query_request
     context["techniques_active"] = technique_query_request
     context["problems"] = problems.order_by("source", "number")
     context["sources"] = Source.objects.all()
-    context["categories"] = Category.objects.all()
+    context["categories"] = Branch.objects.all()
+    context["type"] = Type.objects.all()
     context["techniques"] = Technique.objects.all()
     return render(request, "problem_list.html", context)
 

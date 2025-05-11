@@ -16,7 +16,6 @@
 
 
 <div id="sidebar" class="left">
-    <div class="flex-right">
         <div id="sidebar-search">
 
             <div class="search-databox" data-type="source">
@@ -122,7 +121,6 @@
 
 
         </div>
-    </div>
 </div>
 
 </div>
@@ -132,25 +130,25 @@
 
 <main>
 <div id="problem-list">
-    {% if grouped_problems|length == 0 %}
-    <h2 class="muted">(No results found)</h2>
-    {% endif %}
-
-    {% for source,problemos in grouped_problems %}
+    {% for source,problem_group in grouped_problems %}
     
     <h2 id="source-name">
         {{ source.get_short_name }}
     </h2>
     
     <ol>
-        {% for problem in problemos %}
+        {% for problem in problem_group %}
         <li value="{{problem.number}}" >
             <a href="{{problem.get_absolute_url}}">
-                {{ problem.problem_text | markdown | safe}}
+                <span>
+                    {{ problem.problem_text | markdown | safe}}
+                </span>
             </a>
         </li>
         {% endfor %}
     </ol>
+    {% empty %}
+     <h2 class="muted">(No results found)</h2>
     {% endfor %}
 </div>
 </main>

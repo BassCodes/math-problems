@@ -38,10 +38,12 @@
     <h1>Problem Statement</h1>    
     {{ problem.problem_text | markdown | safe  }}
     
+    {% for solution in problem.solutions.all %}    
     <details>
-    <summary><h2>Solution</h2></summary>    
-    {{ problem.solution_text | markdown | safe  }}
+    <summary><h2>Solution {% if problem.solutions.all|length != 1 %}{{ forloop.counter }}{% endif %}</h2></summary>
+    {{ solution.solution_text | markdown | safe  }}
     </details>
+    {% endfor %}
 
     <details>
     <summary><h2>Answer</h2></summary>    
@@ -51,7 +53,6 @@
    
     
 <div id="sidebar" class="left">
-    <div class="flex-right">
     <div id="sidebar-meta-container">
 
     {% if problem.source.pk == problem.source.get_default_pk %}
@@ -64,7 +65,7 @@
     <ol id="meta-source-problem-list">
         {% for p in problem.source.get_problems %}
 
-        <li value="{{p.number}}"{% if p.number == problem.number %}id="meta-current-problem-no"{% endif %}>
+        <li value="{{p.number}}"{% if p.number == problem.number %} id="meta-current-problem-no"{% endif %}>
         <a href="{{ p.get_absolute_url }}" {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
         </li> 
         {% endfor %}
@@ -99,16 +100,16 @@
     </ul>
     {% endif %}
 
-    {% if problem.techniques.all|length != 0%}
+    {% if problem.techniques|length != 0%}
     <div id="meta-sidebar-title">
-        {% if problem.techniques.all|length != 1%}
+        {% if problem.techniques|length != 1%}
         Techniques:
         {% else %}
         Technique:
         {% endif %}
     </div>
     <ul id="meta-problem-techniques">
-        {% for technique in problem.techniques.all %}
+        {% for technique in problem.techniques %}
         <li>
             {{ technique }}
         </li>
@@ -117,8 +118,6 @@
     {% endif %}
 
 </div>
-</div>
-
 </div>
 
 

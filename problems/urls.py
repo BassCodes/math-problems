@@ -10,7 +10,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path("problems/<int:pk>/", problem_detail_view, name="problem_detail"),
+    path("problems/<int:pk>", problem_detail_view, name="problem_detail"),
     path("problems/", problem_list_view, name="problem_list"),
     path(
         "sources/group/<int:pk>",

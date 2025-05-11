@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<header>
+    <h1 id="page-title">
+       Missing Problems
+    </h1>
+</header>
+
+<main>
+    <p>
+        The following sources have problems which are not entered into the database.
+    </p>
+
+    <ul>
+        {% for s in sources %}
+
+        <li>
+            <a href="{% url 'missing_problem' pk=s.pk %}"> {{s.name}} ({{s.existing_problem_count}} / {{s.problem_count }})</a> 
+        </li>
+
+        {% endfor %}
+    </ul>
+
+
+</main>
+{% endblock content %}

@@ -4,7 +4,7 @@ Things todo.
 
 ## Editor
 
-- Currently, the markdown will allow any tag like `<script>window.location="google.com"</script>` to be put into the text fields. This is a major security issue. Before any real-world deployment this must be resolved.
+Allow creating and editing more than one solution
 
 Add WYSIWYG Editor
 
@@ -33,12 +33,6 @@ Allow public user signup
 
 ## Problems
 
-Create separate table for solutions. One problem can have many solutions
-
-- This will solve part of the difficulty of tagging problems.
-  The problems themselves will be tagged based upon the statement
-  The solutions will be tagged based on their content
-
 Add problem quantity to sources
 
-**Fix Markdown XSS**
+Pagination to problem list
