@@ -6,10 +6,9 @@ from .models import Problem, Branch, Source, SourceGroup, Technique, Solution, T
 class SolutionInline(admin.TabularInline):
     model = Solution
 
+
 class ProblemAdmin(admin.ModelAdmin):
-    inlines = [
-        SolutionInline
-    ]
+    inlines = [SolutionInline]
     list_display = (
         "pk",
         "problem_text",
@@ -19,9 +18,17 @@ class ProblemAdmin(admin.ModelAdmin):
     )
 
 
-
 class SourceAdmin(admin.ModelAdmin):
-    list_display = ("pk", "name", "shortname", "subtitle", "problem_count", "publish_date", "parent", "url")
+    list_display = (
+        "pk",
+        "name",
+        "shortname",
+        "subtitle",
+        "problem_count",
+        "publish_date",
+        "parent",
+        "url",
+    )
 
 
 class SourceGroupAdmin(admin.ModelAdmin):

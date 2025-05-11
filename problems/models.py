@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
+
 class SourceGroup(models.Model):
     """
     A SourceGroup represents an overall Branch for many different sources.
@@ -93,16 +94,17 @@ class Branch(models.Model):
     def __str__(self):
         return self.name[:50]
 
+
 class Type(models.Model):
     """
     A Type represents the general class of a problem. E.g. Word Problem, or Integration
     """
+
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name[:50]
-
 
 
 class Technique(models.Model):
@@ -148,11 +150,12 @@ class Problem(models.Model):
 
     @property
     def techniques(self):
-        return Technique.objects.filter(pk__in=self.solutions.all().values("techniques"))
+        return Technique.objects.filter(
+            pk__in=self.solutions.all().values("techniques")
+        )
 
     def is_published(self):
         return self.pub_date is not None
-
 
     def get_next(self):
         if self.source is None:

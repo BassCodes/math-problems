@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Q,F
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from .models import Problem, Branch, Technique, Source, SourceGroup, Solution, Type
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
+from .models import Problem, Branch, Technique, Source, SourceGroup, Type
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 import json
 
