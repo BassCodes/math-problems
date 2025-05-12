@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<header>
+    <h1 id="page-title">
+       Missing Problems
+    </h1>
+</header>
+
+<main>
+    <p>
+        {{ source.full_name }}
+    </p>
+
+    {% if not source.problem_count %}
+    <p>NOTE: This source does not specify how many problems are within. Extrapolating by existing problems. To fix this <a href="{% url 'source_edit' pk=source.pk %}">edit the source</a></p>
+    {% endif %}
+
+    <h2>Problems</h2>
+    {% if problems %}
+    <ol>
+        {% for problem in problems %}
+        <li>
+            {% if problem is not None %}
+            <a href="{{ problem.get_absolute_url }}">Exists. View problem</a>    
+            {% else %}
+            <a href="{% url 'problem_create' %}?src={{ source.pk }}&no={{ forloop.counter  }}">Create problem</a>    
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+    {% else %}
+        <p class="muted">(no problems)</p>
+    {% endif %}
+</main>
+{% endblock content %}

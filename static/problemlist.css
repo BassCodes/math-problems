@@ -2,6 +2,9 @@
 /* USED IN: problem_list, source_detail */
 
 #problem-list {
+  & > ul > li {
+    list-style: none;
+  }
   & > ol,
   & > ul {
     display: flex;

@@ -177,6 +177,13 @@ p {
   color: var(--text-muted-color);
 }
 
+a.incognito {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 a {
   text-decoration-style: dotted;
   color: var(--text-color);
@@ -268,7 +275,7 @@ details:not([open]) summary h2::after {
   content: "(click to reveal)";
   font-size: 0.58em;
   margin-inline-start: 1em;
-  color: var(--border-secondary-color);
+  color: var(--text-muted-color);
 }
 details > summary {
   list-style: none;
@@ -277,13 +284,7 @@ details > summary::-webkit-details-marker {
   display: none;
 }
 
-#problem-edit-box {
-  position: absolute;
-  span {
-    position: relative;
-    right: 5em;
-    top: -1em;
-  }
+#edit-box {
   a {
     font-size: 1.5em;
     text-decoration: none;
@@ -293,4 +294,31 @@ details > summary::-webkit-details-marker {
     }
   }
   user-select: none;
+}
+
+.flex {
+  display: flex;
+
+  &.row {
+    flex-direction: row;
+  }
+  &.column {
+    flex-direction: column;
+  }
+
+  &.j-between {
+    justify-content: space-between;
+  }
+  &.j-around {
+    justify-content: space-around;
+  }
+  &.j-evenly {
+    justify-content: space-evenly;
+  }
+  &.j-center {
+    justify-content: center;
+  }
+  &.a-center {
+    align-items: center;
+  }
 }

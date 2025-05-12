@@ -14,14 +14,23 @@
 </header>
 
 <main>
-
-    <h2>Description</h2>
+    <div class="flex row j-between a-center">
+        <h2>Description</h2>
+        {% if user.is_authenticated %}
+    <span id="edit-box">
+        <span>
+            <a href="{% url 'source_edit' pk=source.pk %}" title="Edit">✐</a>
+            <a href="" title="Delete">␥</a>
+        </span>
+    </span>
+    {% endif %}
+    </div>
 
     {% if source.description %}
         {{ source.description | markdown | safe }}
     {% else %}
         <p class="muted">
-            (this source has no description)
+            (no description)
         </p>
     {% endif %}
 
@@ -31,7 +40,40 @@
     </p>
     {% endif %}
 
-    <h2>Problems</h2>
+    <h2>Metadata </h2>
+
+    <ul>
+        <li>Published:&nbsp;
+            {% if source.publish_date %}
+            {{source.publish_date}}
+            {% else %}
+            <span class="muted">(unknown)</span>
+            {% endif %}
+        </li>
+        <li>{% if source.url %}
+            <a href="{{source.url}}">Source URL</a>
+            {% else %}<span class="muted">(No URL available)</span>
+            {% endif %}
+        </li>
+        <li>Total problems:{% if source.problem_count %}
+            {{ source.problem_count }}
+            {% else %}
+            <span class="muted">(unknown)</span>
+            {% endif %}
+        </li>
+    </ul>
+
+    <div class="flex j-between a-center">
+        <h2>Problems</h2>
+
+        {% if user.is_authenticated %}
+        <span id="edit-box">
+            <span>
+            <a href="{% url 'missing_problem' pk=source.pk %}" title="Fill Missing">+</a>
+            </span>
+        </span>
+        {% endif %}
+    </div>
 
     {% if source.problems.all|length != 0%}
     <div id="problem-list">
@@ -48,28 +90,9 @@
     </div>
     {% else %}
     <p class="muted">
-        (this source has no problems assigned to it yet)
+        (no problems)
     </p>
     {% endif %}
-
-    <h2>Metadata </h2>
-
-    <ul>
-        <li>Published:&nbsp;
-            {% if source.publish_date %}
-            {{source.publish_date}}
-            {% else %}
-            <span class="muted">Unknown</span>
-            {% endif %}
-        </li>
-        <li>{% if source.url %}
-            <a href="{{source.url}}">Source URL</a>
-            {% else %}<span class="muted">No URL available</span>
-            {% endif %}
-
-        </li>
-    </ul>
-
 
 </main>
 

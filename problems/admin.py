@@ -9,13 +9,7 @@ class SolutionInline(admin.TabularInline):
 
 class ProblemAdmin(admin.ModelAdmin):
     inlines = [SolutionInline]
-    list_display = (
-        "pk",
-        "problem_text",
-        "number",
-        "source",
-        "contributor",
-    )
+    list_display = ("pk", "problem_text", "number", "source", "pub_date")
 
 
 class SourceAdmin(admin.ModelAdmin):

@@ -43,7 +43,7 @@
         </li>
         {% if user.is_authenticated %}
         <li>  
-          Logged in: {{ user.username }}
+          <a href="{% url 'my_profile' %}">{{ user.username }}</a> 
         </li>
         <li>
         <form action="{% url 'logout' %}" method="post">

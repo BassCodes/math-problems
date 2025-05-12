@@ -30,6 +30,21 @@
     </p>
 
     <p>This project is still under active development. Check <a href="https://github.com/BassCodes/math-problems">the GitHub page</a> for updates</p>
+    <h2>Newest Problems</h2>
+    <div id="problem-list">
+
+        <ul>
+            {% for problem in newest_problems %}
+            <li>
+                <a href="{{problem.get_absolute_url}}">
+                    {{ problem.problem_text | markdown | safe}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
 </main>
 
 {% endblock content %}

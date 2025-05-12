@@ -7,15 +7,30 @@
 </header>
 
 <main>
-    <h2>Description</h2>
+    <h2>Series Information</h2>
     {% if sourcegroup.description %}
         {{ sourcegroup.description | markdown | safe }}
     {% else %}
         <p class="muted">
-            (this source group has no description)
+            (no description)
         </p>
     {% endif %}
-    <a href="{{sourcegroup.url}}">Source URL</a>
+    {% if sourcegroup.url %}
+    <a href="{{sourcegroup.url}}">Web URL</a>
+    {% endif %}
+
+
+    <div class="flex j-between a-center">
+        <h2>Sources from series</h2>
+        {% if user.is_authenticated %}
+        <span id="edit-box">
+            <span>
+                <a href="{% url 'source_create' %}?group={{ sourcegroup.id }}" title="New Source">+</a>
+            </span>
+        </span>
+        {% endif %}
+    </div>
+    {% if sourcegroup.sources.all %}
     <ul>
         {% for source in sourcegroup.sources.all %}
         <li>
@@ -25,6 +40,11 @@
         </li>
         {% endfor %}
     </ul>
+    {% else %}
+    <p class="muted">
+        (no sources)
+    </p>
+    {% endif %}
 </main>
 
 {%endblock%}

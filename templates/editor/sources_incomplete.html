@@ -15,7 +15,7 @@
         {% for s in sources %}
 
         <li>
-            <a href="{% url 'missing_problem' pk=s.pk %}"> {{s.name}} ({{s.existing_problem_count}} / {{s.problem_count }})</a> 
+            <a href="{% url 'missing_problem' pk=s.pk %}"> {{ s.get_short_name }} ({{s.existing_problem_count}} / {{s.problem_count }})</a> 
         </li>
 
         {% endfor %}

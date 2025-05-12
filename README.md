@@ -39,56 +39,34 @@ Frontend Libraries
 Prerequisites
 
 - Python 3.12
-- Pip
+- [uv package manager](https://docs.astral.sh/uv/)
 
 ### Step 1
-
-Create virtual environment
-
-```shell
-python -m venv .venv
-```
-
-Activate virtual environment (depends on OS, linux example give)
-
-```shell
-source ./.venv/bin/activate
-```
-
-### Step 2
-
-Install requirements
-
-```shell
-python -m pip install -r requirements.txt
-```
-
-### Step 3
 
 Migrate database
 
 ```shell
-python manage.py migrate
+uv run python manage.py migrate
 ```
 
 Load database dump
 
 ```shell
-python manage.py loaddata database_dump.json
+uv run python manage.py loaddata database_dump.json
 ```
 
-### Step 4
+### Step 2
 
 Run server
 
 ```shell
-python manage.py runserver 3333
+uv run python manage.py runserver 3333
 ```
 
 Additionally, you can get live resource reloading by running (in a separate terminal)
 
 ```
-python manage.py livereload
+uv run python manage.py livereload
 ```
 
 ## Additional Documents

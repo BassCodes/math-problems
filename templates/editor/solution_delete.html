@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block content %}
+{% load markdown_extras %}
+<header>
+    <h1 id="page-title">
+        Delete Solution
+    </h1>
+</header>
+
+<main>
+    <h2>Delete Solution ID {{ object.id }}</h2>
+
+    <p>Are you sure you want to delete the solution for <a href="{{ object.problem.get_absolute_url }}">problem ID {{object.problem.id}}</a><p>
+
+
+    <div style="border: 1px solid red">
+        {{ solution.solution_text | markdown | safe  }}
+    </div>
+
+    <form method="post">{% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Confirm">
+    </form>
+</main>
+
+{%endblock%}

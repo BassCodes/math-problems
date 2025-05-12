@@ -11,7 +11,7 @@ class SourceGroup(models.Model):
     That year's competition source will reference a SourceGroup for the overall competition
     """
 
-    name = models.TextField()
+    name = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
 
@@ -27,9 +27,9 @@ class Source(models.Model):
     A Source represents a single 'document' containing many math problems
     """
 
-    name = models.TextField()
-    shortname = models.TextField(blank=True, null=True)
-    subtitle = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=128)
+    shortname = models.CharField(max_length=40, blank=True, null=True)
+    subtitle = models.CharField(max_length=30, blank=True, null=True)
     parent = models.ForeignKey(
         SourceGroup,
         on_delete=models.CASCADE,
@@ -85,7 +85,7 @@ class Branch(models.Model):
     A Branch represents a branch of mathematics like Calculus or Algebra
     """
 
-    name = models.TextField()
+    name = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -97,10 +97,10 @@ class Branch(models.Model):
 
 class Type(models.Model):
     """
-    A Type represents the general class of a problem. E.g. Word Problem, or Integration
+    A Type represents the general class of a problem. E.g. Word Problem, Integration
     """
 
-    name = models.TextField()
+    name = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -112,7 +112,7 @@ class Technique(models.Model):
     A Technique represents a trick or a book-method for solving a problem
     """
 
-    name = models.TextField()
+    name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -126,11 +126,6 @@ class Problem(models.Model):
 
     problem_text = models.TextField()
     answer_text = models.TextField()
-
-    contributor = models.ForeignKey(
-        "accounts.CustomUser",
-        on_delete=models.CASCADE,
-    )
 
     pub_date = models.DateField(blank=True, null=True)
 

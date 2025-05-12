@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, DeleteView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from .models import Problem, Branch, Technique, Source, SourceGroup, Type
+from .models import Problem, Branch, Technique, Source, SourceGroup, Type, Solution
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 import json
@@ -10,6 +10,13 @@ import json
 
 class HomePageView(TemplateView):
     template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["newest_problems"] = (
+            Problem.objects.all().order_by("pub_date").reverse()[:3]
+        )
+        return context
 
 
 def problem_list_view(request):

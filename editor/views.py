@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import ProblemForm, SolutionForm
 from django.views.generic.edit import FormView
-
+from django.core.exceptions import ObjectDoesNotExist
 
 import datetime
 import problems
@@ -23,8 +23,8 @@ class EditorHomePageView(LoginRequiredMixin, TemplateView):
     template_name = "editor/editor_home.html"
 
 
-class EditorMissingProblemsView(LoginRequiredMixin, TemplateView):
-    template_name = "editor/missing_problems.html"
+class IncompleteSourceView(LoginRequiredMixin, TemplateView):
+    template_name = "editor/sources_incomplete.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,8 +38,8 @@ class EditorMissingProblemsView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class EditorIncompleteSourceView(LoginRequiredMixin, DetailView):
-    template_name = "editor/incomplete_source.html"
+class SourceMissingProblemsView(LoginRequiredMixin, DetailView):
+    template_name = "editor/source_missing_problems.html"
     model = problems.models.Source
 
     def get_context_data(self, **kwargs):
@@ -53,12 +53,20 @@ class EditorIncompleteSourceView(LoginRequiredMixin, DetailView):
             numbered_problems[problem.number] = problem
 
         ordered_problems_and_blanks = []
-        for num in range(1, source.problem_count + 1):
+
+        if source.problem_count:
+            max_problems = source.problem_count
+        elif source.problems.all().count() != 0:
+            max_problems = source.problems.all().order_by("number").last().number
+        else:
+            return context
+
+        for num in range(1, max_problems + 1):
             if num in numbered_problems:
                 ordered_problems_and_blanks.append(numbered_problems[num])
             else:
                 ordered_problems_and_blanks.append(None)
-        context["listicle"] = ordered_problems_and_blanks
+        context["problems"] = ordered_problems_and_blanks
 
         return context
 
@@ -77,7 +85,7 @@ def problem_create_view(request):
         if problem_form.is_valid() and solution_form.is_valid():
             new_problem = problem_form.save(commit=False)
             new_problem.contributor = request.user
-            new_problem.pub_date = pub_date = datetime.date.today()
+            new_problem.pub_date = datetime.date.today()
             new_problem.save()
 
             new_solution = solution_form.save(commit=False)
@@ -100,7 +108,7 @@ def problem_create_view(request):
         solution_form = SolutionForm(instance=problems.models.Solution(), prefix="sol")
     return render(
         request,
-        "editor/create_problem.html",
+        "editor/problem_create.html",
         {"problem_form": problem_form, "solution_form": solution_form},
     )
 
@@ -151,7 +159,7 @@ def problem_update_view(request, pk):
     dummy_solution_form = SolutionForm(instance=problems.models.Solution())
     return render(
         request,
-        "editor/edit_problem.html",
+        "editor/problem_edit.html",
         {
             "problem_form": problem_form,
             "solution_forms": solution_forms,
@@ -160,19 +168,60 @@ def problem_update_view(request, pk):
     )
 
 
-class EditorUpdateProblemView(LoginRequiredMixin, UpdateView):
-    model = problems.models.Problem
-    template_name = "editor/edit_problem.html"
-    fields = (
-        "problem_text",
-        "answer_text",
-        "source",
-        "number",
-        "categories",
-    )
-
-
 class EditorProblemDeleteView(LoginRequiredMixin, DeleteView):
     model = problems.models.Problem
     template_name = "editor/problem_confirm_delete.html"
     success_url = reverse_lazy("editor_home")
+
+
+class SolutionDeleteView(LoginRequiredMixin, DeleteView):
+    model = problems.models.Solution
+    template_name = "editor/solution_delete.html"
+
+    # Redirect to problem page
+    def get_success_url(self, **kwargs):
+        parent_id = self.get_object().problem.id
+        return reverse_lazy("problem_detail", kwargs={"pk": parent_id})
+
+
+class SourceEditView(LoginRequiredMixin, UpdateView):
+    model = problems.models.Source
+    fields = [
+        "name",
+        "shortname",
+        "subtitle",
+        "parent",
+        "problem_count",
+        "description",
+        "publish_date",
+        "url",
+    ]
+    template_name = "editor/source_edit.html"
+
+
+class SourceCreateView(LoginRequiredMixin, CreateView):
+    model = problems.models.Source
+    fields = [
+        "name",
+        "shortname",
+        "subtitle",
+        "parent",
+        "problem_count",
+        "description",
+        "publish_date",
+        "url",
+    ]
+    template_name = "editor/source_create.html"
+    success_url = reverse_lazy("editor_home")
+
+    def get_initial(self):
+        specified_group_id = self.request.GET.get("group")
+        if specified_group_id:
+            try:
+                parent = problems.models.SourceGroup.objects.get(pk=specified_group_id)
+                if parent:
+                    return {"parent": parent}
+            except ObjectDoesNotExist:
+                return {}
+
+        return {}

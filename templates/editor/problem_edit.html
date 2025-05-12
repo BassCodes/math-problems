@@ -50,10 +50,12 @@
         </div>
 
  
-        <h2>Solution</h2>
+        <h2>Solutions</h2>
 
         {% for solution_form in solution_forms %}
         <div class="solutionWrapper" data-solution-no="{{ solution_form.x_form_no }}">
+
+
             {{ solution_form.non_field_errors }}
 
             <div class="fieldWrapper">
@@ -62,6 +64,8 @@
             <div class="fieldWrapper">
                 {{ solution_form.techniques.as_field_group }}
             </div>
+            <a href="{% url 'solution_delete' pk=solution_form.instance.id %}" target="_blank">Delete</a>
+
         </div>
         {% endfor %}
 
