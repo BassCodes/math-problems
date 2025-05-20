@@ -10,16 +10,14 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {% endblock pagehead %}
 
+
+{% block header %}
+<h1 id="page-title">
+   Create Problem
+</h1>
+{% endblock header %}
+
 {% block content %}
-
-<header>
-    <h1 id="page-title">
-       Create Problem
-    </h1>
-</header>
-
-
-
 
 <main>
 
@@ -39,9 +37,15 @@
         <div class="fieldWrapper">
             {{ problem_form.answer_text.as_field_group }}
         </div>
-        <div class="fieldWrapper">
-            {{ problem_form.categories.as_field_group }}
-        </div>
+
+<div class="flex j-between">
+    <div class="fieldWrapper">
+        {{ problem_form.branches.as_field_group }}
+    </div>
+    <div class="fieldWrapper">
+        {{ problem_form.types.as_field_group }}
+    </div>
+</div>
 
         <div class="fieldWrapper">
             {{ problem_form.pub_date.as_field_group }}

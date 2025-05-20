@@ -15,7 +15,7 @@ class UserProfileView(DetailView):
 
 class UserOwnProfileView(LoginRequiredMixin, DetailView):
     model = CustomUser
-    template_name = "profile/my_profile.html"
+    template_name = "profile/user_profile.html"
 
     def get_object(self, queryset=None):
         return self.request.user

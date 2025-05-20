@@ -2,21 +2,44 @@
 
 Things todo.
 
+## General Layout
+
+Rework layout to be responsive. Grid, Flexbox?
+
+Grid works, but is difficult to get responsive.
+Flexbox is difficult to get working, but is easier to get responsive. Preliminary testing has shown flexbox to probably be inadequate.
+
+## Problem List Search
+
+Filter problems by Source, Branch, Type, and Technique
+
+Nice looking filters (probably using select2)
+
+Number of results matched
+
 ## Editor
 
-Allow creating and editing more than one solution
+Add views to edit Tags (Type, Branch, Technique)
 
-Add WYSIWYG Editor
+- Create
+- Edit
+- Delete
 
-- Mathquil seems like a good options
-- Keep plain text code editor for advanced math operations and tricky formatting.
+Integrate tag create views into problem editor
 
-Improve plaintext problem editor to be more like a code editor.
+## Drafts
 
-- Add line numbers, proper TAB support, etc.
-- There should be a library for this.
+Allow creating of draft problems
 
-Add easy view to add missing problems to a category
+Get deleted after three months of inactivity.
+
+Draft problems get sent into review
+
+Draft problems are reviewed by Reviewers and are then published
+
+Draft solutions?
+
+Draft edits?
 
 ## Auth
 
@@ -27,12 +50,28 @@ Add user permissions system:
 - Reviewer (Can review problems and add them to the problem list)
 - Guest (can create problem drafts and request for them to be reviewed )
 
-Add user profiles
+Write migrations to create these permissions
 
 Allow public user signup
 
+### Solved Problems
+
+Allow users to mark problems as solved
+Add solved problems to user profile
+
+Filter problems list by solved/unsolved
+
+markers on problems for solved
+markers on sources for solved problems
+
 ## Problems
 
-Add problem quantity to sources
-
 Pagination to problem list
+
+# Long Term
+
+## Editor
+
+Add WYSIWYG Editor
+
+- Mathquil seems like a good option

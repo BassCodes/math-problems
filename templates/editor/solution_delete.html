@@ -1,11 +1,14 @@
-{% extends "base.html" %} {% block content %}
-{% load markdown_extras %}
-<header>
-    <h1 id="page-title">
-        Delete Solution
-    </h1>
-</header>
+{% extends "base.html" %}
 
+
+{% block header %}
+<h1 id="page-title">
+    Delete Solution
+</h1>
+{% endblock header %}
+
+{% block content %}
+{% load markdown_extras %}
 <main>
     <h2>Delete Solution ID {{ object.id }}</h2>
 

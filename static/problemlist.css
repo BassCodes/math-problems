@@ -1,7 +1,15 @@
 /* STYLE SHEET FOR PROBLEM LISTS */
 /* USED IN: problem_list, source_detail */
 
-#problem-list {
+.small-heading {
+  /* color: #494949; */
+  color: var(--text-muted-color);
+  font-size: 0.9em;
+  margin-block: 1em;
+  text-align: center;
+}
+
+.problem-list {
   & > ul > li {
     list-style: none;
   }
@@ -38,13 +46,5 @@
   }
   * + p {
     margin-top: 0.1em;
-  }
-
-  h2 {
-    /* color: #494949; */
-    color: var(--text-muted-color);
-    font-size: 0.9em;
-    margin-block: 1em;
-    text-align: center;
   }
 }

@@ -1,26 +1,34 @@
-{% extends "base.html" %} {% block content %}
-{% load markdown_extras %}
-{% load static %}
+{% extends "base.html" %}
 
-
-
-<header>
+{% block header %}
     <h1 id="page-title">{{source.name}}</h1>
     {% if source.subtitle %}
     <div id="problem-source-box">
         <div id="problem-source-subtitle">{{ source.subtitle }}</div>
     </div>
     {% endif %}
-</header>
+{% endblock header %}
 
-<main>
+
+{% block content %}
+{% load markdown_extras %}
+{% load problem_list %}
+{% load static %}
+
+
+
+<main class="doc">
     <div class="flex row j-between a-center">
         <h2>Description</h2>
         {% if user.is_authenticated %}
     <span id="edit-box">
         <span>
+            {% if perms.problems.change_source %}
             <a href="{% url 'source_edit' pk=source.pk %}" title="Edit">✐</a>
+            {% endif %}
+            {% if perms.problems.delete_source %}
             <a href="" title="Delete">␥</a>
+            {% endif %}
         </span>
     </span>
     {% endif %}
@@ -75,25 +83,7 @@
         {% endif %}
     </div>
 
-    {% if source.problems.all|length != 0%}
-    <div id="problem-list">
-
-        <ol>
-            {% for problem in source.get_problems %}
-            <li value="{{problem.number}}" >
-                <a href="{{problem.get_absolute_url}}">
-                    {{ problem.problem_text | markdown | safe}}
-                </a>
-            </li>
-            {% endfor %}
-        </ol>
-    </div>
-    {% else %}
-    <p class="muted">
-        (no problems)
-    </p>
-    {% endif %}
-
+    {% problem_list source.get_problems ord="true" %}
 </main>
 
 {%endblock%}

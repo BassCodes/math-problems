@@ -5,15 +5,15 @@ from django.views.generic import (
     DeleteView,
     DetailView,
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse_lazy
-from django.db.models import Q, F, Count
+from django.db.models import F, Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import ProblemForm, SolutionForm
-from django.views.generic.edit import FormView
 from django.core.exceptions import ObjectDoesNotExist
+
 
 import datetime
 import problems
@@ -72,8 +72,8 @@ class SourceMissingProblemsView(LoginRequiredMixin, DetailView):
 
 
 @login_required
+@permission_required("problems.add_problem")
 def problem_create_view(request):
-    # TODO authenticate
     # Todo add drafts/publishing
     if request.method == "POST":
         problem_form = ProblemForm(
@@ -114,8 +114,8 @@ def problem_create_view(request):
 
 
 @login_required
+@permission_required("problems.change_problem")
 def problem_update_view(request, pk):
-    # TODO authenticate
     # Todo add drafts/publishing
     problem = problems.models.Problem.objects.get(id=pk)
 
@@ -134,6 +134,8 @@ def problem_update_view(request, pk):
                     request.POST, instance=problems.models.Solution(), prefix=f"sol{i}"
                 )
             )
+        for s in solution_forms:
+            print(s, s.errors.items(), s.data)
 
         if problem_form.is_valid() and all([s.is_valid() for s in solution_forms]):
             problem_form.save(commit=True)
@@ -156,11 +158,14 @@ def problem_update_view(request, pk):
             solution_forms.append(solution_form)
 
     # Dummy solution form. used as a template create additional solutions for the problem
-    dummy_solution_form = SolutionForm(instance=problems.models.Solution())
+    dummy_solution_form = SolutionForm(
+        instance=problems.models.Solution(), prefix="solREPLACEME"
+    )
     return render(
         request,
         "editor/problem_edit.html",
         {
+            "problem": problem,
             "problem_form": problem_form,
             "solution_forms": solution_forms,
             "dummy_solution": dummy_solution_form,
@@ -168,14 +173,17 @@ def problem_update_view(request, pk):
     )
 
 
-class EditorProblemDeleteView(LoginRequiredMixin, DeleteView):
+class EditorProblemDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = "problems.delete_problem"
     model = problems.models.Problem
     template_name = "editor/problem_confirm_delete.html"
     success_url = reverse_lazy("editor_home")
 
 
-class SolutionDeleteView(LoginRequiredMixin, DeleteView):
+class SolutionDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = problems.models.Solution
+    permission_required = "problems.delete_problem"
+
     template_name = "editor/solution_delete.html"
 
     # Redirect to problem page
@@ -184,8 +192,9 @@ class SolutionDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy("problem_detail", kwargs={"pk": parent_id})
 
 
-class SourceEditView(LoginRequiredMixin, UpdateView):
+class SourceEditView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = problems.models.Source
+    permission_required = "problems.change_source"
     fields = [
         "name",
         "shortname",
@@ -199,8 +208,9 @@ class SourceEditView(LoginRequiredMixin, UpdateView):
     template_name = "editor/source_edit.html"
 
 
-class SourceCreateView(LoginRequiredMixin, CreateView):
+class SourceCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = problems.models.Source
+    permission_required = "problems.add_source"
     fields = [
         "name",
         "shortname",
@@ -215,6 +225,7 @@ class SourceCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("editor_home")
 
     def get_initial(self):
+        # Get URL parameters for specific SourceGroup and select that SourceGroup
         specified_group_id = self.request.GET.get("group")
         if specified_group_id:
             try:
@@ -225,3 +236,27 @@ class SourceCreateView(LoginRequiredMixin, CreateView):
                 return {}
 
         return {}
+
+
+class SourceGroupEditView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = problems.models.SourceGroup
+    permission_required = "problems.change_sourcegroup"
+    fields = [
+        "name",
+        "description",
+        "url",
+    ]
+    template_name = "editor/sourcegroup_edit.html"
+    success_url = reverse_lazy("editor_home")
+
+
+class SourceGroupCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = problems.models.SourceGroup
+    permission_required = "problems.add_sourcegroup"
+    fields = [
+        "name",
+        "description",
+        "url",
+    ]
+    template_name = "editor/sourcegroup_create.html"
+    success_url = reverse_lazy("editor_home")

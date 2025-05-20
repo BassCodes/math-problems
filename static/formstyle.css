@@ -1,6 +1,68 @@
 /* EDITOR Form styling */
 /* Used in: create_problem, edit_problem */
 
+body > #gridContainer:has(> .wideMain) {
+  grid-template-columns: 0.1fr 1fr 2fr 1fr 0.1fr;
+  grid-template-areas:
+    ". .      .        ."
+    ". .      .        ."
+    ". nav      header   ."
+    ". .      .        ."
+    ". main  main     preview"
+    ". .      footer   ." !important;
+}
+
+div.previewBar {
+  grid-area: preview;
+}
+
+#fancy-editor {
+  min-height: 10ch;
+  font-size: 0.8em;
+}
+.cm-editor {
+  font-size: 0.8em;
+}
+
+div.previewBar {
+  border: 1px solid var(--border-primary-color);
+  background-color: var(--background-primary-color);
+  padding-inline: 1em;
+  padding-block: 2em;
+  p {
+    overflow-wrap: break-word;
+  }
+}
+
+main > form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+#problem-tag-fields {
+  display: flex;
+  justify-content: space-around;
+  gap: 1em;
+  .select2-container {
+    width: 100%;
+  }
+
+  .fieldWrapper {
+    width: 100%;
+  }
+  select {
+    width: 100%;
+  }
+}
+
+#sourceBox {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* SELECT 2 */
+
 select {
   font-size: 0.8em;
   font-family: sans-serif;
@@ -13,6 +75,42 @@ select {
   font-size: 0.8em;
 }
 
-#sourceBox {
-  display: flex;
+.select2-container .select2-search--inline .select2-search__field {
+  font-size: 0.8em !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .select2-container--default .select2-selection--multiple {
+    background-color: black !important;
+    border: 1px solid gray !important;
+  }
+  .select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice {
+    background-color: black !important;
+    border: 1px solid gray !important;
+  }
+  .select2-dropdown {
+    background-color: black !important;
+    border: 1px solid gray !important;
+  }
+  .select2-container--default .select2-results__option--selected {
+    background-color: #222 !important;
+  }
+  .select2-container--default .select2-selection--single {
+    background-color: black !important;
+    border: 1px solid gray !important;
+  }
+  .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
+    color: inherit !important;
+  }
+}
+
+/* END SELECT2 */
+
+textarea {
+  max-width: 100%;
+  width: 100%;
 }

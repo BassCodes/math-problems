@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 import problems
 
 
@@ -8,19 +7,21 @@ class ProblemForm(forms.ModelForm):
         model = problems.models.Problem
         fields = [
             "problem_text",
+            "has_answer",
             "answer_text",
-            "categories",
+            "branches",
             "types",
             "source",
             "number",
         ]
 
-    # def clean_number(self):
-    #     number = self.cleaned_data["number"]
-    #     problem_count = self.cleaned_data["source"].problem_count
-    #     if number and problem_count and not (number <= problem_count):
-    #         raise ValidationError('Problem number must be within source problem number count.')
-    #     return self.cleaned_data
+    def clean_answer_text(self):
+        # If the has_answer boolean is false, get rid of any answer data.
+
+        if not self.cleaned_data.get("has_answer"):
+            return ""
+        else:
+            return self.cleaned_data["answer_text"]
 
 
 class SolutionForm(forms.ModelForm):

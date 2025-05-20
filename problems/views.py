@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, DetailView, DeleteView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from .models import Problem, Branch, Technique, Source, SourceGroup, Type, Solution
+from .models import Problem, Source, SourceGroup, Solution
 from django.http import HttpResponseForbidden
-from django.shortcuts import redirect
-import json
+from .forms import SearchForm
 
 
 class HomePageView(TemplateView):
@@ -20,60 +19,59 @@ class HomePageView(TemplateView):
 
 
 def problem_list_view(request):
-    # Filters for source, branch, and technique are sent in the url search
-    # parameter in the following format: "?sou=[1,2]&cat=[8,3]"
-    # where "sou" -> "source" and the list after the equals contains a list
-    # of ids for the respective model to filter by
-    try:
-        sources_query_request = json.loads(request.GET.get("sou", "[]"))
-        branch_query_request = json.loads(request.GET.get("cat", "[]"))
-        technique_query_request = json.loads(request.GET.get("tec", "[]"))
-    except json.JSONDecodeError:
-        return redirect(problem_list_view)
+    search_form = SearchForm(request.GET)
 
-    # Create a Q-query object to contain filter
-    final_query = Q()
+    query = Q()
+    solution_query = Q()
 
-    # Add source filter to final query
-    # Sources are filtered by union, e.g. a source can pass the filter when it
-    # matches any one of the requested ids.
-    tq = Q()
-    for sid in sources_query_request:
-        tq |= Q(source__exact=sid)
-    final_query &= tq
+    filter_by_solution = False
+    if search_form.is_valid():
+        source_query = Q()
+        for source in search_form.cleaned_data["source"]:
+            source_query |= Q(source__exact=source.id)
+        query &= source_query
 
-    # Add branch filter to final query
-    # Categories are filtered by intersection, e.g. a branch can pass the filter when it
-    # matches *ALL* of the requested ids.
-    tq = Q()
-    for item in branch_query_request:
-        tq |= ~Q(categories__id=item)
-    final_query &= ~tq
+        branch_query = Q()
+        for branch in search_form.cleaned_data["branch"]:
+            branch_query &= Q(branches__exact=branch.id)
+        query &= branch_query
 
-    # Add Technique filter to final query
-    # Techniques are filtered by intersection
-    # TODO, broke this
-    # tq = Q()
-    # for item in technique_query_request:
-    #     tq |= ~Q(techniques__id=item)
-    # final_query &= ~tq
+        type_query = Q()
+        for type in search_form.cleaned_data["type"]:
+            type_query |= ~Q(types__id=type.id)
+        query &= ~type_query
 
-    # Technique.objects.filter(pk__in=self.solutions.all().values("techniques"))
-    # Filter problems
-    problems = Problem.objects.filter(final_query).distinct()
-    print(problems.query)
-    # FUTURE WORK: Only show categories and techniques which are within the
-    # filtered `problems` variable
+        if search_form.cleaned_data["tech"]:
+            technique_query = Q()
+            filter_by_solution = True
+
+            for technique in search_form.cleaned_data["tech"]:
+                technique_query |= ~Q(techniques__id=technique.id)
+
+            solution_query &= ~technique_query
 
     context = {}
-    context["sources_active"] = sources_query_request
-    context["categories_active"] = branch_query_request
-    context["techniques_active"] = technique_query_request
-    context["problems"] = problems.order_by("source", "number")
-    context["sources"] = Source.objects.all()
-    context["categories"] = Branch.objects.all()
-    context["type"] = Type.objects.all()
-    context["techniques"] = Technique.objects.all()
+
+    if filter_by_solution:
+        # The filter_by_solution enables filtering the set of problems by a set of solutions.
+        # If filtering by solution is not needed, this cuts down on an extra database query.
+        solutions = Solution.objects.filter(solution_query)
+        context["problems"] = (
+            Problem.objects.filter(query)
+            .filter(solutions__in=solutions)
+            .order_by("source", "number")
+        )
+    else:
+        # Also, without this branch, a bug arises when problems have no
+        # solutions. Without the branch those problems would simply be lost.
+        context["problems"] = (
+            Problem.objects.prefetch_related("source")
+            .filter(query)
+            .order_by("source", "number")
+        )
+
+    context["search_form"] = search_form
+
     return render(request, "problem_list.html", context)
 
 

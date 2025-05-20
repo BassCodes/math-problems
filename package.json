@@ -1,0 +1,19 @@
+{
+  "name": "math_problem_editor",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.40.2"
+  },
+  "scripts": {
+    "build": "npx rollup -c"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "description": "",
+  "dependencies": {
+    "codemirror": "^6.0.1",
+    "markdown-it": "^14.1.0"
+  }
+}

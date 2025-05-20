@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-
+from .models import UserSolvedProblem
 from .models import CustomUser
 
 
+@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = [
@@ -15,4 +16,6 @@ class CustomUserAdmin(UserAdmin):
     ]
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+@admin.register(UserSolvedProblem)
+class UserSolvedProblemAdmin(admin.ModelAdmin):
+    list_display = ["pk", "user", "problem", "solve_date"]

@@ -3,10 +3,9 @@
 {% load static %}
 
 
-
-<header>
-    <h1 id="page-title">User Profile</h1>
-</header>
+{% block header %}
+<h1 id="page-title">User Profile</h1>
+{% endblock header %}
 
 <main>
 
@@ -16,9 +15,11 @@
 Last Online: {{ user.last_login|date:"Y-m-d" }} 
 </p>
 
+{% if request.user == user %}
+Viewing own profile
+{% endif %}
 
 </main>
-
 {%endblock%}
 
 {% block pagehead %}

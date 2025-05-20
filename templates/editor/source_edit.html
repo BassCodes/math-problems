@@ -2,28 +2,21 @@
 
 {% load static %}
 
-{% block pagehead %}
-{% endblock pagehead %}
-
-{% block content %}
-
+{% block header %}
 <header>
     <h1 id="page-title">
        Edit Source
     </h1>
 </header>
+{% endblock header %}
 
-
-
-
+{% block content %}
 <main>
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Update">
     </form>
 </main>
-
-
 {% endblock content %}
 
 

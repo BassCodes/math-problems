@@ -1,12 +1,15 @@
-{% extends "base.html" %} {% block content %}
-{% load markdown_extras %}
-<header>
-    <h1 id="page-title">
-        {{sourcegroup.name}}
-    </h1>
-</header>
+{% extends "base.html" %}
 
-<main>
+{% block header %}
+<h1 id="page-title">
+    {{sourcegroup.name}}
+</h1>
+{% endblock header %}
+
+{% block content %}
+{% load markdown_extras %}
+
+<main class="doc">
     <h2>Series Information</h2>
     {% if sourcegroup.description %}
         {{ sourcegroup.description | markdown | safe }}
@@ -22,7 +25,7 @@
 
     <div class="flex j-between a-center">
         <h2>Sources from series</h2>
-        {% if user.is_authenticated %}
+        {% if perms.problems.add_source %}
         <span id="edit-box">
             <span>
                 <a href="{% url 'source_create' %}?group={{ sourcegroup.id }}" title="New Source">+</a>

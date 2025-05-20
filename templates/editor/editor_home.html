@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
-{% block content %}
-<header>
+
+{% block header %}
     <h1 id="page-title">
        Editor
     </h1>
-</header>
+{% endblock header %}
 
+{% block content %}
 <main>
     <h2>Create</h2>
     <ul>
@@ -15,6 +16,9 @@
         </li>
         <li>
             <a href="{% url 'source_create' %}">New Source</a>
+        </li>
+        <li>
+            <a href="{% url 'sourcegroup_create' %}">New Source Group</a>
         </li>
         <li>
             <a href="{% url 'missing_problems' %}">Missing Problems</a>

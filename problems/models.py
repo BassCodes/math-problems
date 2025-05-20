@@ -1,6 +1,5 @@
 from django.db import models
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 
 
 class SourceGroup(models.Model):
@@ -89,7 +88,7 @@ class Branch(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Categories"
+        verbose_name_plural = "Branches"
 
     def __str__(self):
         return self.name[:50]
@@ -125,10 +124,16 @@ class Problem(models.Model):
     """
 
     problem_text = models.TextField()
-    answer_text = models.TextField()
+    # Having dependency between fields (has_answer and answer_text) doesn't
+    # seem normalized. Splitting out to another table would be needlessly
+    # complex though.
+    has_answer = models.BooleanField()
+    answer_text = models.TextField(blank=True, null=True)
 
     pub_date = models.DateField(blank=True, null=True)
 
+    # Having dependency between fields (source and number) doesn't
+    # seem normalized. Perhaps this should be fixed in the future.
     source = models.ForeignKey(
         Source,
         on_delete=models.CASCADE,
@@ -136,7 +141,7 @@ class Problem(models.Model):
         related_name="problems",
     )
     number = models.PositiveSmallIntegerField()
-    categories = models.ManyToManyField(Branch, blank=True, related_name="problems")
+    branches = models.ManyToManyField(Branch, blank=True, related_name="problems")
     types = models.ManyToManyField(Type, blank=True, related_name="problems")
 
     # Two problems can not share the same problem number and the same source

@@ -3,28 +3,45 @@
 {% load static %}
 
 {% block pagehead %}
-<script  type="module" src="{% static 'problemeditor.js' %}"></script>
+<script  src="{% static 'compiled/problem_editor.js' %}"></script>
 <link rel="stylesheet" href="{% static 'formstyle.css' %}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {% endblock pagehead %}
 
+{% block header %}
+    <h1 id="page-title">
+        {{problem.source.name}}
+    </h1>
+    <div id="problem-source-box">
+        {% if problem.source.subtitle %}
+        <div id="problem-source-subtitle">{{ problem.source.subtitle }}</div>
+        {% endif %}
+        <div id="problem-number">
+            {% if problem.number %}
+                Problem &numero;
+                {{problem.number}}.
+            {% endif %}
+        </div>
+    </div>
+{% endblock header %}
+
+{% block rsidebar %}
+<div class="previewBar doc">
+    <h2>Preview</h2>
+
+</div>
+{% endblock rsidebar %}
+
 {% block content %}
 
-<header>
-    <h1 id="page-title">
-       Edit Problem
-    </h1>
-</header>
 
 
 
 
-<main class="wideMain">
-
-
-
+<main class="wide-main doc">
+    <h2>Edit Problem</h2>
     <form method="post">
         {% csrf_token %}
         <div id="sourceBox">
@@ -36,46 +53,66 @@
             </div>
         </div>
         {{ problem_form.non_field_errors }}
-        <div class="fieldWrapper">
+        <div id="problem-tag-fields">
+
+            <div class="fieldWrapper">
+                {{ problem_form.branches.as_field_group }}
+            </div>
+            <div class="fieldWrapper" id="problemTypesField">
+                {{ problem_form.types.as_field_group }}
+            </div>
+        </div>
+
+
+        <div class="fieldWrapper" id="problemTextField">
             {{ problem_form.problem_text.as_field_group }}
         </div>
-        <div class="fieldWrapper">
+
+        
+        <div class="fieldWrapper" id="hasAnswerField">
+            {{ problem_form.has_answer.as_field_group }}
+        </div>
+        <div class="fieldWrapper" id="answerTextField">
             {{ problem_form.answer_text.as_field_group }}
-        </div>
-        <div class="fieldWrapper">
-            {{ problem_form.categories.as_field_group }}
-        </div>
-        <div class="fieldWrapper">
-            {{ problem_form.types.as_field_group }}
         </div>
 
  
-        <h2>Solutions</h2>
-
+        
+        <div class="flex row j-between a-center">
+            <h2>Solutions</h2>
+            <span id="edit-box">
+            
+                <button type="button" class="link" id="newSolutionButton" title="New Solution">New Solution</button>
+                </span>
+            </div>
+ 
+ 
+        <div id="solutionsBox">
         {% for solution_form in solution_forms %}
         <div class="solutionWrapper" data-solution-no="{{ solution_form.x_form_no }}">
 
 
             {{ solution_form.non_field_errors }}
 
-            <div class="fieldWrapper">
+            <div class="fieldWrapper solutionTextField">
                 {{ solution_form.solution_text.as_field_group }}
             </div>
             <div class="fieldWrapper">
                 {{ solution_form.techniques.as_field_group }}
             </div>
             <a href="{% url 'solution_delete' pk=solution_form.instance.id %}" target="_blank">Delete</a>
-
         </div>
         {% endfor %}
+        </div>
 
 
-        <input type="number" style="display: none;" name="additional_solutions" id="additional_solutions" value="0">
+        <input type="number"  style="display: none;" name="additional_solutions" id="additional_solutions" value="0">
 
 
-        <button type="button" id="newSolutionButton">New Solution</button>
+<div class="flex row j-right a-center">
 
-        <button  type="submit">Publish</button>
+    <button  type="submit">Publish</button>
+</div>
     </form>
 </main>
 

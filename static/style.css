@@ -26,36 +26,87 @@ html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
 html {
   color-scheme: light dark;
   height: 100%;
-  font-size: 120%;
+  font-size: 18px;
   font-family: Palatino Linotype, Palatino LT STD, bitstream charter, charter,
     Georgia, serif;
   margin-inline: auto;
 }
 
-body {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  background-color: var(--background-color);
-  color: var(--text-color);
-}
-
 /* GRID LAYOUT */
 /* Entire page layout is blocked out using CSS grid. */
-/* This is to avoid ugly css hacks*/
-body > #gridContainer {
+
+/* @media (max-width: calc(15em + 650px + 8em +  8*1.2em)) {
+  body > #gridContainer {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "nav"
+      "header"
+      "main"
+      "left"
+      "left"
+      "footer" !important;
+  }
+} */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin-inline: auto;
+}
+
+div#outer-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#flex-layout-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1.2em;
+}
+
+#top-box {
+  max-width: 100%;
+  width: 100%;
+  margin-left: auto;
+}
+#spacer {
+  max-width: 18em;
+  width: 100%;
+  height: 1px;
+  background-color: red;
+  display: block;
+}
+
+#sidebar {
+  max-width: 18em;
+  width: 100%;
+  display: block;
+}
+
+#flex-layout-container > #center-column:has(.wide-main) {
+  max-width: calc(650px + 30em);
+}
+
+#flex-layout-container > #center-column {
+  width: 100%;
+
+  max-width: calc(650px + 8em);
+}
+
+/* body > #gridContainer {
   display: grid;
-  grid-template-columns: 15em calc(650px + 10em) 15em;
-  grid-template-rows: repeat(5, min-content);
+  grid-template-columns: minmax(15em, 1fr) calc(650px + 8em) 1fr;
+  grid-template-rows: repeat(6, min-content);
   row-gap: 0.1em;
   column-gap: 1.2em;
   grid-template-areas:
-    ".      .        .      "
-    ".      .        .      "
-    "nav    header   authbar"
-    ".      l-over   .      "
-    "left   main     right  "
-    "left   r-over   right  ";
+    ".      .        "
+    ".      nav      "
+    ".      header   "
+    ".      .        "
+    "left   main     "
+    "left   footer   ";
 }
 
 main {
@@ -63,15 +114,18 @@ main {
   grid-area: main;
 }
 
+#gridContainer > footer {
+  grid-area: footer;
+}
+
 nav {
   grid-area: nav;
 }
 
-#sidebar.right {
-  grid-area: right;
-}
 #sidebar.left {
-  justify-content: right;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
   grid-area: left;
 }
 
@@ -79,24 +133,16 @@ header {
   width: 100%;
   grid-area: header;
   align-self: baseline;
-}
-
-#authbar {
-  grid-area: authbar;
-}
+} */
 
 /* END GRID LAYOUT */
 
+/* NAV */
+
 nav {
-  user-select: none;
-  /* display: flex; */
-  /* align-items: center; */
   ul {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-between;
     row-gap: 0.25em;
+    column-gap: 0.25em;
     list-style: none;
     li {
       background-color: var(--background-secondary-color);
@@ -116,24 +162,17 @@ button.link {
   background: none !important;
   padding: 0 !important;
   border: none;
+  all: inherit;
 
-  font-family: inherit;
-  font-size: inherit;
   color: var(--text-color);
   text-decoration: underline;
   text-decoration-style: dotted;
   cursor: pointer;
 }
 
-h1,
-h2,
-h3 {
-  font-size: x-large;
-  font-weight: 500;
-  margin-block: 0.5em;
+/* END NAV */
 
-  text-decoration: dashed;
-}
+/* HEADER */
 
 header {
   display: flex;
@@ -143,49 +182,101 @@ header {
 
   h1 {
     margin: 0;
+    font-weight: 100;
     font-style: italic;
   }
   #problem-source-box {
-    text-align: right;
+    display: flex;
+    justify-content: right;
+    align-items: end;
+    flex-direction: column;
     color: var(--text-muted-color);
   }
+}
+
+/* END HEADER */
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 1.23em;
+}
+h2 {
+  font-size: 1.2em;
 }
 
 main {
   border: 1px solid var(--border-primary-color);
   background-color: var(--background-primary-color);
-  padding-block: 1em;
-  padding-inline: 5em;
+  padding-block: 2em;
+  padding-inline: 4em;
 }
 
 mjx-container {
   overflow-x: scroll;
+  width: 100%;
+  height: 100%;
   /* Exponents seem to be cut off by 1 pixel without this. Don't ask me why. I got tired of googling. */
   padding: 1px !important;
+}
+
+div:has(mjx-container) {
+  width: 100%;
+  height: 100%;
+}
+
+.doc h1,
+.doc h2,
+.doc h3 {
+  margin-bottom: 1rem;
 }
 
 ul {
   list-style-position: inside;
 }
-
-p {
-  margin-bottom: 0.6em;
-  line-height: 1.55;
+main > ul {
+  list-style-position: outside;
+  /* margin-left: 2ch; */
+  list-style: none;
 }
 
-.muted {
-  color: var(--text-muted-color);
+main > ul > li {
+  margin-bottom: 0.5rem;
+  margin-left: 5ch;
+}
+main > ul > li::before {
+  content: "•";
+  position: absolute;
+  margin-left: -5ch;
 }
 
-a.incognito {
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
+main > ul.slim > li {
+  margin-bottom: 0.25rem;
+}
+
+main p,
+.doc p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+main,
+.doc {
+  line-height: 1.4;
+}
+
+h1,
+h2 {
+  margin-top: 0px;
 }
 
 a {
-  text-decoration-style: dotted;
+  text-decoration-style: solid;
+  text-decoration-thickness: 1px;
   color: var(--text-color);
 }
 
@@ -196,15 +287,6 @@ a:hover {
 a[inert] {
   color: var(--text-muted-color);
   text-decoration: none;
-}
-
-/* .flex-right {
-  display: flex;
-  justify-content: right;
-} */
-
-.hidden {
-  display: none;
 }
 
 div#unpublished-problem-warning {
@@ -223,8 +305,8 @@ div#unpublished-problem-warning {
   word-break: break-all;
   border: 1px solid var(--border-secondary-color);
   background-color: var(--background-secondary-color);
-  padding-block: 1em;
-  padding-inline: 0.5em;
+  padding-block: 2em;
+  padding-inline: 1em;
   #meta-source-problem-list {
     li {
       list-style: disc;
@@ -246,12 +328,9 @@ div#unpublished-problem-warning {
     margin-bottom: 0.2em;
   }
 
-  #meta-sidebar-title:is(* + #meta-sidebar-title) {
-    margin-block: 0.2em;
-  }
-
   a.button {
     min-width: 10ch;
+    margin-bottom: -1.33em;
   }
   li {
     margin-left: 3ch;
@@ -273,10 +352,11 @@ a.button[inert] {
 
 details:not([open]) summary h2::after {
   content: "(click to reveal)";
-  font-size: 0.58em;
+  font-size: 0.8rem;
   margin-inline-start: 1em;
   color: var(--text-muted-color);
 }
+
 details > summary {
   list-style: none;
 }
@@ -295,6 +375,8 @@ details > summary::-webkit-details-marker {
   }
   user-select: none;
 }
+
+/* UTILITY CLASSES */
 
 .flex {
   display: flex;
@@ -318,7 +400,38 @@ details > summary::-webkit-details-marker {
   &.j-center {
     justify-content: center;
   }
+  &.j-right {
+    justify-content: right;
+  }
+  &.j-left {
+    justify-content: left;
+  }
   &.a-center {
     align-items: center;
   }
 }
+
+.borderunder {
+  border-bottom: 1px solid var(--text-muted-color);
+}
+
+.hidden {
+  display: none;
+}
+
+.muted {
+  color: var(--text-muted-color);
+}
+
+.noselect {
+  user-select: none;
+}
+
+a.incognito {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* END UTILITY CLASSES */

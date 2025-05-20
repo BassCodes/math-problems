@@ -1,18 +1,17 @@
 {% extends "base.html" %}
-{% block content %}
-
-{% load markdown_extras %}
-
-<header>
+{% block header %}
     <h1 id="page-title">
        Sources
     </h1>
-</header>
-
+    {% endblock header %}
+    
+    
+{% block content %}
+{% load markdown_extras %}
 
 {% regroup source_list by parent as grouped_sources  %}
-<main>
-    <ul>
+<main class="doc"> 
+    <ul class="slim">
         {% for source_group,sources in grouped_sources %}
         <h2>
             {% if source_group %}

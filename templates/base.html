@@ -3,35 +3,34 @@
   
 <html lang="en">
   <head>
-    <title>Math Problem Site</title>
+    <title>Math Competition Problems</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <script>
       window.MathJax = {
       loader: {load: ['[tex]/cancel']},
   tex: {
 
-    inlineMath: [ ["\\(","\\)"] ],
-    displayMath: [ ["\\[","\\]"] ],
+    inlineMath: [ ["\$","\$"] , ["\\(", "\\)"]],
+    displayMath: [ ["$$","$$"], ["\\[", "\\]"] ],
     processEscapes: true,
     processEnvironments: true,
     packages: {'[+]': ['cancel']}
   },
-  options: {
-    ignoreHtmlClass: ".*",
-    processHtmlClass: "arithmatex"
-  }
 };
     </script>
+    <script id="MathJax-script" src="{% static 'mathjax/tex-chtml-full.js' %}"></script>
+
     {% block pagehead %} {% endblock pagehead %}
   </head>
 
   <body>
-    <span id="gridContainer">
-
-    <nav>
-      <ul>
+    <div id="outer-container">
+      <div id="top-box">
+        <nav>
+      <ul class="flex left noselect">
         <li>
           <a href="{% url 'home' %}">Home</a>
         </li>
@@ -61,8 +60,25 @@
         {% endif %}
       </ul>
     </nav>
-      {% block content %} {% endblock content %}
-  </span>
-
+        <header>
+          {% block header %} {% endblock header %}
+        </header>
+      </div>
+      <span id="flex-layout-container">
+        
+        {% block sidebar %} {% endblock sidebar %}
+        
+        <div id="center-column">    
+          {% block content %} {% endblock content %}
+        </div>
+        {% block rsidebar %} {% endblock rsidebar %}
+      </span>
+    </div>
+      
     </body>
 </html>
+
+
+
+
+

@@ -1,5 +1,6 @@
 from django.urls import path
 
+
 from .views import (
     EditorHomePageView,
     EditorProblemDeleteView,
@@ -10,6 +11,8 @@ from .views import (
     SolutionDeleteView,
     SourceEditView,
     SourceCreateView,
+    SourceGroupEditView,
+    SourceGroupCreateView,
 )
 
 urlpatterns = [
@@ -32,4 +35,12 @@ urlpatterns = [
     ),
     path("source/upd/<int:pk>", SourceEditView.as_view(), name="source_edit"),
     path("source/add/", SourceCreateView.as_view(), name="source_create"),
+    path(
+        "sourcegroup/upd/<int:pk>",
+        SourceGroupEditView.as_view(),
+        name="sourcegroup_edit",
+    ),
+    path(
+        "sourcegroup/add/", SourceGroupCreateView.as_view(), name="sourcegroup_create"
+    ),
 ]

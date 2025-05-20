@@ -20,26 +20,13 @@ Django views are to be written as classes unless it would be simpler to write as
 
 CSS Nesting is used heavily in the stylesheets. [Can I use CSS Nesting?](https://caniuse.com/css-nesting)
 
-## Libraries
-
-Backend Libraries
-
-- Livereload: Automatically reloading Django static resources (CSS,JS,etc.)
-- Markdown: Plaintext formatting when rendering to HTML
-- pymdown-extensions: Allows MathJax Math to work with markdown.
-
-Frontend Libraries
-
-- MathJax: Math Typesetting
-- Select2: Pretty input[type="select"] input forms
-- JQuery: Dependency of Select2
-
 ## Installation
 
 Prerequisites
 
 - Python 3.12
 - [uv package manager](https://docs.astral.sh/uv/)
+- Recent version of Node and pm
 
 ### Step 1
 
@@ -69,6 +56,21 @@ Additionally, you can get live resource reloading by running (in a separate term
 uv run python manage.py livereload
 ```
 
+### Step 3
+
+Only a few parts of the application use compiled JavaScript (currently the W.I.P. editor)
+so you can skip this part if you won't be touching that.
+
+```sh
+npm install
+```
+
+```sh
+npm run build
+```
+
 ## Additional Documents
 
 [Future Work](future_work.md) planned additions to the software.
+
+[Commands](commands.md)
