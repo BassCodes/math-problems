@@ -1,17 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block pagehead %}
+<link rel="stylesheet" href="{% static 'loginform.css' %}">
+{% endblock pagehead %}
+
+
+
+{% block header %}
+<h1 id="page-title">Login</h1>
+{% endblock header %}
 
 {% block content %}
-<header>
-    <h1 id="page-title">
-       Login
-    </h1>
-</header>
-
 <main>
     <p>Registrations are currently closed. If you would like an account, please contact the administrator.</p>
-    <form method="post">{% csrf_token %}
-        {{ form }}
-        <button type="submit">Log In</button>
-    </form>
+    <div id="login-form-container">
+        <form id="login-form" method="post">{% csrf_token %}
+            {{ form }}
+            <button type="submit">Log In</button>
+        </form>
+    </div>
 </main>
 {% endblock content %}

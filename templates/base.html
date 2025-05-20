@@ -58,6 +58,9 @@
           <a href="{% url 'login' %}">Log In</a>
         </li>
         {% endif %}
+        <li>
+          <a href="{% url 'about_page' %}">About</a>
+        </li>
       </ul>
     </nav>
         <header>
@@ -66,12 +69,12 @@
       </div>
       <span id="flex-layout-container">
         
-        {% block sidebar %} {% endblock sidebar %}
         
         <div id="center-column">    
           {% block content %} {% endblock content %}
         </div>
-        {% block rsidebar %} {% endblock rsidebar %}
+        {% block rsidebar  %} {% endblock rsidebar %}
+        {% block sidebar %} {% endblock sidebar %}
       </span>
     </div>
       

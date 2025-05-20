@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     # 3rd Party
     "livereload",
     "debug_toolbar",
+    "captcha",
     # Staticfiles
     "django.contrib.staticfiles",
     # Local
     "accounts",
     "problems",
     "editor",
+    "about",
 ]
 
 MIDDLEWARE = [

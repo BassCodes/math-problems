@@ -2,6 +2,37 @@
 
 Things todo.
 
+## Information pages
+
+Page about copyright of problems
+
+- All solutions contributed must be licensed under CC-BY-SA 4.0 (checkbox or something in the signup and problem contribute flows)
+
+Problem authoring guidelines
+
+- What kinds of problems are accepted
+
+- No geometry/image problems until image uploads are supported
+
+- Each solution step should be an imperative statement.
+- Do not add period to end-of-sentence if a display math expression follows it.
+  If no display expression follows it, or if another sentence follows it, use periods.
+
+- Example imperative statements
+
+  - "Notice that"
+  - "Remember that"
+  - Integrate
+  - Sum
+  - Differentiate
+  - Divide
+  - Substitute
+  - Split
+  - Factor
+  - List
+  - Remove
+  - Find
+
 ## General Layout
 
 Rework layout to be responsive. Grid, Flexbox?
@@ -75,3 +106,9 @@ Pagination to problem list
 Add WYSIWYG Editor
 
 - Mathquil seems like a good option
+
+Add image uploads
+
+Custom markup features
+
+- Columns

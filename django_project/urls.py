@@ -20,10 +20,15 @@ from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
 
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("accounts/", include("accounts.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path("edit/", include("editor.urls")),
-    path("", include("problems.urls")),
-] + debug_toolbar_urls()
+urlpatterns = (
+    [
+        path("admin/", admin.site.urls),
+        path("accounts/", include("accounts.urls")),
+        path("accounts/", include("django.contrib.auth.urls")),
+        path("edit/", include("editor.urls")),
+        path("about/", include("about.urls")),
+        path("", include("problems.urls")),
+    ]
+    + debug_toolbar_urls()
+    + [path("captcha/", include("captcha.urls"))]
+)

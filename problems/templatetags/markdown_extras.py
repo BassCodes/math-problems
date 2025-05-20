@@ -20,3 +20,16 @@ def markdown(value):
     )
     clean_html = bleach.clean(dirty_html, markdown_tags, markdown_attrs)
     return clean_html
+
+
+@register.filter()
+@stringfilter
+def unsafe_markdown(value):
+    """
+    Renders Inline HTML in markdown.
+    Not to be used with user input. Only to be used for static data like markdown files.
+    """
+    dirty_html = md.markdown(
+        value, extensions=extensions, extension_configs=extension_configs
+    )
+    return dirty_html

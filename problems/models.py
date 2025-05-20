@@ -127,7 +127,7 @@ class Problem(models.Model):
     # Having dependency between fields (has_answer and answer_text) doesn't
     # seem normalized. Splitting out to another table would be needlessly
     # complex though.
-    has_answer = models.BooleanField()
+    has_answer = models.BooleanField(default=False)
     answer_text = models.TextField(blank=True, null=True)
 
     pub_date = models.DateField(blank=True, null=True)

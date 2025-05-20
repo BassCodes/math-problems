@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import UserSolvedProblem
 from .models import CustomUser
 
 
@@ -14,8 +13,3 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_active",
     ]
-
-
-@admin.register(UserSolvedProblem)
-class UserSolvedProblemAdmin(admin.ModelAdmin):
-    list_display = ["pk", "user", "problem", "solve_date"]

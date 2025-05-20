@@ -9,6 +9,8 @@
   --background-secondary-color: light-dark(#fefefe, #0f0f0f);
   --border-primary-color: light-dark(black, #2b2e30);
   --border-secondary-color: light-dark(gray, #1c1e1f);
+  /* buttons and such should be styled with the following radius */
+  --interact-border-radius: 3px;
 }
 
 /* Reset default styles */
@@ -62,6 +64,8 @@ div#outer-container {
   display: flex;
   justify-content: center;
   flex-direction: row;
+  flex-wrap: wrap;
+
   gap: 1.2em;
 }
 
@@ -209,10 +213,14 @@ h2 {
   font-size: 1.2em;
 }
 
+h3 {
+  font-size: 1.03em;
+}
+
 main {
   border: 1px solid var(--border-primary-color);
   background-color: var(--background-primary-color);
-  padding-block: 2em;
+  padding-block: 2.5em;
   padding-inline: 4em;
 }
 
@@ -435,3 +443,8 @@ a.incognito {
 }
 
 /* END UTILITY CLASSES */
+
+.example {
+  border: 1px solid var(--border-secondary-color);
+  margin-bottom: 1em;
+}
