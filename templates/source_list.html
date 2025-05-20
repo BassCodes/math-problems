@@ -11,6 +11,7 @@
 
 {% regroup source_list by parent as grouped_sources  %}
 <main class="doc"> 
+    {% if source_list|length != 0 %}
     <ul class="slim">
         {% for source_group,sources in grouped_sources %}
         <h2>
@@ -30,6 +31,9 @@
         {% endfor %}
         {% endfor %}
     </ul>
+    {% else %}
+    <div class="muted">(no sources)</div>
+    {% endif %}
 </main>
 {% endblock content %}
 
