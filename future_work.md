@@ -2,6 +2,10 @@
 
 Things todo.
 
+## Git
+
+Move to codeberg
+
 ## Information pages
 
 Page about copyright of problems

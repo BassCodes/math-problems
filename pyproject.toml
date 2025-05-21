@@ -23,11 +23,18 @@ blank_line_after_tag="load,endblock,extends"
 ignore="H023,H021"
 custom_blocks="problem_list,regroup"
 
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "django_project.settings"
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
+
+
 
 [dependency-groups]
 dev = [
     "django-livereload-server>=0.5.1",
     "djlint>=1.36.4",
+    "pytest>=8.3.5",
+    "pytest-django>=4.11.1",
     "ruff>=0.11.9",
 ]
 

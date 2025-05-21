@@ -173,3 +173,13 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "logout-page"
+
+# Captcha config
+
+CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.math_challenge"
+CAPTCHA_NOISE_FUNCTIONS = (
+    # "captcha.helpers.noise_arcs",
+    "captcha.helpers.noise_dots",
+)
+CAPTCHA_LETTER_ROTATION = (-20, 20)
+CAPTCHA_MATH_CHALLENGE_OPERATOR = "*"
