@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from .models import Problem, Source, SourceGroup, Solution
 from django.http import HttpResponseForbidden
-from .forms import SearchForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .models import Problem, Source, SourceGroup, Solution
+from .forms import SearchForm
 
 
 class HomePageView(TemplateView):
@@ -78,10 +79,6 @@ def problem_list_view(request):
 
 def problem_detail_view(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
-    if not problem.is_published() and not request.user.is_authenticated:
-        return HttpResponseForbidden(
-            "This problem is a draft. Only logged-in users can view it."
-        )
 
     context = {}
     context["problem"] = problem

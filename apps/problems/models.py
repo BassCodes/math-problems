@@ -130,8 +130,6 @@ class Problem(models.Model):
     has_answer = models.BooleanField(default=False)
     answer_text = models.TextField(blank=True, null=True)
 
-    pub_date = models.DateField(blank=True, null=True)
-
     # Having dependency between fields (source and number) doesn't
     # seem normalized. Perhaps this should be fixed in the future.
     source = models.ForeignKey(
@@ -153,9 +151,6 @@ class Problem(models.Model):
         return Technique.objects.filter(
             pk__in=self.solutions.all().values("techniques")
         )
-
-    def is_published(self):
-        return self.pub_date is not None
 
     def get_next(self):
         if self.source is None:

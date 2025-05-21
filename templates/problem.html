@@ -15,11 +15,6 @@
 
 {% block content %}
     <main class="doc">
-        {% if not problem.is_published %}
-            <div id="unpublished-problem-warning">
-                <div>This is a draft which is only visible to logged-in users</div>
-            </div>
-        {% endif %}
         <div class="flex row j-between a-center">
             <h1>Problem Statement</h1>
             {% if user.is_authenticated %}
