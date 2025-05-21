@@ -7,10 +7,6 @@
 
 - Test unicode codepoint icons on other fonts/machines
 
-- Refactor page subtitles into block
-
-- Figure out why chrome wants to scroll on the math
-
 - Docker setup?
 
 - Configure captcha to be less painful
@@ -18,3 +14,5 @@
 - Make max username length shorter 30 chars?
 
 - Move markdown to templates dir
+
+- Find external font to appease brave browser (doesn't want to use Palatino system font)
