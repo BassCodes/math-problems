@@ -15,7 +15,9 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["newest_problems"] = (
-            Problem.objects.all().order_by("pub_date").reverse()[:3]
+            Problem.objects.all()
+            # .order_by("pub_date")
+            .reverse()[:3]
         )
         return context
 

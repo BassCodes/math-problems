@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load markdown_extras %}
+{% load problem_list %}
+
+{% block header %}
+    <h1 id="page-title">
+        <a class="incognito" href="{{ problem.source.get_absolute_url }}">{{ problem.source.name }}</a>
+    </h1>
+{% endblock header %}
+
+{% block subtitle %}
+    {% if problem.source.subtitle %}<div id="problem-source-subtitle">{{ problem.source.subtitle }}</div>{% endif %}
+    {% if problem.number %}<div id="problem-number">Problem &numero; {{ problem.number }}.</div>{% endif %}
+{% endblock %}
+
+{% block content %}
+    <main class="doc">
+        <h2>Problem History</h2>
+        <ul>    
+            {% for h in diffs %}
+        <li>
+            {{ h.history.history_type }} {{ h.history.history_user_id }} changed  {{ h.diff }}
+        </li>
+            {% endfor %}
+        </ul>
+    </main>
+{% endblock content %}

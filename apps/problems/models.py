@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from simple_history.models import HistoricalRecords
 
 
 class SourceGroup(models.Model):
@@ -41,6 +42,7 @@ class Source(models.Model):
     description = models.TextField(blank=True, null=True)
     publish_date = models.DateField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["parent", "name"]
@@ -123,7 +125,7 @@ class Problem(models.Model):
     A Problem represents the description of a problem, including statement and answer
     """
 
-    problem_text = models.TextField()
+    problem_text = models.TextField(blank=True, null=True)
     # Having dependency between fields (has_answer and answer_text) doesn't
     # seem normalized. Splitting out to another table would be needlessly
     # complex though.
@@ -141,6 +143,7 @@ class Problem(models.Model):
     number = models.PositiveSmallIntegerField()
     branches = models.ManyToManyField(Branch, blank=True, related_name="problems")
     types = models.ManyToManyField(Type, blank=True, related_name="problems")
+    history = HistoricalRecords()
 
     # Two problems can not share the same problem number and the same source
     class Meta:
@@ -180,6 +183,13 @@ class Problem(models.Model):
         else:
             return None
 
+    def date_published(self):
+        return self.history.last().history_date
+
+    def date_edited(self):
+        # TODO check solutions too
+        return self.history.first().history_date
+
     def __str__(self):
         return self.problem_text[:50]
 
@@ -193,6 +203,7 @@ class Solution(models.Model):
     )
     techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
     solution_text = models.TextField()
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.solution_text[:50]

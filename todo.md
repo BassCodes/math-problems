@@ -16,3 +16,7 @@
 - Move markdown to templates dir
 
 - Find external font to appease brave browser (doesn't want to use Palatino system font)
+
+- Djlint considers regroup to be a block instead of inline
+
+- Give problem \_\_str\_\_ name from source name

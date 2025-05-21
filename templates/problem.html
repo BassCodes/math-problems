@@ -51,12 +51,13 @@
                 {{ problem.answer_text | markdown | safe }}
             </details>
         {% endif %}
-        {% comment %}
     <h2>Unsorted Data</h2>
 
+    <p>history</p>
     <ul>
-        <li>Added {{ problem.pub_date }}</li>
-    </ul>
+        <li>Created {{ problem.date_published }}</li>
+        <li>Edited {{ problem.date_edited }}</li>
+    </ul>            
 
     <ul>
         {% for branch in problem.branches.all %}
@@ -72,7 +73,6 @@
         </li>
         {% endfor %}
     </ul>
-        {% endcomment %}
     </main>
 {% endblock content %}
 

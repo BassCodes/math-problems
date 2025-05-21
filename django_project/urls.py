@@ -27,6 +27,7 @@ urlpatterns = (
         path("accounts/", include("django.contrib.auth.urls")),
         path("edit/", include("editor.urls")),
         path("about/", include("about.urls")),
+        path("history/", include("history.urls")),
         path("", include("problems.urls")),
     ]
     + debug_toolbar_urls()

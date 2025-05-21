@@ -50,18 +50,22 @@ INSTALLED_APPS = [
     "livereload",
     "debug_toolbar",
     "captcha",
-    # Staticfiles
+    "simple_history",
+    # First Party
     "django.contrib.staticfiles",
     # Local
     "accounts",
     "problems",
     "editor",
     "about",
+    "history",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # Third Party
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # First Party
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -70,6 +74,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Third Party
     "livereload.middleware.LiveReloadScript",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 DEBUG_TOOLBAR_PANELS = [

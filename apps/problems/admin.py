@@ -2,9 +2,11 @@ from django.contrib import admin
 
 from .models import Problem, Branch, Source, SourceGroup, Technique, Solution, Type
 
+import simple_history
+
 
 @admin.register(Solution)
-class SolutionAdmin(admin.ModelAdmin):
+class SolutionAdmin(simple_history.admin.SimpleHistoryAdmin):
     list_display = ("pk", "problem", "solution_text")
 
 
@@ -13,13 +15,13 @@ class SolutionInline(admin.TabularInline):
 
 
 @admin.register(Problem)
-class ProblemAdmin(admin.ModelAdmin):
+class ProblemAdmin(simple_history.admin.SimpleHistoryAdmin):
     inlines = [SolutionInline]
-    list_display = ("pk", "problem_text", "number", "source", "pub_date")
+    list_display = ("pk", "problem_text", "number", "source", "history")
 
 
 @admin.register(Source)
-class SourceAdmin(admin.ModelAdmin):
+class SourceAdmin(simple_history.admin.SimpleHistoryAdmin):
     list_display = (
         "pk",
         "name",
@@ -29,6 +31,7 @@ class SourceAdmin(admin.ModelAdmin):
         "publish_date",
         "parent",
         "url",
+        "history",
     )
 
 
