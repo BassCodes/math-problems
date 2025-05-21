@@ -2,7 +2,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 
 import bleach
-from bleach_whitelist import markdown_tags, markdown_attrs
+from bleach_allowlist import markdown_tags, markdown_attrs
 
 import markdown as md
 
