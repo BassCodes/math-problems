@@ -1,93 +1,77 @@
 {% extends "base.html" %}
 
-{% block header %}
-    <h1 id="page-title">{{source.name}}</h1>
-    {% if source.subtitle %}
-    <div id="problem-source-box">
-        <div id="problem-source-subtitle">{{ source.subtitle }}</div>
-    </div>
-    {% endif %}
-{% endblock header %}
-
-
-{% block content %}
 {% load markdown_extras %}
 {% load problem_list %}
 {% load static %}
 
+{% block header %}
+    <h1 id="page-title">{{ source.name }}</h1>
+{% endblock header %}
 
-
-<main class="doc">
-    <div class="flex row j-between a-center">
-        <h2>Description</h2>
-        {% if user.is_authenticated %}
-    <span id="edit-box">
-        <span>
-            {% if perms.problems.change_source %}
-            <a href="{% url 'source_edit' pk=source.pk %}" title="Edit">✐</a>
-            {% endif %}
-            {% if perms.problems.delete_source %}
-            <a href="" title="Delete">␥</a>
-            {% endif %}
-        </span>
-    </span>
-    {% endif %}
-    </div>
-
-    {% if source.description %}
-        {{ source.description | markdown | safe }}
-    {% else %}
-        <p class="muted">
-            (no description)
-        </p>
-    {% endif %}
-
-    {% if source.parent %}
-    <p>
-        This source is part of the series <i><a href="{{source.parent.get_absolute_url}}">{{source.parent}}</a></i>.
-    </p>
-    {% endif %}
-
-    <h2>Metadata </h2>
-
-    <ul>
-        <li>Published:&nbsp;
-            {% if source.publish_date %}
-            {{source.publish_date}}
-            {% else %}
-            <span class="muted">(unknown)</span>
-            {% endif %}
-        </li>
-        <li>{% if source.url %}
-            <a href="{{source.url}}">Source URL</a>
-            {% else %}<span class="muted">(No URL available)</span>
-            {% endif %}
-        </li>
-        <li>Total problems:{% if source.problem_count %}
-            {{ source.problem_count }}
-            {% else %}
-            <span class="muted">(unknown)</span>
-            {% endif %}
-        </li>
-    </ul>
-
-    <div class="flex j-between a-center">
-        <h2>Problems</h2>
-
-        {% if user.is_authenticated %}
-        <span id="edit-box">
-            <span>
-            <a href="{% url 'missing_problem' pk=source.pk %}" title="Fill Missing">+</a>
-            </span>
-        </span>
-        {% endif %}
-    </div>
-
-    {% problem_list source.get_problems ord="true" %}
-</main>
-
-{%endblock%}
+{% block subtitle %}
+    {% if source.subtitle %}<div id="problem-source-subtitle">{{ source.subtitle }}</div>{% endif %}
+{% endblock %}
 
 {% block pagehead %}
-<link rel="stylesheet" href="{% static 'problemlist.css' %}">
+    <link rel="stylesheet" href="{% static 'problemlist.css' %}">
 {% endblock pagehead %}
+
+{% block content %}
+    <main class="doc">
+        <div class="flex row j-between a-center">
+            <h2>Description</h2>
+            {% if user.is_authenticated %}
+                <span class="aside-links">
+                    {% if perms.problems.change_source %}
+                        <a href="{% url 'source_edit' pk=source.pk %}" title="Edit">✐</a>
+                    {% endif %}
+                    {% if perms.problems.delete_source %}<a href="" title="Delete">␥</a>{% endif %}
+                </span>
+            {% endif %}
+        </div>
+        {% if source.description %}
+            {{ source.description | markdown | safe }}
+        {% else %}
+            <p class="muted">(no description)</p>
+        {% endif %}
+        {% if source.parent %}
+            <p>
+                This source is part of the series <i><a href="{{ source.parent.get_absolute_url }}">{{ source.parent }}</a></i>.
+            </p>
+        {% endif %}
+        <h2>Metadata</h2>
+        <ul>
+            <li>
+                Published:&nbsp;
+                {% if source.publish_date %}
+                    {{ source.publish_date }}
+                {% else %}
+                    <span class="muted">(unknown)</span>
+                {% endif %}
+            </li>
+            <li>
+                {% if source.url %}
+                    <a href="{{ source.url }}">Source URL</a>
+                {% else %}
+                    <span class="muted">(No URL available)</span>
+                {% endif %}
+            </li>
+            <li>
+                Total problems:
+                {% if source.problem_count %}
+                    {{ source.problem_count }}
+                {% else %}
+                    <span class="muted">(unknown)</span>
+                {% endif %}
+            </li>
+        </ul>
+        <div class="flex j-between a-center">
+            <h2>Problems</h2>
+            <span class="aside-links">
+                <a href="{% url 'missing_problem' pk=source.pk %}"
+                   title="View missing problems">+</a>
+            </span>
+        </div>
+        {% problem_list source.get_problems ord="true" %}
+        </main>
+    {% endblock %}

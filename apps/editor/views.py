@@ -38,39 +38,6 @@ class IncompleteSourceView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class SourceMissingProblemsView(LoginRequiredMixin, DetailView):
-    template_name = "editor/source_missing_problems.html"
-    model = problems.models.Source
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        source = context["source"]
-
-        numbered_problems = {}
-
-        p = source.problems.all()
-        for problem in p:
-            numbered_problems[problem.number] = problem
-
-        ordered_problems_and_blanks = []
-
-        if source.problem_count:
-            max_problems = source.problem_count
-        elif source.problems.all().count() != 0:
-            max_problems = source.problems.all().order_by("number").last().number
-        else:
-            return context
-
-        for num in range(1, max_problems + 1):
-            if num in numbered_problems:
-                ordered_problems_and_blanks.append(numbered_problems[num])
-            else:
-                ordered_problems_and_blanks.append(None)
-        context["problems"] = ordered_problems_and_blanks
-
-        return context
-
-
 @login_required
 @permission_required("problems.add_problem")
 def problem_create_view(request):

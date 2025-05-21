@@ -1,71 +1,62 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
+{% load markdown_extras %}
 
 {% block header %}
-<h1 id="page-title">
-    <a class="incognito" href="{{ problem.source.get_absolute_url }}">{{problem.source.name}}</a>
-</h1>
-<div id="problem-source-box">
-    {% if problem.source.subtitle %}
-    <div id="problem-source-subtitle">{{ problem.source.subtitle }}</div>
-    {% endif %}
-    <div id="problem-number">
-        {% if problem.number %}
-            Problem &numero;
-            {{problem.number}}.
-        {% endif %}
-    </div>
-</div>
+    <h1 id="page-title">
+        <a class="incognito" href="{{ problem.source.get_absolute_url }}">{{ problem.source.name }}</a>
+    </h1>
 {% endblock header %}
 
+{% block subtitle %}
+    {% if problem.source.subtitle %}<div id="problem-source-subtitle">{{ problem.source.subtitle }}</div>{% endif %}
+    {% if problem.number %}<div id="problem-number">Problem &numero; {{ problem.number }}.</div>{% endif %}
+{% endblock %}
+
 {% block content %}
-{% load markdown_extras %}
-<main class="doc">
-    {% if not problem.is_published %}
-    <div id="unpublished-problem-warning">
-        <div>
-            This is a draft which is only visible to logged-in users
+    <main class="doc">
+        {% if not problem.is_published %}
+            <div id="unpublished-problem-warning">
+                <div>This is a draft which is only visible to logged-in users</div>
+            </div>
+        {% endif %}
+        <div class="flex row j-between a-center">
+            <h1>Problem Statement</h1>
+            {% if user.is_authenticated %}
+                <span class="aside-links">
+                    {% if perms.problems.change_problem %}
+                        <a href="{% url 'problem_edit' pk=problem.pk %}" title="Edit">✐</a>
+                    {% endif %}
+                    {% if perms.problems.delete_problem %}
+                        <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
+                    {% endif %}
+                </span>
+            {% endif %}
         </div>
-    </div>
-    {% endif %}
-
-    
-    <div class="flex row j-between a-center">
-        <h1>Problem Statement</h1>    
-        {% if user.is_authenticated %}
-    <span id="edit-box">
-        <span>
-            {% if perms.problems.change_problem %}
-            <a href="{% url 'problem_edit' pk=problem.pk %}" title="Edit">✐</a>
-            {% endif %}
-            {% if perms.problems.delete_problem %}
-            <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
-            {% endif %}
-        </span>
-    </span>
-    {% endif %}
-    </div>
-    {{ problem.problem_text | markdown | safe  }}
-    
-    {% for solution in problem.solutions.all %}    
-    <details>
-    <summary><h2 class="borderunder">Solution {% if problem.solutions.all|length != 1 %}{{ forloop.counter }}{% endif %}</h2></summary>
-    {{ solution.solution_text | markdown | safe  }}
-    
-    </details>
-    {% empty %}
-    <h2 class="borderunder">Solutions</h2>
-    <p class="muted noselect">(no solutions)</p>
-    {% endfor %}
-
-    {% if problem.has_answer %}
-    <details>
-        <summary><h2 class="borderunder">Answer</h2></summary>    
-        {{ problem.answer_text | markdown | safe  }}
-    </details>
-    {% endif %}
-
-    {% comment %}
+        {{ problem.problem_text | markdown | safe }}
+        {% for solution in problem.solutions.all %}
+            <details>
+                <summary>
+                    <h2 class="borderunder">
+                        Solution
+                        {% if problem.solutions.all|length != 1 %}{{ forloop.counter }}{% endif %}
+                    </h2>
+                </summary>
+                {{ solution.solution_text | markdown | safe }}
+            </details>
+        {% empty %}
+            <h2 class="borderunder">Solutions</h2>
+            <p class="muted noselect">(no solutions)</p>
+        {% endfor %}
+        {% if problem.has_answer %}
+            <details>
+                <summary>
+                    <h2 class="borderunder">Answer</h2>
+                </summary>
+                {{ problem.answer_text | markdown | safe }}
+            </details>
+        {% endif %}
+        {% comment %}
     <h2>Unsorted Data</h2>
 
     <ul>
@@ -86,69 +77,53 @@
         </li>
         {% endfor %}
     </ul>
-    {% endcomment %}
-
-</main>
+        {% endcomment %}
+    </main>
 {% endblock content %}
 
-
 {% block sidebar %}
-<div id="sidebar" class="left">
-    <div id="sidebar-meta-container">
-
-    {% if problem.source.pk == problem.source.get_default_pk %}
-    
-    {% else %}
-    <div id="meta-sidebar-title">
-        Other Problems
+    <div id="sidebar" class="left">
+        <div id="sidebar-meta-container">
+            {% if problem.source.pk == problem.source.get_default_pk %}
+            {% else %}
+                <div id="meta-sidebar-title">Other Problems</div>
+                <ol id="meta-source-problem-list">
+                    {% for p in problem.source.get_problems %}
+                        <li value="{{ p.number }}"
+                            {% if p.number == problem.number %}id="meta-current-problem-no"{% endif %}>
+                            <a href="{{ p.get_absolute_url }}"
+                               {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+                <div id="next-prev-button-box">
+                    <a href="{{ problem.get_prev.get_absolute_url }}"
+                       class="next button"
+                       {% if problem.get_prev.get_absolute_url is None %}inert{% endif %}>Previous</a>
+                    <a href="{{ problem.get_next.get_absolute_url }}"
+                       class="prev button"
+                       {% if problem.get_next.get_absolute_url is None %}inert{% endif %}>Next</a>
+                </div>
+            {% endif %}
+        </div>
+        <div id="sidebar-meta-container">
+            <div id="meta-sidebar-title">Meta</div>
+            <h3>Branches</h3>
+            <ul>
+                {% for branch in problem.branches.all %}
+                    <li>{{ branch }}</li>
+                {% empty %}
+                    <div class="muted">(No Branches)</div>
+                {% endfor %}
+            </ul>
+            <h3>Types</h3>
+            <ul>
+                {% for type in problem.types.all %}
+                    <li>{{ type }}</li>
+                {% empty %}
+                    <div class="muted">(No Types)</div>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-
-    <ol id="meta-source-problem-list">
-        {% for p in problem.source.get_problems %}
-        <li value="{{p.number}}"{% if p.number == problem.number %} id="meta-current-problem-no"{% endif %}>
-            <a href="{{ p.get_absolute_url }}" {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
-        </li> 
-        {% endfor %}
-    </ol>
-
-    <div id="next-prev-button-box">
-        <a href="{{ problem.get_prev.get_absolute_url}}" class="next button" {%if problem.get_prev.get_absolute_url is None%}inert{%endif%}>Previous</a>
-        <a href="{{ problem.get_next.get_absolute_url}}" class="prev button" {%if problem.get_next.get_absolute_url is None%}inert{%endif%}>Next</a>
-    </div>
-    {% endif %}
-       
-    </div>
-    <div id="sidebar-meta-container">
-
-    <div id="meta-sidebar-title">
-        Meta
-    </div>
-
-    <h3>Branches</h3>
-    <ul>
-        {% for branch in problem.branches.all %}
-            <li>
-                {{ branch }}
-            </li>
-        {% empty %}
-            <div class="muted">
-                (No Branches)
-            </div>
-        {% endfor %}
-    </ul>
-    <h3>Types</h3>
-    <ul>
-        {% for type in problem.types.all %}
-            <li>
-                {{ type }}
-            </li>
-        {% empty %}
-            <div class="muted">
-                (No Types)
-            </div>
-        {% endfor %}
-    </ul>
-    
-    </div>
-</div>
 {% endblock sidebar %}

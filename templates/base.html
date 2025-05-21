@@ -1,14 +1,15 @@
 {% load static %}
-<!DOCTYPE html>
-  
-<html lang="en">
-  <head>
-    <title>Math Competition Problems</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="shortcut icon" href="{% static 'favicon.png' %}" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Math Competition Problems</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="shortcut icon"
+              href="{% static 'favicon.png' %}"
+              type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
       window.MathJax = {
       loader: {load: ['[tex]/cancel']},
   tex: {
@@ -20,68 +21,71 @@
     packages: {'[+]': ['cancel']}
   },
 };
-    </script>
-    <script id="MathJax-script" src="{% static 'mathjax/tex-chtml-full.js' %}"></script>
+        </script>
+        <script id="MathJax-script" src="{% static 'mathjax/tex-chtml-full.js' %}"></script>
+        {% block pagehead %}
+        {% endblock pagehead %}
 
-    {% block pagehead %} {% endblock pagehead %}
-  </head>
+    </head>
+    <body>
+        <div id="outer-container">
+            <div id="top-box">
+                <nav>
+                    <ul class="flex left noselect">
+                        <li>
+                            <a href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'problem_list' %}">Problems</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'source_list' %}">Sources</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'my_profile' %}">{{ user.username }}</a>
+                            </li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="link" type="submit">Log Out</button>
+                                </form>
+                            </li>
+                            <li>
+                                <a href="{% url 'editor_home' %}">+</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'login' %}">Log In</a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'about_page' %}">About</a>
+                        </li>
+                    </ul>
+                </nav>
+                <header>
+                    {% block header %}{% endblock %}
 
-  <body>
-    <div id="outer-container">
-      <div id="top-box">
-        <nav>
-      <ul class="flex left noselect">
-        <li>
-          <a href="{% url 'home' %}">Home</a>
-        </li>
-        <li>
-          <a href="{% url 'problem_list' %}">Problems</a>
-        </li>
-        <li>
-          <a href="{% url 'source_list'%}">Sources</a>
-        </li>
-        {% if user.is_authenticated %}
-        <li>  
-          <a href="{% url 'my_profile' %}">{{ user.username }}</a> 
-        </li>
-        <li>
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button class="link" type="submit">Log Out</button>
-        </form>
-        </li>
-        <li>
-          <a href="{% url 'editor_home' %}">+</a>
-        </li>
-        {% else %}
-        <li>
-          <a href="{% url 'login' %}">Log In</a>
-        </li>
-        {% endif %}
-        <li>
-          <a href="{% url 'about_page' %}">About</a>
-        </li>
-      </ul>
-    </nav>
-        <header>
-          {% block header %} {% endblock header %}
-        </header>
-      </div>
-      <span id="flex-layout-container">
-        
-        
-        <div id="center-column">    
-          {% block content %} {% endblock content %}
+                    <span id="subtitle">
+                        {% block subtitle %}{% endblock %}
+
+                    </span>
+                </header>
+            </div>
+            <span id="flex-layout-container">
+                <div id="center-column">
+                    {% block content %}
+                    {% endblock content %}
+
+                </div>
+                {% block rsidebar %}
+                {% endblock rsidebar %}
+
+                {% block sidebar %}
+                {% endblock sidebar %}
+
+            </span>
         </div>
-        {% block rsidebar  %} {% endblock rsidebar %}
-        {% block sidebar %} {% endblock sidebar %}
-      </span>
-    </div>
-      
     </body>
 </html>
-
-
-
-
-

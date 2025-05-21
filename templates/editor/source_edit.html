@@ -3,20 +3,17 @@
 {% load static %}
 
 {% block header %}
-<header>
-    <h1 id="page-title">
-       Edit Source
-    </h1>
-</header>
+    <header>
+        <h1 id="page-title">Edit Source</h1>
+    </header>
 {% endblock header %}
 
 {% block content %}
-<main>
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Update">
-    </form>
-</main>
+    <main>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Update">
+        </form>
+    </main>
 {% endblock content %}
-
-

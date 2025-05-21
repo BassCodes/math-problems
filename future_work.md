@@ -10,11 +10,8 @@ Page about copyright of problems
 
 Problem authoring guidelines
 
-- What kinds of problems are accepted
-
 - No geometry/image problems until image uploads are supported
 
-- Each solution step should be an imperative statement.
 - Do not add period to end-of-sentence if a display math expression follows it.
   If no display expression follows it, or if another sentence follows it, use periods.
 
@@ -83,8 +80,6 @@ Add user permissions system:
 
 Write migrations to create these permissions
 
-Allow public user signup
-
 ### Solved Problems
 
 Allow users to mark problems as solved
@@ -99,6 +94,12 @@ markers on sources for solved problems
 
 Pagination to problem list
 
+# Before Launch
+
+Determine Site name
+
+Add image uploads
+
 # Long Term
 
 ## Editor
@@ -107,8 +108,6 @@ Add WYSIWYG Editor
 
 - Mathquil seems like a good option
 
-Add image uploads
-
-Custom markup features
+Custom markup features (write own markdown compiler (rust? (WASM? (with all these parenthesis maybe I'll write it in lisp))))
 
 - Columns

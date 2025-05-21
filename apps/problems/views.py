@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from .models import Problem, Source, SourceGroup, Solution
 from django.http import HttpResponseForbidden
 from .forms import SearchForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class HomePageView(TemplateView):
@@ -105,3 +106,36 @@ class SourceDetailView(DetailView):
 class SourceGroupDetailView(DetailView):
     model = SourceGroup
     template_name = "source_group.html"
+
+
+class SourceMissingProblemsView(DetailView):
+    template_name = "source_missing_problems.html"
+    model = Source
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        source = context["source"]
+
+        numbered_problems = {}
+
+        p = source.problems.all()
+        for problem in p:
+            numbered_problems[problem.number] = problem
+
+        ordered_problems_and_blanks = []
+
+        if source.problem_count:
+            max_problems = source.problem_count
+        elif source.problems.all().count() != 0:
+            max_problems = source.problems.all().order_by("number").last().number
+        else:
+            return context
+
+        for num in range(1, max_problems + 1):
+            if num in numbered_problems:
+                ordered_problems_and_blanks.append(numbered_problems[num])
+            else:
+                ordered_problems_and_blanks.append(None)
+        context["problems"] = ordered_problems_and_blanks
+
+        return context

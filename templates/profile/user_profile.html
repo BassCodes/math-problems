@@ -1,27 +1,20 @@
-{% extends "base.html" %} {% block content %}
-{% load markdown_extras %}
-{% load static %}
+{% extends "base.html" %}
 
+{% block content %}
+    {% load markdown_extras %}
+    {% load static %}
 
-{% block header %}
-<h1 id="page-title">User Profile</h1>
-{% endblock header %}
+    {% block header %}
+        <h1 id="page-title">User Profile</h1>
+    {% endblock header %}
 
-<main>
-
-<h2>{{ user.username }}</h2>
-
-<p>
-Last Online: {{ user.last_login|date:"Y-m-d" }} 
-</p>
-
-{% if request.user == user %}
-Viewing own profile
-{% endif %}
-
-</main>
-{%endblock%}
+    <main>
+        <h2>{{ user.username }}</h2>
+        <p>Last Online: {{ user.last_login|date:"Y-m-d" }}</p>
+        {% if request.user == user %}Viewing own profile{% endif %}
+    </main>
+{% endblock %}
 
 {% block pagehead %}
-<link rel="stylesheet" href="{% static 'problemlist.css' %}">
+    <link rel="stylesheet" href="{% static 'problemlist.css' %}">
 {% endblock pagehead %}

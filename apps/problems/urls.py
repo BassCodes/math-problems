@@ -7,6 +7,7 @@ from .views import (
     SourceDetailView,
     SourceGroupDetailView,
     problem_list_view,
+    SourceMissingProblemsView,
 )
 
 urlpatterns = [
@@ -18,6 +19,11 @@ urlpatterns = [
         name="source_group_detail",
     ),
     path("sources/<int:pk>/", SourceDetailView.as_view(), name="source_detail"),
+    path(
+        "sources/<int:pk>/missing",
+        SourceMissingProblemsView.as_view(),
+        name="missing_problem",
+    ),
     path("sources/", SourceListView.as_view(), name="source_list"),
     path("", HomePageView.as_view(), name="home"),
 ]

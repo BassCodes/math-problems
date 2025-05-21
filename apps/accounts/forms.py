@@ -6,7 +6,8 @@ from .models import CustomUser
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    captcha = CaptchaField()
+    # captcha = CaptchaField()
+    pass
 
 
 class CustomUserCreationForm(UserCreationForm):

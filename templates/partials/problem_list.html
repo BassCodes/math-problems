@@ -1,29 +1,23 @@
-
 {% load markdown_extras %}
 
-{% if problems|length != 0%}
-<div class="problem-list">
-
-    {% if ordered %}
-    <ol>
-    {% else %}
-    <ul>
-    {% endif %}
-        {% for problem in problems %}
-        <li value="{{problem.number}}" >
-            <a href="{{problem.get_absolute_url}}">
-                {{ problem.problem_text | markdown | safe}}
-            </a>
-        </li>
-        {% endfor %}
-    {% if ordered %}
-    </ol>
-    {% else %}
-    </ul>
-    {% endif %}
-</div>
+{% if problems|length != 0 %}
+    <div class="problem-list">
+        {% if ordered %}
+            <ol>
+            {% else %}
+                <ul>
+                {% endif %}
+                {% for problem in problems %}
+                    <li value="{{ problem.number }}">
+                        <a href="{{ problem.get_absolute_url }}">{{ problem.problem_text | markdown | safe }}</a>
+                    </li>
+                {% endfor %}
+                {% if ordered %}
+                </ol>
+            {% else %}
+            </ul>
+        {% endif %}
+    </div>
 {% else %}
-<p class="muted">
-    (no problems)
-</p>
+    <p class="muted">(no problems)</p>
 {% endif %}

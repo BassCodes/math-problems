@@ -1,39 +1,33 @@
 {% extends "base.html" %}
-{% block header %}
-    <h1 id="page-title">
-       Sources
-    </h1>
-    {% endblock header %}
-    
-    
-{% block content %}
+
 {% load markdown_extras %}
 
-{% regroup source_list by parent as grouped_sources  %}
-<main class="doc"> 
-    {% if source_list|length != 0 %}
-    <ul class="slim">
-        {% for source_group,sources in grouped_sources %}
-        <h2>
-            {% if source_group %}
-                {{source_group}}
+{% block header %}
+    <h1 id="page-title">Sources</h1>
+{% endblock header %}
+
+{% block content %}
+    {% regroup source_list by parent as grouped_sources %}
+        <main class="doc">
+            {% if source_list|length != 0 %}
+                <ul class="slim">
+                    {% for source_group,sources in grouped_sources %}
+                        <h2>
+                            {% if source_group %}
+                                {{ source_group }}
+                            {% else %}
+                                Other
+                            {% endif %}
+                        </h2>
+                        {% for source in sources %}
+                            <li>
+                                <a href="{{ source.get_absolute_url }}">{{ source.full_name }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
             {% else %}
-                Other
+                <div class="muted">(no sources)</div>
             {% endif %}
-        </h2>
-
-        {% for source in sources %}
-        <li>
-            <a href="{{ source.get_absolute_url }}">
-                {{ source.full_name }}
-            </a>
-        </li>
-        {% endfor %}
-        {% endfor %}
-    </ul>
-    {% else %}
-    <div class="muted">(no sources)</div>
-    {% endif %}
-</main>
-{% endblock content %}
-
+        </main>
+    {% endblock content %}

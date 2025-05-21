@@ -1,53 +1,39 @@
 {% extends "base.html" %}
 
+{% load markdown_extras %}
+
 {% block header %}
-<h1 id="page-title">
-    {{sourcegroup.name}}
-</h1>
+    <h1 id="page-title">{{ sourcegroup.name }}</h1>
 {% endblock header %}
 
 {% block content %}
-{% load markdown_extras %}
-
-<main class="doc">
-    <h2>Series Information</h2>
-    {% if sourcegroup.description %}
-        {{ sourcegroup.description | markdown | safe }}
-    {% else %}
-        <p class="muted">
-            (no description)
-        </p>
-    {% endif %}
-    {% if sourcegroup.url %}
-    <a href="{{sourcegroup.url}}">Web URL</a>
-    {% endif %}
-
-
-    <div class="flex j-between a-center">
-        <h2>Sources from series</h2>
-        {% if perms.problems.add_source %}
-        <span id="edit-box">
-            <span>
-                <a href="{% url 'source_create' %}?group={{ sourcegroup.id }}" title="New Source">+</a>
-            </span>
-        </span>
+    <main class="doc">
+        <h2>Series Information</h2>
+        {% if sourcegroup.description %}
+            {{ sourcegroup.description | markdown | safe }}
+        {% else %}
+            <p class="muted">(no description)</p>
         {% endif %}
-    </div>
-    {% if sourcegroup.sources.all %}
-    <ul>
-        {% for source in sourcegroup.sources.all %}
-        <li>
-            <a href="{{ source.get_absolute_url }}">
-                {{source.name}}                
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p class="muted">
-        (no sources)
-    </p>
-    {% endif %}
-</main>
-
-{%endblock%}
+        {% if sourcegroup.url %}<a href="{{ sourcegroup.url }}">Web URL</a>{% endif %}
+        <div class="flex j-between a-center">
+            <h2>Sources from series</h2>
+            {% if perms.problems.add_source %}
+                <span class="aside-links">
+                    <a href="{% url 'source_create' %}?group={{ sourcegroup.id }}"
+                       title="New Source">+</a>
+                </span>
+            {% endif %}
+        </div>
+        {% if sourcegroup.sources.all %}
+            <ul>
+                {% for source in sourcegroup.sources.all %}
+                    <li>
+                        <a href="{{ source.get_absolute_url }}">{{ source.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="muted">(no sources)</p>
+        {% endif %}
+    </main>
+{% endblock %}

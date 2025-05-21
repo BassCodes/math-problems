@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1 id="page-title">
+        <a class="incognito" href="{{ source.get_absolute_url }}">{{ source.name }}</a>
+    </h1>
+{% endblock header %}
+
+{% block subtitle %}
+    {% if source.subtitle %}<div id="problem-source-subtitle">{{ source.subtitle }}</div>{% endif %}
+{% endblock %}
+
+{% block content %}
+    <main class="doc">
+        <div class="flex row j-between a-center">
+            <h2>Missing Problems</h2>
+            <span class="aside-links">
+                <a href="{{ source.get_absolute_url }}" title="back to source">⎗</a>
+            </span>
+        </div>
+        {% if not source.problem_count %}
+            <p>
+                NOTE: This source does not specify how many problems are within. Extrapolating by existing problems. To fix this <a href="{% url 'source_edit' pk=source.pk %}">edit the source</a>
+            </p>
+        {% endif %}
+        {% if problems %}
+            <ol>
+                {% for problem in problems %}
+                    <li>
+                        {% if problem is not None %}
+                            <a href="{{ problem.get_absolute_url }}" class="muted">View problem</a>
+                        {% else %}
+                            {% if perms.problems.add_problem %}
+                                <a href="{% url 'problem_create' %}?src={{ source.pk }}&no={{ forloop.counter }}">Create problem</a>
+                            {% else %}
+                                <div class="muted">(problem not entered)</div>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p class="muted">(no problems)</p>
+        {% endif %}
+    </main>
+{% endblock content %}

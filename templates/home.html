@@ -1,34 +1,32 @@
 {% extends "base.html" %}
+
 {% load static %}
 {% load markdown_extras %}
 {% load problem_list %}
 
-
 {% block pagehead %}
-<link rel="stylesheet" href="{% static 'problemlist.css' %}">
+    <link rel="stylesheet" href="{% static 'problemlist.css' %}">
 {% endblock pagehead %}
 
-
 {% block header %}
-<h1 id="page-title">Math Problem Site</h1>
+    <h1 id="page-title">Math Problem Site</h1>
 {% endblock header %}
 
-
 {% block content %}
-<main class="doc">
-    <h2>Welcome</h2>
-    <p>This website contains math problems, their answers, and their solutions.</p>
-
-    <p>Most problems are from math competition test documents.
-       A list of problems is found on the
-       <a href="{% url 'problem_list' %}">Problems page</a>.
-       Problem sources are found on the
-       <a href="{% url 'source_list' %}">Sources page</a>
-    </p>
-
-    <p>This project is still under active development. Check <a href="https://github.com/BassCodes/math-problems">the GitHub page</a> for updates</p>
-    <h2>Newest Problems</h2>
-
-    {% problem_list newest_problems %}
-</main>
-{% endblock content %}
+    <main class="doc">
+        <h2>Welcome</h2>
+        <p>This website contains math problems, their answers, and their solutions.</p>
+        <p>
+            Most problems are from math competition test documents.
+            A list of problems is found on the
+            <a href="{% url 'problem_list' %}">Problems page</a>.
+            Problem sources are found on the
+            <a href="{% url 'source_list' %}">Sources page</a>
+        </p>
+        <p>
+            This project is still under active development. Check <a href="https://github.com/BassCodes/math-problems">the GitHub page</a> for updates
+        </p>
+        <h2>Newest Problems</h2>
+        {% problem_list newest_problems %}
+        </main>
+    {% endblock content %}

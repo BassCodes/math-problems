@@ -1,16 +1,13 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+
 {% load markdown_extras %}
 
 {% block header %}
-<h1 id="page-title">
-    {{ frontmatter.title }}
-</h1>
+    <h1 id="page-title">{{ frontmatter.title }}</h1>
 {% endblock header %}
 
-
-
 {% block content %}
-<main class="doc">
-    {{ markdown_content | unsafe_markdown | safe }}
-</main>
+    <main class="doc">
+        {{ markdown_content | unsafe_markdown | safe }}
+    </main>
 {% endblock content %}

@@ -1,96 +1,82 @@
 {% extends "base.html" %}
+
 {% load markdown_extras %}
 {% load static %}
 {% load problem_list %}
 
-
 {% block pagehead %}
-<script src="{% static 'problemlist.js' %}"></script>
-<link rel="stylesheet" href="{% static 'problemlistsearch.css' %}">
-<link rel="stylesheet" href="{% static 'problemlist.css' %}">
+    <script src="{% static 'problemlist.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'problemlistsearch.css' %}" />
+    <link rel="stylesheet" href="{% static 'problemlist.css' %}" />
 {% endblock pagehead %}
 
-
 {% block header %}
-<h1 id="page-title">Problems</h1>
+    <h1 id="page-title">Problems</h1>
 {% endblock header %}
 
-
 {% block content %}
-{% regroup problems by source as grouped_problems  %}
-<main class="doc">
-    {% for source,problem_group in grouped_problems %}
-    <h2 class="small-heading">
-        {{ source.get_short_name }}
-    </h2>
-    
-    {% problem_list problem_group ord="true" %}
+    {% regroup problems by source as grouped_problems %}
+        <main class="doc">
+            {% for source,problem_group in grouped_problems %}
+                <h2 class="small-heading">{{ source.get_short_name }}</h2>
+                {% problem_list problem_group ord="true" %}
+                {% empty %}
+                    <p class="muted">(No results found)</p>
+                {% endfor %}
+            </main>
+        {% endblock content %}
 
-    {% empty %}
-     <p class="muted">(No results found)</p>
-    {% endfor %}
-</main>
-{% endblock content %}
-
-
-{% block sidebar %}
-<div id="sidebar" class="left">
-    <div id="sidebar-search">
-        <form method="get">
-
-            {{ search_form.non_field_errors }}
-            <div class="fieldWrapper">
-                {{ search_form.source.as_field_group }}
+        {% block sidebar %}
+            <div id="sidebar" class="left">
+                <div id="sidebar-search">
+                    <form method="get">
+                        {{ search_form.non_field_errors }}
+                        <div class="fieldWrapper">{{ search_form.source.as_field_group }}</div>
+                        <div class="fieldWrapper">{{ search_form.branch.as_field_group }}</div>
+                        <div class="fieldWrapper">{{ search_form.type.as_field_group }}</div>
+                        <div class="fieldWrapper">{{ search_form.tech.as_field_group }}</div>
+                        <div class="search-databox" data-type="source">
+                            <h2>Sources</h2>
+                            <ul id="chosen-filters">
+                                {% for s in sources %}
+                                    {% if s.pk in sources_active %}
+                                        <li data-id="{{ s.pk }}" title="{{ s.name }}">
+                                            <input type="checkbox" checked name="{{ s.name }}" id="source{{ s.pk }}" />
+                                            <label for="source{{ s.pk }}">
+                                                &Cross;
+                                                {% if s.shortname %}
+                                                    {{ s.get_short_name }}
+                                                {% else %}
+                                                    {{
+                                                    s.name }}
+                                                {% endif %}
+                                            </label>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <input type="search" name="" placeholder="Search Sources" id="" />
+                            <ul id="available-filters">
+                                {% for s in sources %}
+                                    {% if s.pk not in sources_active %}
+                                        <li data-id="{{ s.pk }}" title="{{ s.name }}">
+                                            <input type="checkbox" name="{{ s.name }}" id="source{{ s.pk }}" />
+                                            <label for="source{{ s.pk }}">
+                                                &cup;
+                                                {% if s.shortname %}
+                                                    {{ s.get_short_name }}
+                                                {% else %}
+                                                    {{
+                                                    s.name }}
+                                                {% endif %}
+                                            </label>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
             </div>
-            <div class="fieldWrapper">
-                {{ search_form.branch.as_field_group }}
-            </div>
-            <div class="fieldWrapper">
-                {{ search_form.type.as_field_group }}
-            </div>
-            <div class="fieldWrapper">
-                {{ search_form.tech.as_field_group }}
-            </div>
-
-
-            <div class="search-databox" data-type="source">
-                <h2>Sources</h2>
-                <ul id="chosen-filters">
-                    {% for s in sources %}
-                    {% if s.pk in sources_active %}
-                    <li data-id="{{s.pk}}"  title="{{s.name}}"> 
-                        <input type="checkbox" checked name="{{s.name}}" id="source{{s.pk}}">
-                        <label for="source{{s.pk}}">
-                            &Cross;
-                            {% if s.shortname %}{{ s.get_short_name  }} 
-                            {% else %}{{ s.name  }}
-                            {% endif %}
-                        </label>
-
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-                <input type="search" name="" placeholder="Search Sources" id="">
-                <ul id="available-filters">
-                    {% for s in sources %}
-                    {% if s.pk not in sources_active %}
-                    <li data-id="{{s.pk}}"  title="{{s.name}}"> 
-                        <input type="checkbox" name="{{s.name}}" id="source{{s.pk}}">
-                        <label for="source{{s.pk}}">
-                            &cup;
-                            {% if s.shortname %}{{ s.get_short_name  }} 
-                            {% else %}{{ s.name  }}
-                            {% endif %}
-                        </label>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-
-          <button type="submit">Search</button>
-        </form>
-    </div>
-</div>
-{% endblock sidebar %}
+        {% endblock sidebar %}

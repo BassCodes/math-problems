@@ -5,7 +5,6 @@ from .views import (
     EditorHomePageView,
     EditorProblemDeleteView,
     IncompleteSourceView,
-    SourceMissingProblemsView,
     problem_create_view,
     problem_update_view,
     SolutionDeleteView,
@@ -18,9 +17,6 @@ from .views import (
 urlpatterns = [
     path("", EditorHomePageView.as_view(), name="editor_home"),
     path("missing/", IncompleteSourceView.as_view(), name="missing_problems"),
-    path(
-        "missing/<int:pk>", SourceMissingProblemsView.as_view(), name="missing_problem"
-    ),
     path(
         "solution/del/<int:pk>",
         SolutionDeleteView.as_view(),
