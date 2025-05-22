@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
 
     username = models.CharField(
         _("username"),
-        max_length=30,
+        max_length=18,
         unique=True,
         help_text=_(
             "Required. 30 characters or fewer. Lowercase letters, digits and underscores(_) only."
