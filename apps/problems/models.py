@@ -44,7 +44,7 @@ class Source(models.Model):
     description = models.TextField(blank=True, null=True)
     publish_date = models.DateField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
-    history = HistoricalRecords()
+    history = HistoricalRecords(app="history")
 
     class Meta:
         ordering = ["parent", "name"]
@@ -145,7 +145,7 @@ class Problem(models.Model):
     number = models.PositiveSmallIntegerField()
     branches = models.ManyToManyField(Branch, blank=True, related_name="problems")
     types = models.ManyToManyField(Type, blank=True, related_name="problems")
-    history = HistoricalRecords()
+    history = HistoricalRecords(app="history")
 
     # Two problems can not share the same problem number and the same source
     class Meta:
@@ -203,13 +203,24 @@ class Problem(models.Model):
         )
 
 
+class SolutionProblemHistoryShim(models.Model):
+    class Meta:
+        abstract = True
+
+    history_problem_ref = models.ForeignKey(
+        "history.HistoricalProblem",
+        on_delete=models.CASCADE,
+        null=True,
+    )
+
+
 class Solution(models.Model):
     problem = models.ForeignKey(
         Problem, on_delete=models.CASCADE, related_name="solutions"
     )
     techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
     solution_text = models.TextField()
-    history = HistoricalRecords()
+    history = HistoricalRecords(app="history", bases=[SolutionProblemHistoryShim])
 
     def __str__(self):
         return self.solution_text[:50]

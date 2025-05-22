@@ -101,21 +101,16 @@ def problem_update_view(request, pk):
                     request.POST, instance=problems.models.Solution(), prefix=f"sol{i}"
                 )
             )
-        for s in solution_forms:
-            print(s, s.errors.items(), s.data)
 
         if problem_form.is_valid() and all([s.is_valid() for s in solution_forms]):
             problem_form.save(commit=True)
 
             for solution_form in solution_forms:
-                print(solution_form.data)
                 new_solution = solution_form.save(commit=False)
                 new_solution.problem = problem
                 new_solution.save()
 
-            return HttpResponseRedirect(
-                reverse_lazy("problem_detail", kwargs={"pk": pk})
-            )
+            return HttpResponseRedirect(problem.get_absolute_url())
     else:
         problem_form = ProblemForm(instance=problem, prefix="prb")
         solution_forms = []

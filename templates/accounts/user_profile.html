@@ -12,22 +12,17 @@
         <h2>{{ user.username }}</h2>
         <p>Last Online: {{ user.last_login|date:"Y-m-d" }}</p>
         {% if request.user == user %}Viewing own profile{% endif %}
-        
         <h2>Groups</h2>
-        
         <ul>
-        {% for group in user.groups.all %}
-            <li>
-                {{ group.name }}
-            </li>
-        {% empty %}
-            <li>
-                <div class="muted">(No Groups)</div>
-            </li>
-        {% endfor %}
+            {% for group in user.groups.all %}
+                <li>{{ group.name }}</li>
+            {% empty %}
+                <li>
+                    <div class="muted">(No Groups)</div>
+                </li>
+            {% endfor %}
         </ul>
     </main>
-
 {% endblock %}
 
 {% block pagehead %}

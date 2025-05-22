@@ -5,7 +5,18 @@
 {% load problem_list %}
 
 {% block pagehead %}
-<link rel="stylesheet" href="{% static 'history_style.css' %}">
+    <link rel="stylesheet" href="{% static 'history_style.css' %}">
+            <script>
+      window.MathJax = {
+      loader: {load: ['[tex]/cancel']},
+  tex: {
+
+    inlineMath: [ [], []],
+    displayMath: [ [], [] ],
+
+  },
+};
+        </script>
 {% endblock pagehead %}
 
 {% block header %}
@@ -23,51 +34,43 @@
     <main class="doc">
         <h2>Problem History</h2>
         <history-box>
-            <ul>    
-                {% for h in diffs %}
+        <ul>
+            {% for h in diffs %}
                 <li>
-                    <history-marker>
-                    </history-marker>
+                    <history-marker></history-marker>
                     <history-contents>
-                        <history-top>
-                            <history-edit-icon>
-                                {{ h.history.history_type }}
-                            </history-edit-icon>
-                            <history-edit-name>
-                                {% if h.history.history_type == "+" %}
-                                Created
-                                {% elif h.history.history_type == "~" %}
-                                Edited
-                                {% elif h.history.history_type == "-" %}
-                                Deleted
-                                {% else %}
-                                Unknown action
-                                {% endif %}
-                            </history-edit-name>
-                            <history-inline-text>
-                                by
-                            </history-inline-text>
-                            <history-user class="muted">
-                                {{ h.history.history_user}}
-                            </history-user>
-                            <history-time>
-                            {{ h.history.history_date|date:"y/m/d g:mA" }}
-                           </history-time>
-                        </history-top>
-                        <history-bottom>
-                            {% if h.diff %}
-                            <history-changed>
-                                Changed 
-                                    {{ h.diff.changed_fields }}
-                            </history-changed>
-                            {% endif %}
-                        </history-bottom>
-
+                    <history-top>
+                    <history-edit-icon>{{ h.history.history_type }}</history-edit-icon>
+                    <history-edit-name>
+                    {% if h.history.history_type == "+" %}
+                        Created
+                    {% elif h.history.history_type == "~" %}
+                        Edited
+                    {% elif h.history.history_type == "-" %}
+                        Deleted
+                    {% else %}
+                        Unknown action
+                    {% endif %}
+                    </history-edit-name>
+                    <history-inline-text>by</history-inline-text>
+                    <history-user class="muted">{{ h.history.history_user }}</history-user>
+                    <history-time>{{ h.history.history_date|date:"y/m/d g:mA" }}</history-time>
+                    </history-top>
+                    <history-bottom>
+                    {% if h.diff %}
+                        <history-changed>
+                        Changed
+                        {{ h.diff.changed_fields }}
+                        </history-changed>
+                    {% endif %}
+                    <history-changed>
+                    {% for hist_solution in h.solutions %}{{ hist_solution }}{% endfor %}
+                    </history-changed>
+                    </history-bottom>
                     </history-contents>
                 </li>
-                {% endfor %}
-            </ul>
+            {% endfor %}
+        </ul>
         </history-box>
-
     </main>
 {% endblock content %}

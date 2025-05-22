@@ -17,15 +17,15 @@
     <main class="doc">
         <div class="flex row j-between a-center">
             <h1>Problem Statement</h1>
-                <span class="aside-links">
-                    {% if perms.problems.change_problem %}
-                        <a href="{% url 'problem_edit' pk=problem.pk %}" title="Edit">✐</a>
-                    {% endif %}
-                    {% if perms.problems.delete_problem %}
-                        <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
-                    {% endif %}
-                    <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
-                </span>
+            <span class="aside-links">
+                {% if perms.problems.change_problem %}
+                    <a href="{% url 'problem_edit' pk=problem.pk %}" title="Edit">✐</a>
+                {% endif %}
+                {% if perms.problems.delete_problem %}
+                    <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
+                {% endif %}
+                <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
+            </span>
         </div>
         {{ problem.problem_text | markdown | safe }}
         {% for solution in problem.solutions.all %}
@@ -50,28 +50,18 @@
                 {{ problem.answer_text | markdown | safe }}
             </details>
         {% endif %}
-    <h2>Unsorted Data</h2>
-
-    <p>history</p>
-    <ul>
-        <li>Created {{ problem.date_published }}</li>
-        <li>Edited {{ problem.date_edited }}</li>
-    </ul>            
-
-    <ul>
-        {% for branch in problem.branches.all %}
-        <li>
-            {{ branch.name }}
-        </li>
-        {% endfor %}
-    </ul>
-    <ul>
-        {% for branch in problem.types.all %}
-        <li>
-            {{ branch.name }}
-        </li>
-        {% endfor %}
-    </ul>
+        <h2>Unsorted Data</h2>
+        <p>history</p>
+        <ul>
+            <li>Created {{ problem.date_published }}</li>
+            <li>Edited {{ problem.date_edited }}</li>
+        </ul>
+        <ul>
+            {% for branch in problem.branches.all %}<li>{{ branch.name }}</li>{% endfor %}
+        </ul>
+        <ul>
+            {% for branch in problem.types.all %}<li>{{ branch.name }}</li>{% endfor %}
+        </ul>
     </main>
 {% endblock content %}
 

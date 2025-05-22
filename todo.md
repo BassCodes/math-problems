@@ -22,6 +22,8 @@
 
 - Django Slugify?
 
+- Add problem_history foreign key to solution_history when solution deleted (see problems/signals.py)
+
 - Add limits to everything
 
   - Number of solutions

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from problems.models import Problem
+from problems.models import Problem, Solution
 
 
 class ProblemHistoryView(TemplateView):
@@ -11,17 +11,21 @@ class ProblemHistoryView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         history_queryset = None
-        if "problem" in context:
-            history_queryset = context["problem"].history.all().order_by("history_date")
-        else:
-            context["problem"] = Problem.history.filter(id=context["pk"]).first()
-            history_queryset = Problem.history.filter(id=context["pk"]).order_by(
-                "history_date"
-            )
+        # When a problem is deleted, the problem object can not be found from
+
+        context["problem"] = Problem.history.filter(id=context["pk"]).first()
+        history_queryset = Problem.history.filter(id=context["pk"]).order_by(
+            "history_date"
+        )
 
         diffs = []
         last_hist = None
         for hist in history_queryset:
+            solutions_modified = (
+                Solution.history.all()
+                .filter(history_problem_ref_id=hist.history_id)
+                .all()
+            )
             diff_value = None
             if last_hist:
                 diff_value = last_hist.diff_against(hist)
@@ -29,10 +33,7 @@ class ProblemHistoryView(TemplateView):
                     diff_value = None
 
             diffs.append(
-                {
-                    "history": hist,
-                    "diff": diff_value,
-                }
+                {"history": hist, "diff": diff_value, "solutions": solutions_modified}
             )
             last_hist = hist
 
