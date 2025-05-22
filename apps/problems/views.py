@@ -79,8 +79,8 @@ def problem_list_view(request):
     return render(request, "problem_list.html", context)
 
 
-def problem_detail_view(request, pk):
-    problem = get_object_or_404(Problem, pk=pk)
+def problem_detail_view(request, slug, number):
+    problem = get_object_or_404(Problem, source__slug=slug, number=number)
 
     context = {}
     context["problem"] = problem

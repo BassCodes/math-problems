@@ -27,6 +27,8 @@ class Source(models.Model):
     A Source represents a single 'document' containing many math problems
     """
 
+    # TODO slugify function
+    slug = models.SlugField(max_length=50, unique=True)
     name = models.CharField(max_length=128)
     shortname = models.CharField(max_length=40, blank=True, null=True)
     subtitle = models.CharField(max_length=30, blank=True, null=True)
@@ -46,7 +48,7 @@ class Source(models.Model):
 
     class Meta:
         ordering = ["parent", "name"]
-        unique_together = ["parent", "shortname", "subtitle"]
+        unique_together = [["shortname", "subtitle"], ["name", "subtitle"]]
 
     # Source https://stackoverflow.com/a/62697872
     @classmethod
@@ -78,7 +80,7 @@ class Source(models.Model):
             return self.full_name()
 
     def get_absolute_url(self):
-        return reverse("source_detail", kwargs={"pk": self.pk})
+        return reverse("source_detail", kwargs={"slug": self.slug})
 
 
 class Branch(models.Model):
@@ -196,7 +198,9 @@ class Problem(models.Model):
         return self.problem_text[:50]
 
     def get_absolute_url(self):
-        return reverse("problem_detail", kwargs={"pk": self.pk})
+        return reverse(
+            "problem_detail", kwargs={"slug": self.source.slug, "number": self.number}
+        )
 
 
 class Solution(models.Model):

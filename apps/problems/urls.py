@@ -11,19 +11,22 @@ from .views import (
 )
 
 urlpatterns = [
-    path("problems/<int:pk>", problem_detail_view, name="problem_detail"),
-    path("problems/", problem_list_view, name="problem_list"),
     path(
-        "sources/group/<int:pk>",
+        "problem/<slug:slug>/<int:number>", problem_detail_view, name="problem_detail"
+    ),
+    path("problem/<int:pk>", problem_detail_view, name="problem_detail"),
+    path("problem/", problem_list_view, name="problem_list"),
+    path(
+        "source/group/<int:pk>",
         SourceGroupDetailView.as_view(),
         name="source_group_detail",
     ),
-    path("sources/<int:pk>/", SourceDetailView.as_view(), name="source_detail"),
+    path("source/<slug:slug>/", SourceDetailView.as_view(), name="source_detail"),
     path(
-        "sources/<int:pk>/missing",
+        "source/<int:pk>/missing",
         SourceMissingProblemsView.as_view(),
         name="missing_problem",
     ),
-    path("sources/", SourceListView.as_view(), name="source_list"),
+    path("source/", SourceListView.as_view(), name="source_list"),
     path("", HomePageView.as_view(), name="home"),
 ]

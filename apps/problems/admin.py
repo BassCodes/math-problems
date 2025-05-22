@@ -24,6 +24,7 @@ class ProblemAdmin(simple_history.admin.SimpleHistoryAdmin):
 class SourceAdmin(simple_history.admin.SimpleHistoryAdmin):
     list_display = (
         "pk",
+        "slug",
         "name",
         "shortname",
         "subtitle",
