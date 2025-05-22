@@ -35,12 +35,12 @@ class LogoutPageView(LoginRequiredMixin, TemplateView):
 
 class UserProfileView(DetailView):
     model = CustomUser
-    template_name = "profile/user_profile.html"
+    template_name = "accounts/user_profile.html"
 
 
 class UserOwnProfileView(LoginRequiredMixin, DetailView):
     model = CustomUser
-    template_name = "profile/user_profile.html"
+    template_name = "accounts/user_profile.html"
 
     def get_object(self, queryset=None):
         return self.request.user
