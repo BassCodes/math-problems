@@ -15,7 +15,6 @@ class ProblemHistoryView(DetailView):
         diffs = []
         last_hist = None
         for hist in problem.history.all():
-            print(hist)
             if last_hist is None:
                 diffs.append({"history": hist, "diff": None})
             else:

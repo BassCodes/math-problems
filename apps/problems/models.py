@@ -184,11 +184,13 @@ class Problem(models.Model):
             return None
 
     def date_published(self):
-        return self.history.last().history_date
+        if self.history.last() is not None:
+            return self.history.last().history_date
 
     def date_edited(self):
         # TODO check solutions too
-        return self.history.first().history_date
+        if self.history.first() is not None:
+            return self.history.first().history_date
 
     def __str__(self):
         return self.problem_text[:50]
