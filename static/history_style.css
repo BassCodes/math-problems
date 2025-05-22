@@ -1,0 +1,54 @@
+history-box {
+  --line-color: rgb(245, 215, 85);
+  --line-thickness: 7px;
+  display: block;
+}
+
+history-box > ul {
+  border-left: var(--line-thickness) solid var(--line-color);
+  list-style: none;
+}
+
+history-box > ul > li {
+  margin-block: 2em;
+  display: flex;
+  flex-direction: row;
+}
+
+history-contents {
+  padding-left: 1ch;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+history-top {
+  margin-bottom: 0.5em;
+  gap: 1ch;
+}
+
+history-top,
+history-bottom {
+  display: flex;
+  flex-direction: row;
+}
+
+history-marker {
+  --marker-dimension: calc(var(--line-thickness) * 2);
+  display: block;
+  width: var(--marker-dimension);
+  height: var(--marker-dimension);
+  position: relative;
+  left: calc(0px - var(--line-thickness) / 2 - var(--marker-dimension) / 2);
+  top: calc(1lh / 2 - var(--marker-dimension) / 2);
+
+  background-color: var(--background-primary-color);
+  outline: calc(var(--line-thickness) * 0.8) solid var(--line-color);
+  border-radius: 100px;
+}
+
+history-time {
+  display: block;
+  margin-left: auto;
+}

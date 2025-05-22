@@ -4,6 +4,10 @@
 {% load markdown_extras %}
 {% load problem_list %}
 
+{% block pagehead %}
+<link rel="stylesheet" href="{% static 'history_style.css' %}">
+{% endblock pagehead %}
+
 {% block header %}
     <h1 id="page-title">
         <a class="incognito" href="{{ problem.source.get_absolute_url }}">{{ problem.source.name }}</a>
@@ -18,12 +22,52 @@
 {% block content %}
     <main class="doc">
         <h2>Problem History</h2>
-        <ul>    
-            {% for h in diffs %}
-        <li>
-            {{ h.history.history_type }} {{ h.history.history_user_id }} changed  {{ h.diff }}
-        </li>
-            {% endfor %}
-        </ul>
+        <history-box>
+            <ul>    
+                {% for h in diffs %}
+                <li>
+                    <history-marker>
+                    </history-marker>
+                    <history-contents>
+                        <history-top>
+                            <history-edit-icon>
+                                {{ h.history.history_type }}
+                            </history-edit-icon>
+                            <history-edit-name>
+                                {% if h.history.history_type == "+" %}
+                                Created
+                                {% elif h.history.history_type == "~" %}
+                                Edited
+                                {% elif h.history.history_type == "-" %}
+                                Deleted
+                                {% else %}
+                                Unknown action
+                                {% endif %}
+                            </history-edit-name>
+                            <history-inline-text>
+                                by
+                            </history-inline-text>
+                            <history-user class="muted">
+                                {{ h.history.history_user}}
+                            </history-user>
+                            <history-time>
+                            {{ h.history.history_date|date:"y/m/d g:mA" }}
+                           </history-time>
+                        </history-top>
+                        <history-bottom>
+                            {% if h.diff %}
+                            <history-changed>
+                                Changed 
+                                    {{ h.diff.changed_fields }}
+                            </history-changed>
+                            {% endif %}
+                        </history-bottom>
+
+                    </history-contents>
+                </li>
+                {% endfor %}
+            </ul>
+        </history-box>
+
     </main>
 {% endblock content %}

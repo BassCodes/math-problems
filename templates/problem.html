@@ -17,7 +17,6 @@
     <main class="doc">
         <div class="flex row j-between a-center">
             <h1>Problem Statement</h1>
-            {% if user.is_authenticated %}
                 <span class="aside-links">
                     {% if perms.problems.change_problem %}
                         <a href="{% url 'problem_edit' pk=problem.pk %}" title="Edit">✐</a>
@@ -25,8 +24,8 @@
                     {% if perms.problems.delete_problem %}
                         <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
                     {% endif %}
+                    <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
                 </span>
-            {% endif %}
         </div>
         {{ problem.problem_text | markdown | safe }}
         {% for solution in problem.solutions.all %}
