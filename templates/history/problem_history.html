@@ -33,6 +33,7 @@
 {% block content %}
     <main class="doc">
         <h2>Problem History</h2>
+        {% if diffs %}
         <history-box>
         <ul>
             {% for h in diffs %}
@@ -72,5 +73,8 @@
             {% endfor %}
         </ul>
         </history-box>
+        {% else %}
+            <p class="muted">(No History)</p>
+        {% endif %}
     </main>
 {% endblock content %}

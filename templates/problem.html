@@ -24,7 +24,9 @@
                 {% if perms.problems.delete_problem %}
                     <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
                 {% endif %}
-                <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
+                {% if problem.history.all|length != 0 %}
+                    <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
+                {% endif %}    
             </span>
         </div>
         {{ problem.problem_text | markdown | safe }}

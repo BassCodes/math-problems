@@ -58,9 +58,7 @@ def problem_create_view(request):
             new_solution = solution_form.save(commit=False)
             new_solution.problem = new_problem
             new_solution.save()
-            return HttpResponseRedirect(
-                reverse_lazy("problem_detail", kwargs={"pk": new_problem.pk})
-            )
+            return HttpResponseRedirect(new_problem.get_absolute_url())
     else:
         specified_source_pk = request.GET.get("src")
         specified_problem_no = request.GET.get("no")

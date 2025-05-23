@@ -12,19 +12,20 @@ class ProblemHistoryView(TemplateView):
 
         history_queryset = None
         # When a problem is deleted, the problem object can not be found from
-
-        context["problem"] = Problem.history.filter(id=context["pk"]).first()
-        history_queryset = Problem.history.filter(id=context["pk"]).order_by(
-            "history_date"
-        )
+        context["problem"] = Problem.objects.get(id=context["pk"])
+        if context["problem"]:
+            history_queryset = context["problem"].history.all().order_by("history_date")
+        else:
+            context["problem"] = Problem.history.filter(id=context["pk"]).first()
+            history_queryset = Problem.history.filter(id=context["pk"]).order_by(
+                "history_date"
+            )
 
         diffs = []
         last_hist = None
         for hist in history_queryset:
-            solutions_modified = (
-                Solution.history.all()
-                .filter(history_problem_ref_id=hist.history_id)
-                .all()
+            solutions_modified = Solution.history.all().filter(
+                history_problem_ref_id=hist.history_id
             )
             diff_value = None
             if last_hist:

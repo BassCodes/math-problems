@@ -24,6 +24,8 @@
 
 - Add problem_history foreign key to solution_history when solution deleted (see problems/signals.py)
 
+- Fix bug in problem history where all dates become the same
+
 - Add limits to everything
 
   - Number of solutions
