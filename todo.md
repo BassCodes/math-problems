@@ -9,11 +9,11 @@
 
 ## Functional
 
+- Docker setup?
+
 - Create _through_ model for Problem<->Source to hold number (not sure about this)
 
 - Test unicode codepoint icons on other fonts/machines
-
-- Docker setup?
 
 - Move markdown to templates dir
 

@@ -23,7 +23,7 @@ urlpatterns = [
     ),
     path("source/<slug:slug>/", SourceDetailView.as_view(), name="source_detail"),
     path(
-        "source/<int:pk>/missing",
+        "source/<slug:slug>/missing",
         SourceMissingProblemsView.as_view(),
         name="missing_problem",
     ),
