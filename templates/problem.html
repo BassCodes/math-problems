@@ -26,7 +26,7 @@
                 {% endif %}
                 {% if problem.history.all|length != 0 %}
                     <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
-                {% endif %}    
+                {% endif %}
             </span>
         </div>
         {{ problem.problem_text | markdown | safe }}

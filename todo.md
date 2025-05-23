@@ -5,6 +5,7 @@
 - Fix list style on sources pages
 - Find external font to appease brave browser (doesn't want to use Palatino system font)
 - Not all pages have .doc class
+- Make layout responsive
 
 ## Functional
 

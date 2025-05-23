@@ -28,10 +28,12 @@
 
     </head>
     <body>
-        <div id="outer-container">
-            <div id="top-box">
+        <div id="layout-outer-container">
+
+        <div id="layout-flex-container">
+            <div id="layout-top-bar">
                 <nav>
-                    <ul class="flex left noselect">
+                    <ul class="flex noselect">
                         <li>
                             <a href="{% url 'home' %}">Home</a>
                         </li>
@@ -73,19 +75,20 @@
                     </span>
                 </header>
             </div>
-            <span id="flex-layout-container">
-                <div id="center-column">
+            <div id="layout-primary">
                     {% block content %}
                     {% endblock content %}
-
+                <div id="layout-sidebar">
+                    {% block rsidebar %}
+                    {% endblock rsidebar %}
+                    
+                    {% block sidebar %}
+                    {% endblock sidebar %}
                 </div>
-                {% block rsidebar %}
-                {% endblock rsidebar %}
+            </div>
 
-                {% block sidebar %}
-                {% endblock sidebar %}
-
-            </span>
         </div>
+        </div>
+
     </body>
 </html>

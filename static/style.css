@@ -35,113 +35,54 @@ html {
   scrollbar-gutter: stable both-edges;
 }
 
-/* GRID LAYOUT */
-/* Entire page layout is blocked out using CSS grid. */
-
-/* @media (max-width: calc(15em + 650px + 8em +  8*1.2em)) {
-  body > #gridContainer {
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "nav"
-      "header"
-      "main"
-      "left"
-      "left"
-      "footer" !important;
-  }
-} */
-
 body {
   background-color: var(--background-color);
   color: var(--text-color);
   margin-inline: auto;
 }
 
-div#outer-container {
+#layout-outer-container {
+  display: block;
+  margin-inline: auto;
+  max-width: fit-content;
+}
+
+#layout-flex-container {
   display: flex;
   flex-direction: column;
 }
 
-#flex-layout-container {
+:root {
+  --width-content-large: calc(650px + 8em);
+  --width-sidebar-large: 18em;
+  --gap-large: 1.2em;
+}
+
+#layout-primary {
+  gap: var(--gap-large);
   display: flex;
-  justify-content: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  gap: 1.2em;
 }
 
-#top-box {
-  max-width: 100%;
+#layout-top-bar {
   width: 100%;
-  margin-left: auto;
-}
-#spacer {
-  max-width: 18em;
-  width: 100%;
-  height: 1px;
-  background-color: red;
-  display: block;
-}
-
-#sidebar {
-  max-width: 18em;
-  width: 100%;
-  display: block;
-}
-
-#flex-layout-container > #center-column:has(.wide-main) {
-  max-width: calc(650px + 30em);
-}
-
-#flex-layout-container > #center-column {
-  width: 100%;
-
+  display: flex;
+  flex-direction: column;
   max-width: calc(650px + 8em);
 }
 
-/* body > #gridContainer {
-  display: grid;
-  grid-template-columns: minmax(15em, 1fr) calc(650px + 8em) 1fr;
-  grid-template-rows: repeat(6, min-content);
-  row-gap: 0.1em;
-  column-gap: 1.2em;
-  grid-template-areas:
-    ".      .        "
-    ".      nav      "
-    ".      header   "
-    ".      .        "
-    "left   main     "
-    "left   footer   ";
+#layout-sidebar {
+  min-width: var(--width-sidebar-large);
+  width: var(--width-sidebar-large);
 }
 
 main {
-  width: 100%;
-  grid-area: main;
+  min-width: var(--width-content-large);
+  width: var(--width-content-large);
 }
 
-#gridContainer > footer {
-  grid-area: footer;
+/* It's a shame this doesn't work */
+@media (max-width: calc(var(--width-content-large) + var(--width-content-large) + var(--gap-large))) {
 }
-
-nav {
-  grid-area: nav;
-}
-
-#sidebar.left {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2em;
-  grid-area: left;
-}
-
-header {
-  width: 100%;
-  grid-area: header;
-  align-self: baseline;
-} */
-
-/* END GRID LAYOUT */
 
 /* NAV */
 
@@ -184,6 +125,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1em;
   height: 3.2em;
 
   h1 {
@@ -271,6 +213,8 @@ main p,
 .doc p {
   margin-bottom: 1rem;
   font-size: 1rem;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 main,
