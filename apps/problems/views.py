@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Problem, Source, SourceGroup, Solution
+from django.core.paginator import Paginator
+from .models import Problem, Source, SourceGroup, Solution, Technique, Branch, Type
 from .forms import SearchForm
 
 
@@ -138,3 +139,11 @@ class SourceMissingProblemsView(DetailView):
         context["problems"] = ordered_problems_and_blanks
 
         return context
+
+
+def tags_view(request):
+    context = {}
+    context["techniques"] = Technique.objects.all().order_by("name")
+    context["types"] = Type.objects.all().order_by("name")
+    context["branches"] = Branch.objects.all().order_by("name")
+    return render(request, "tag_listing.html", context)

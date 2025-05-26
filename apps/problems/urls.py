@@ -8,6 +8,7 @@ from .views import (
     SourceGroupDetailView,
     problem_list_view,
     SourceMissingProblemsView,
+    tags_view,
 )
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
         SourceMissingProblemsView.as_view(),
         name="missing_problem",
     ),
+    path("tags/", tags_view, name="tags_view"),
     path("source/", SourceListView.as_view(), name="source_list"),
     path("", HomePageView.as_view(), name="home"),
 ]

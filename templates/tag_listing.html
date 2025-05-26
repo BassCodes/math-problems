@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1 id="page-title">Tags</h1>
+{% endblock header %}
+
+{% block content %}
+        <main class="doc">
+            <h2>Branches</h2>
+            {% if branches|length != 0 %}
+                <ul class="slim">
+                    {% for branch in branches %}
+                    <li>
+                        {{ branch.name }}
+                    </li>    
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="muted">(no branches)</div>
+            {% endif %}
+            <h2>Types</h2>
+            {% if types|length != 0 %}
+                <ul class="slim">
+                    {% for type in types %}
+                    <li>
+                        {{ type.name }}
+                    </li>    
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="muted">(no types)</div>
+            {% endif %}
+            <h2>Techniques</h2>
+            {% if techniques|length != 0 %}
+                <ul class="slim">
+                    {% for technique in techniques %}
+                    <li>
+                        {{ technique.name }}
+                    </li>    
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="muted">(no techniques)</div>
+            {% endif %}
+        </main>
+    {% endblock content %}
