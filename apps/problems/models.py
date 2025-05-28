@@ -86,43 +86,43 @@ class Source(models.Model):
         return reverse("source_detail", kwargs={"slug": self.slug})
 
 
-class Branch(models.Model):
-    """
-    A Branch represents a branch of mathematics like Calculus or Algebra
-    """
+# class Branch(models.Model):
+#     """
+#     A Branch represents a branch of mathematics like Calculus or Algebra
+#     """
 
-    name = models.CharField(max_length=128)
-    description = models.TextField(blank=True, null=True)
+#     name = models.CharField(max_length=128)
+#     description = models.TextField(blank=True, null=True)
 
-    class Meta:
-        verbose_name_plural = "Branches"
+#     class Meta:
+#         verbose_name_plural = "Branches"
 
-    def __str__(self):
-        return self.name[:50]
-
-
-class Type(models.Model):
-    """
-    A Type represents the general class of a problem. E.g. Word Problem, Integration
-    """
-
-    name = models.CharField(max_length=128)
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name[:50]
+#     def __str__(self):
+#         return self.name[:50]
 
 
-class Technique(models.Model):
-    """
-    A Technique represents a trick or a book-method for solving a problem
-    """
+# class Type(models.Model):
+#     """
+#     A Type represents the general class of a problem. E.g. Word Problem, Integration
+#     """
 
-    name = models.CharField(max_length=128)
-    description = models.TextField(blank=True)
+#     name = models.CharField(max_length=128)
+#     description = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return self.name[:50]
+#     def __str__(self):
+#         return self.name[:50]
+
+
+# class Technique(models.Model):
+#     """
+#     A Technique represents a trick or a book-method for solving a problem
+#     """
+
+#     name = models.CharField(max_length=128)
+#     description = models.TextField(blank=True)
+
+#     def __str__(self):
+#         return self.name[:50]
 
 
 class Problem(models.Model):
@@ -146,19 +146,19 @@ class Problem(models.Model):
         related_name="problems",
     )
     number = models.PositiveSmallIntegerField()
-    branches = models.ManyToManyField(Branch, blank=True, related_name="problems")
-    types = models.ManyToManyField(Type, blank=True, related_name="problems")
+    # branches = models.ManyToManyField(Branch, blank=True, related_name="problems")
+    # types = models.ManyToManyField(Type, blank=True, related_name="problems")
     history = HistoricalRecords(app="history")
 
     # Two problems can not share the same problem number and the same source
     class Meta:
         unique_together = ["source", "number"]
 
-    @property
-    def techniques(self):
-        return Technique.objects.filter(
-            pk__in=self.solutions.all().values("techniques")
-        )
+    # @property
+    # def techniques(self):
+    #     return Technique.objects.filter(
+    #         pk__in=self.solutions.all().values("techniques")
+    #     )
 
     def get_next(self):
         if self.source is None:
@@ -221,7 +221,7 @@ class Solution(models.Model):
     problem = models.ForeignKey(
         Problem, on_delete=models.CASCADE, related_name="solutions"
     )
-    techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
+    # techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
     solution_text = models.TextField()
     history = HistoricalRecords(app="history", bases=[SolutionProblemHistoryShim])
 

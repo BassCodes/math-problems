@@ -1,5 +1,6 @@
 from django import forms
-from .models import Source, Branch, Technique, Type
+from .models import Source
+# , Branch, Technique, Type
 
 
 class SearchForm(forms.Form):
@@ -11,6 +12,6 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["source"].queryset = Source.objects.all()
-        self.fields["branch"].queryset = Branch.objects.all()
-        self.fields["tech"].queryset = Technique.objects.all()
-        self.fields["type"].queryset = Type.objects.all()
+        # self.fields["branch"].queryset = Branch.objects.all()
+        # self.fields["tech"].queryset = Technique.objects.all()
+        # self.fields["type"].queryset = Type.objects.all()

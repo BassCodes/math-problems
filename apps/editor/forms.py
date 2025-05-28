@@ -9,8 +9,8 @@ class ProblemForm(forms.ModelForm):
             "problem_text",
             "has_answer",
             "answer_text",
-            "branches",
-            "types",
+            # "branches",
+            # "types",
             "source",
             "number",
         ]
@@ -27,5 +27,8 @@ class ProblemForm(forms.ModelForm):
 class SolutionForm(forms.ModelForm):
     class Meta:
         model = problems.models.Solution
-        fields = ["solution_text", "techniques"]
+        fields = [
+            "solution_text",
+            # "techniques"
+        ]
         exclude = ("problem",)

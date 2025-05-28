@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Problem, Branch, Source, SourceGroup, Technique, Solution, Type
+from .models import Problem, Source, SourceGroup, Solution
 
 import simple_history
 
@@ -41,10 +41,10 @@ class SourceGroupAdmin(admin.ModelAdmin):
     list_display = ("pk", "name", "description", "url")
 
 
-@admin.register(Technique)
-class TechniqueAdmin(admin.ModelAdmin):
-    list_display = ("pk", "name", "description")
+# @admin.register(Technique)
+# class TechniqueAdmin(admin.ModelAdmin):
+#     list_display = ("pk", "name", "description")
 
 
-admin.site.register(Branch)
-admin.site.register(Type)
+# admin.site.register(Branch)
+# admin.site.register(Type)
