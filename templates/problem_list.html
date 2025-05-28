@@ -18,7 +18,7 @@
     {% regroup problems by source as grouped_problems %}
         <main class="doc">
             {% for source,problem_group in grouped_problems %}
-                <h2 class="small-heading">{{ source.get_short_name }}</h2>
+                <h2 class="small-heading smcp tolower">{{ source.get_short_name }}</h2>
                 {% problem_list problem_group ord="true" %}
                 {% empty %}
                     <p class="muted">(No results found)</p>

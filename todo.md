@@ -3,9 +3,11 @@
 - Horizontal rules look bad in doc scope
 - Spruce up signup form
 - Fix list style on sources pages
-- Find external font to appease brave browser (doesn't want to use Palatino system font)
 - Not all pages have .doc class
 - Make layout responsive
+- Add license description for Alegreya
+- Inline SMALLCAPS fonts for alegreya
+- get all font styles for base https://fontsource.org/fonts/alegreya/ (italics isn't part of this). (cmon man, they give you woff2's from the source but no CSS on how to use it !)
 
 ## Functional
 

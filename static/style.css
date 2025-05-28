@@ -28,9 +28,9 @@ html, body, nav, p, div, h1, h2, h3, a, ul, ol, li {
 html {
   color-scheme: light dark;
   height: 100%;
-  font-size: 18px;
-  font-family: Palatino Linotype, Palatino LT STD, bitstream charter, charter,
-    serif;
+  font-size: 20px;
+  font-family: Alegreya, Palatino Linotype, Palatino LT STD, bitstream charter,
+    charter, serif;
   margin-inline: auto;
   scrollbar-gutter: stable both-edges;
 }
@@ -374,6 +374,17 @@ details > summary::-webkit-details-marker {
 
 .muted {
   color: var(--text-muted-color);
+}
+
+.smcp {
+  font-family: Alegreya SC;
+}
+
+.tolower {
+  text-transform: lowercase;
+}
+.toupper {
+  text-transform: uppercase;
 }
 
 .noselect {
