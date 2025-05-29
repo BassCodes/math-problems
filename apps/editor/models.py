@@ -67,7 +67,7 @@ class DraftableMixin(models.Model):
     @classmethod
     def create_new(cls, user, forked_from=None, **kwargs):
         if forked_from is not None:
-            obj = cls._create_from_published(forked_from)
+            obj = cls.__create_from_published(forked_from)
         else:
             obj = cls(**kwargs)
         draft_ref = DraftRef._create_new(user, forked_from=forked_from)
@@ -77,27 +77,27 @@ class DraftableMixin(models.Model):
         return obj
 
     @classmethod
-    def _create_from_published(cls, published):
+    def __create_from_published(cls, published):
         obj = cls()
-        obj._copy_fields_from_object(published)
+        obj.__copy_fields_from_object(published)
         return obj
 
-    def _copy_fields_from_object(self, obj):
+    def __copy_fields_from_object(self, obj):
         for field in self.DraftMeta.copy_fields:
             setattr(self, field, getattr(obj, field))
 
-    def _verify_foreign_keys_are_not_drafts(self):
+    def __verify_foreign_keys_are_not_drafts(self):
         for fk, draft_fk in self.DraftMeta.draftable_foreign_keys.items():
             if getattr(self, draft_fk) is not None:
                 raise DraftDependsOnOtherDraft(
                     f"Foreign Key `{draft_fk}` is still in draft state. (unpublished)"
                 )
 
-    def _copy_fields_to_object(self, obj):
+    def __copy_fields_to_object(self, obj):
         for field in self.DraftMeta.copy_fields:
             setattr(obj, field, getattr(self, field))
 
-    def _update_dependents_post_publish(self, published):
+    def __update_dependents_post_publish(self, published):
         for [cls, draft_name, pub_name] in self.DraftMeta.dependents:
             f = draft_name
             dependents = cls.objects.filter(**{f: self})
@@ -106,9 +106,9 @@ class DraftableMixin(models.Model):
                 setattr(dep, pub_name, published)
                 dep.save()
 
-    def _convert_to_published(self, forked_from=None):
+    def __convert_to_published(self, forked_from=None):
         assert self.DraftMeta.reference_model is not None
-        self._verify_foreign_keys_are_not_drafts()
+        self.__verify_foreign_keys_are_not_drafts()
 
         if forked_from is None:
             published = self.DraftMeta.reference_model()
@@ -116,9 +116,9 @@ class DraftableMixin(models.Model):
             # TODO handle history
             published = forked_from
 
-        self._copy_fields_to_object(published)
+        self.__copy_fields_to_object(published)
         published.save()
-        self._update_dependents_post_publish(published)
+        self.__update_dependents_post_publish(published)
 
         return published
 
@@ -126,7 +126,7 @@ class DraftableMixin(models.Model):
         ref = self.draft_ref
         assert ref.draft_state == DraftRef.DraftState.IN_REVIEW
 
-        published = self._convert_to_published(ref.forked_content_object)
+        published = self.__convert_to_published(ref.forked_content_object)
         self.draft_ref.delete()
         self.delete()
         return published
