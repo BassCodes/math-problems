@@ -5,9 +5,9 @@ from .models import Source
 
 class SearchForm(forms.Form):
     source = forms.ModelMultipleChoiceField(queryset=None, required=False)
-    branch = forms.ModelMultipleChoiceField(queryset=None, required=False)
-    type = forms.ModelMultipleChoiceField(queryset=None, required=False)
-    tech = forms.ModelMultipleChoiceField(queryset=None, required=False)
+    # branch = forms.ModelMultipleChoiceField(queryset=None, required=False)
+    # type = forms.ModelMultipleChoiceField(queryset=None, required=False)
+    # tech = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

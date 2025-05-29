@@ -11,12 +11,15 @@ from django.urls import reverse_lazy
 from django.db.models import F, Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import ProblemForm, SolutionForm
 from django.core.exceptions import ObjectDoesNotExist
 
+from .forms import ProblemForm, SolutionForm, SourceForm
+
+import accounts
 
 import datetime
 import problems
+from .models import DraftProblem, DraftSource, DraftRef
 
 
 class EditorHomePageView(LoginRequiredMixin, TemplateView):
@@ -168,8 +171,64 @@ class SourceEditView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = "editor/source_edit.html"
 
 
+# @login_required
+# def source_create_draft_view(
+#     request,
+#     draft_id,
+# ):
+#     problem = problems.models.Problem.objects.get(id=d)
+
+#     if request.method == "POST":
+#         problem_form = ProblemForm(request.POST, instance=problem, prefix="prb")
+
+#         highest_solution = problem.solutions.count()
+#         additional_solutions = int(request.POST.get("additional_solutions", 0))
+#         solution_forms = [
+#             SolutionForm(request.POST, instance=solution, prefix=f"sol{i}")
+#             for (i, solution) in enumerate(problem.solutions.all())
+#         ]
+#         for i in range(highest_solution, highest_solution + additional_solutions):
+#             solution_forms.append(
+#                 SolutionForm(
+#                     request.POST, instance=problems.models.Solution(), prefix=f"sol{i}"
+#                 )
+#             )
+
+#         if problem_form.is_valid() and all([s.is_valid() for s in solution_forms]):
+#             problem_form.save(commit=True)
+
+#             for solution_form in solution_forms:
+#                 new_solution = solution_form.save(commit=False)
+#                 new_solution.problem = problem
+#                 new_solution.save()
+
+#             return HttpResponseRedirect(problem.get_absolute_url())
+#     else:
+#         problem_form = ProblemForm(instance=problem, prefix="prb")
+#         solution_forms = []
+#         for i, solution in enumerate(problem.solutions.all()):
+#             solution_form = SolutionForm(instance=solution, prefix=f"sol{i}")
+#             solution_form.x_form_no = i
+#             solution_forms.append(solution_form)
+
+#     # Dummy solution form. used as a template create additional solutions for the problem
+#     dummy_solution_form = SolutionForm(
+#         instance=problems.models.Solution(), prefix="solREPLACEME"
+#     )
+#     return render(
+#         request,
+#         "editor/problem_edit.html",
+#         {
+#             "problem": problem,
+#             "problem_form": problem_form,
+#             "solution_forms": solution_forms,
+#             "dummy_solution": dummy_solution_form,
+#         },
+#     )
+
+
 class SourceCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    model = problems.models.Source
+    model = DraftSource
     permission_required = "problems.add_source"
     fields = [
         "name",
@@ -183,6 +242,9 @@ class SourceCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     ]
     template_name = "editor/source_create.html"
     success_url = reverse_lazy("editor_home")
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
     def get_initial(self):
         # Get URL parameters for specific SourceGroup and select that SourceGroup
@@ -220,3 +282,20 @@ class SourceGroupCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateV
     ]
     template_name = "editor/sourcegroup_create.html"
     success_url = reverse_lazy("editor_home")
+
+
+from django.db.models import F
+
+
+# TODO Auth
+class UserDraftsDetailView(DetailView):
+    model = accounts.models.CustomUser
+    template_name = "editor/user_drafts.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # context["draft_sources"] = DraftSource.objects.filter(
+        #     draft_owner=self.request.user
+        # )
+        return context

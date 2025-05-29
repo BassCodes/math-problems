@@ -12,6 +12,7 @@ from .views import (
     SourceCreateView,
     SourceGroupEditView,
     SourceGroupCreateView,
+    UserDraftsDetailView,
 )
 
 urlpatterns = [
@@ -38,5 +39,11 @@ urlpatterns = [
     ),
     path(
         "sourcegroup/add/", SourceGroupCreateView.as_view(), name="sourcegroup_create"
+    ),
+    path("drafts/<uuid:pk>", UserDraftsDetailView.as_view(), name="user_drafts"),
+    path(
+        "drafts/<uuid:pk>/publish",
+        UserDraftsDetailView.as_view(),
+        name="user_publish_draft",
     ),
 ]

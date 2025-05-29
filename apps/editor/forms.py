@@ -1,5 +1,6 @@
 from django import forms
 import problems
+from .models import DraftSource, DraftProblem
 
 
 class ProblemForm(forms.ModelForm):
@@ -24,11 +25,23 @@ class ProblemForm(forms.ModelForm):
             return self.cleaned_data["answer_text"]
 
 
+class SourceForm(forms.ModelForm):
+    class Meta:
+        model = DraftSource
+        fields = [
+            "name",
+            "shortname",
+            "subtitle",
+            "parent",
+            "problem_count",
+            "description",
+            "publish_date",
+            "url",
+        ]
+
+
 class SolutionForm(forms.ModelForm):
     class Meta:
         model = problems.models.Solution
-        fields = [
-            "solution_text",
-            # "techniques"
-        ]
+        fields = ["solution_text"]
         exclude = ("problem",)

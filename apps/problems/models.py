@@ -6,6 +6,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveBigIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+
 class SourceGroup(models.Model):
     """
     A SourceGroup represents an overall Branch for many different sources.

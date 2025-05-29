@@ -31,51 +31,51 @@ def problem_list_view(request):
     query = Q()
     solution_query = Q()
 
-    filter_by_solution = False
-    if search_form.is_valid():
-        source_query = Q()
-        for source in search_form.cleaned_data["source"]:
-            source_query |= Q(source__exact=source.id)
-        query &= source_query
+    # filter_by_solution = False
+    # if search_form.is_valid():
+    #     source_query = Q()
+    #     for source in search_form.cleaned_data["source"]:
+    #         source_query |= Q(source__exact=source.id)
+    #     query &= source_query
 
-        branch_query = Q()
-        for branch in search_form.cleaned_data["branch"]:
-            branch_query &= Q(branches__exact=branch.id)
-        query &= branch_query
+    #     branch_query = Q()
+    #     for branch in search_form.cleaned_data["branch"]:
+    #         branch_query &= Q(branches__exact=branch.id)
+    #     query &= branch_query
 
-        type_query = Q()
-        for type in search_form.cleaned_data["type"]:
-            type_query |= ~Q(types__id=type.id)
-        query &= ~type_query
+    #     type_query = Q()
+    #     for type in search_form.cleaned_data["type"]:
+    #         type_query |= ~Q(types__id=type.id)
+    #     query &= ~type_query
 
-        if search_form.cleaned_data["tech"]:
-            technique_query = Q()
-            filter_by_solution = True
+    #     if search_form.cleaned_data["tech"]:
+    #         technique_query = Q()
+    #         filter_by_solution = True
 
-            for technique in search_form.cleaned_data["tech"]:
-                technique_query |= ~Q(techniques__id=technique.id)
+    #         for technique in search_form.cleaned_data["tech"]:
+    #             technique_query |= ~Q(techniques__id=technique.id)
 
-            solution_query &= ~technique_query
+    #         solution_query &= ~technique_query
 
     context = {}
 
-    if filter_by_solution:
-        # The filter_by_solution enables filtering the set of problems by a set of solutions.
-        # If filtering by solution is not needed, this cuts down on an extra database query.
-        solutions = Solution.objects.filter(solution_query)
-        context["problems"] = (
-            Problem.objects.filter(query)
-            .filter(solutions__in=solutions)
-            .order_by("source", "number")
-        )
-    else:
-        # Also, without this branch, a bug arises when problems have no
-        # solutions. Without the branch those problems would simply be lost.
-        context["problems"] = (
-            Problem.objects.prefetch_related("source")
-            .filter(query)
-            .order_by("source", "number")
-        )
+    # if filter_by_solution:
+    #     # The filter_by_solution enables filtering the set of problems by a set of solutions.
+    #     # If filtering by solution is not needed, this cuts down on an extra database query.
+    #     solutions = Solution.objects.filter(solution_query)
+    #     context["problems"] = (
+    #         Problem.objects.filter(query)
+    #         .filter(solutions__in=solutions)
+    #         .order_by("source", "number")
+    #     )
+    # else:
+    # Also, without this branch, a bug arises when problems have no
+    # solutions. Without the branch those problems would simply be lost.
+    context["problems"] = (
+        Problem.objects.prefetch_related("source")
+        .filter(query)
+        .order_by("source", "number")
+    )
 
     context["search_form"] = search_form
 

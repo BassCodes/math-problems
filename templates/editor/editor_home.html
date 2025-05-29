@@ -20,6 +20,9 @@
             <li>
                 <a href="{% url 'missing_problems' %}">Missing Problems</a>
             </li>
+            <li>
+                <a href="{% url 'user_drafts' pk=request.user.pk  %}">My Drafts</a>
+            </li>
         </ul>
     </main>
 {% endblock content %}

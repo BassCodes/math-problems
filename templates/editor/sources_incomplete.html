@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block header %}
     <header>
         <h1 id="page-title">Missing Problems</h1>
     </header>
+{% endblock %}
+
+{% block content %}
     <main>
         <p>The following sources have problems which are not entered into the database.</p>
+        {% if sources|length != 0 %}
         <ul>
             {% for s in sources %}
                 <li>
@@ -13,5 +17,8 @@
                 </li>
             {% endfor %}
         </ul>
+        {% else %}
+        <p class="muted">(No sources)</p>
+        {% endif %}
     </main>
 {% endblock content %}
