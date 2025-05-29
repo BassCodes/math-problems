@@ -26,7 +26,7 @@ Prerequisites
 
 - Python 3.12
 - [uv package manager](https://docs.astral.sh/uv/)
-- Recent version of Node and pm
+- Recent version of Node and npm
 
 ### Step 1
 

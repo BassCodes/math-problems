@@ -26,7 +26,7 @@ class DraftRef(models.Model):
 
     forked_object_id = models.PositiveIntegerField(null=True)
     forked_content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, related_name="aaaaa", null=True
+        ContentType, on_delete=models.CASCADE, related_name="+", null=True
     )
     forked_content_object = GenericForeignKey("forked_content_type", "forked_object_id")
 
