@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 import pytest
 
-from editor.models import DraftSource, DraftProblem, DraftRef, DraftDependsOnOtherDraft
+from editor.models import DraftSource, DraftProblem, DraftRef
 from problems.models import Problem, Source
+from editor.exceptions import DraftDependsOnOtherDraft
 
 
 @pytest.mark.django_db
@@ -42,6 +43,7 @@ def test_source_draft_merge_back_into_fork():
 def test_problem_draft_publish_with_source_dependency():
     user = get_user_model().objects.create(username="Foo", password="Bar")
     source_draft = DraftSource.create_new(user, name="Foo Draft", slug="foo")
+    assert source_draft.slug == "foo"
     problem_draft = DraftProblem.create_new(user, problem_text="Bar problem", number=1)
     assert not problem_draft.is_fork()
     assert not source_draft.is_fork()
@@ -56,6 +58,7 @@ def test_problem_draft_publish_with_source_dependency():
     source_draft.send_to_review()
     assert problem_draft.draft_source == source_draft
     source_published = source_draft.publish()
+    assert source_published.slug == "foo"
     problem_draft.refresh_from_db()
     assert problem_draft.source == source_published
     assert problem_draft.draft_source is None
@@ -85,11 +88,11 @@ def test_source_draft_publishing_flow():
     draft = DraftSource.create_new(user, name="Baz", slug="baz")
     assert not draft.is_fork()
     assert draft.name == "Baz"
-    ref = draft.get_draft_ref()
+    ref = draft.draft_ref
     draft_pk = draft.pk
     ref_pk = ref.pk
 
-    draft_ref = draft.get_draft_ref()
+    draft_ref = draft.draft_ref
     assert draft_ref == ref
 
     # Can only publish when in review
@@ -97,7 +100,7 @@ def test_source_draft_publishing_flow():
         draft.publish()
 
     draft.send_to_review()
-    assert draft.get_draft_ref().draft_state == DraftRef.DraftState.IN_REVIEW
+    assert draft.draft_ref.draft_state == DraftRef.DraftState.IN_REVIEW
 
     # Draft can't be put into review when already in review
     with pytest.raises(AssertionError) as e_info:

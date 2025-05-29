@@ -284,9 +284,6 @@ class SourceGroupCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateV
     success_url = reverse_lazy("editor_home")
 
 
-from django.db.models import F
-
-
 # TODO Auth
 class UserDraftsDetailView(DetailView):
     model = accounts.models.CustomUser
@@ -294,8 +291,10 @@ class UserDraftsDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # context["draft_sources"] = DraftSource.objects.filter(
-        #     draft_owner=self.request.user
-        # )
+        context["draft_sources"] = DraftSource.objects.owned_by(self.request.user)
+        context["draft_source_groups"] = DraftProblem.objects.owned_by(
+            self.request.user
+        )
+        context["draft_problems"] = DraftProblem.objects.owned_by(self.request.user)
+        context["draft_solutions"] = DraftProblem.objects.owned_by(self.request.user)
         return context
