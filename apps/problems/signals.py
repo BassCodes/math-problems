@@ -13,5 +13,7 @@ def add_solution_history_save_to_problem_history(sender, instance, **kwargs):
         return
 
     recent_solution_hist = solution.history.first()
+    if recent_solution_hist is None:
+        return
     recent_solution_hist.history_problem_ref = recent_problem_hist
     recent_solution_hist.save()
