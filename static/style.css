@@ -94,8 +94,6 @@ main {
 /* NAV */
 
 nav {
-  font-family: Alegreya SC;
-
   ul {
     row-gap: 0.25em;
     column-gap: 0.25em;
@@ -222,6 +220,11 @@ main,
 h1,
 h2 {
   margin-top: 0px;
+}
+
+h2:has(+ ul),
+h2:has(+ ol) {
+  margin-bottom: 0.2em !important;
 }
 
 a {
@@ -363,7 +366,7 @@ button.link {
 
 details:not([open]) summary h2::after {
   content: "(click to reveal)";
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   margin-inline-start: 1em;
   color: var(--text-muted-color);
 }
@@ -446,6 +449,7 @@ details > summary::-webkit-details-marker {
 .system-msg {
   color: var(--text-muted-color);
   user-select: none;
+  text-transform: lowercase;
 }
 .system-msg::before {
   content: "(";

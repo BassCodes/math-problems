@@ -59,7 +59,7 @@
             </details>
         {% empty %}
             <h2 class="borderunder">Solutions</h2>
-            <p class="system-msg smcp">no solutions</p>
+            <p class="system-msg">no solutions</p>
         {% endfor %}
         {% if problem.has_answer %}
             <details>
@@ -100,31 +100,13 @@
             </ol>
             <div id="next-prev-button-box">
                 <a href="{{ problem.get_prev.get_absolute_url }}"
-                    class="next button"
+                    class="next fbtn"
                     {% if problem.get_prev.get_absolute_url is None %}inert{% endif %}>Previous</a>
                 <a href="{{ problem.get_next.get_absolute_url }}"
-                    class="prev button"
+                    class="prev fbtn"
                     {% if problem.get_next.get_absolute_url is None %}inert{% endif %}>Next</a>
             </div>
         </div>
-        <div id="sidebar-meta-container">
-            <div id="meta-sidebar-title">Meta</div>
-            <h3>Branches</h3>
-            <ul>
-                {% for branch in problem.branches.all %}
-                    <li>{{ branch }}</li>
-                {% empty %}
-                    <div class="system-msg">No Branches</div>
-                {% endfor %}
-            </ul>
-            <h3>Types</h3>
-            <ul>
-                {% for type in problem.types.all %}
-                    <li>{{ type }}</li>
-                {% empty %}
-                    <div class="system-msg">No Types</div>
-                {% endfor %}
-            </ul>
-        </div>
+
     </div>
 {% endblock sidebar %}

@@ -10,22 +10,22 @@
     {% regroup source_list by parent as grouped_sources %}
         <main class="doc">
             {% if source_list|length != 0 %}
-                <ul class="slim">
-                    {% for source_group,sources in grouped_sources %}
-                        <h2>
-                            {% if source_group %}
-                                {{ source_group }}
-                            {% else %}
-                                Other
-                            {% endif %}
-                        </h2>
-                        {% for source in sources %}
-                            <li>
-                                <a href="{{ source.get_absolute_url }}">{{ source.full_name }}</a>
-                            </li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
+            {% for source_group,sources in grouped_sources %}
+            <h2>
+                {% if source_group %}
+                {{ source_group }}
+                {% else %}
+                Other
+                {% endif %}
+            </h2>
+            <ul class="slim">
+                {% for source in sources %}
+                    <li>
+                        <a href="{{ source.get_absolute_url }}">{{ source.full_name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
             {% else %}
                 <div class="system-msg">no sources</div>
             {% endif %}
