@@ -76,9 +76,7 @@ def draft_force_publish_factory(model):
     attributes["template_name"] = "editor/generic_confirm_force_publish.html"
 
     def form_valid(self, form):
-        if self.object.draft_ref.draft_state == DraftRef.DraftState.DRAFT:
-            self.object.send_to_review()
-        published = self.object.publish()
+        published = self.object.force_publish(self.request.user)
         return HttpResponseRedirect(published.get_absolute_url())
 
     def post(self, request, *args, **kwargs):

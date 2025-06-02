@@ -13,6 +13,9 @@ from accounts.models import CustomUser
 from .exceptions import DraftDependsOnOtherDraft, AttemptToDoubleForkObject
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
+from history.models import HistoryPublishDataShim
+
+
 from utility import PascalCaseToSnakeCase
 
 
@@ -187,7 +190,6 @@ class DraftableMixin(models.Model):
         if self.draft_ref.forked_content_object is None:
             published = self.DraftMeta.reference_model()
         else:
-            # TODO handle history
             published = self.draft_ref.forked_content_object
         self.__copy_fields_to_object(published)
         return published
@@ -200,11 +202,34 @@ class DraftableMixin(models.Model):
 
         return published
 
-    def publish(self):
+    def publish(self, publishing_user):
         ref = self.draft_ref
         assert ref.draft_state == DraftRef.DraftState.IN_REVIEW
+        if publishing_user is None:
+            raise ObjectDoesNotExist("todo")
 
         published = self.__convert_to_published()
+        h = published.history.first()
+        h.history_publish_type = HistoryPublishDataShim.PublishType.MERGED
+        h.history_publish_reviewer = publishing_user
+        h.history_publish_author = ref.draft_owner
+        h.save()
+        self.delete()
+        return published
+
+    def force_publish(self, publishing_user):
+        if publishing_user is None:
+            raise ObjectDoesNotExist("todo")
+        ref = self.draft_ref
+        if ref.draft_state == DraftRef.DraftState.DRAFT:
+            self.send_to_review()
+
+        published = self.__convert_to_published()
+        h = published.history.first()
+        h.history_publish_type = HistoryPublishDataShim.PublishType.FORCE_PUBLISHED
+        h.history_publish_reviewer = publishing_user
+        h.history_publish_author = ref.draft_owner
+        h.save()
         self.delete()
         return published
 

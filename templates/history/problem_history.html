@@ -42,19 +42,25 @@
                         <history-contents>
                         <history-top>
                         <history-edit-icon>{{ h.history.history_type }}</history-edit-icon>
-                        <history-edit-name>
-                        {% if h.history.history_type == "+" %}
+                        <span>
+
+                            {% if h.history.history_type == "+" %}
                             Created
-                        {% elif h.history.history_type == "~" %}
+                            {% elif h.history.history_type == "~" %}
                             Edited
-                        {% elif h.history.history_type == "-" %}
+                            {% elif h.history.history_type == "-" %}
                             Deleted
-                        {% else %}
+                            {% else %}
                             Unknown action
-                        {% endif %}
-                        </history-edit-name>
-                        <history-inline-text>by</history-inline-text>
-                        <history-user class="muted">{{ h.history.history_user }}</history-user>
+                            {% endif %}
+                            by
+
+                            <history-user class="muted">{{ h.history.history_user }}</history-user>.                            {% if h.history.history_publish_type == "FR" %}
+                            Force published by
+                            <history-user class="muted">{{ h.history.history_publish_reviewer }}</history-user>
+                            {% endif %}
+                        </span>
+
                         <history-time>{{ h.history.history_date|date:"y/m/d g:mA" }}</history-time>
                         </history-top>
                         <history-bottom>

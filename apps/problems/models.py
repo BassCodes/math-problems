@@ -3,6 +3,9 @@ from django.urls import reverse
 from simple_history.models import HistoricalRecords
 
 
+from history.models import HistoryPublishDataShim
+
+
 class SourceGroup(models.Model):
     """
     A SourceGroup represents an overall Branch for many different sources.
@@ -14,7 +17,7 @@ class SourceGroup(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
-    history = HistoricalRecords(app="history")
+    history = HistoricalRecords(app="history", bases=[HistoryPublishDataShim])
 
     def __str__(self):
         return self.name[:50]
@@ -45,7 +48,7 @@ class Source(models.Model):
     description = models.TextField(blank=True, null=True)
     publish_date = models.DateField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
-    history = HistoricalRecords(app="history")
+    history = HistoricalRecords(app="history", bases=[HistoryPublishDataShim])
 
     class Meta:
         ordering = ["parent", "name"]
@@ -98,7 +101,7 @@ class Problem(models.Model):
     number = models.PositiveSmallIntegerField()
     # branches = models.ManyToManyField(Branch, blank=True, related_name="problems")
     # types = models.ManyToManyField(Type, blank=True, related_name="problems")
-    history = HistoricalRecords(app="history")
+    history = HistoricalRecords(app="history", bases=[HistoryPublishDataShim])
 
     # Two problems can not share the same problem number and the same source
     class Meta:
@@ -159,7 +162,7 @@ class Solution(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="solutions")
     # techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
     solution_text = models.TextField()
-    history = HistoricalRecords(app="history", bases=[SolutionProblemHistoryShim])
+    history = HistoricalRecords(app="history", bases=[SolutionProblemHistoryShim, HistoryPublishDataShim])
 
     def __str__(self):
         return self.solution_text[:50]
