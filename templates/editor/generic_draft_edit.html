@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load utility %}
+
+{% block after_nav %}
+{% if object.is_draft %}
+<div class="draft-header">
+<div class="draft-header-main">
+<div class="draft-header-text">
+<div class="draft-header-text-title">
+Editing a Draft
+</div>
+<div class="draft-header-subtitle muted">
+will be viewable to logged-in users
+</div>
+</div>
+</div>
+<div class="draft-header-control">
+<div class="draft-control-attribution">Created by 
+{% if user == object.draft_ref.draft_owner %}
+you
+{% else %}
+<span class="muted">
+{{ object.draft_ref.draft_owner}}
+</span>
+{% endif %}
+</div>
+
+</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block header %}
+    <header>
+        <h1 id="page-title">Edit {{ object|verbose_name|title }}</h1>
+    </header>
+{% endblock header %}
+
+{% block content %}
+    <main>
+        <form method="post" id="generic-edit-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </form>
+    </main>
+    {% endblock content %}
+    
+{% block below %}
+<div class="flex j-right">
+    <button type="submit" class="fbtn" form="generic-edit-form">Update</button>
+</div>    
+{% endblock below %}

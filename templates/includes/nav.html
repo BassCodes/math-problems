@@ -1,0 +1,29 @@
+<nav>
+    <ul class="flex noselect">
+        <li>
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li>
+            <a href="{% url 'problem_list' %}">Problems</a>
+        </li>
+        <li>
+            <a href="{% url 'source_list' %}">Sources</a>
+        </li>
+        <li>
+            <a href="{% url 'about_page' %}">About</a>
+        </li>
+
+        {% if user.is_authenticated %}
+        <li class="shove-right">
+            <a href="{% url 'my_profile' %}">Profile</a>
+        </li>
+        <li>
+            <a href="{% url 'my_drafts' %}">Drafts</a>
+        </li>
+        {% else %}
+        <li class="shove-right">
+            <a href="{% url 'login' %}">Log In</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

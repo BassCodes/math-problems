@@ -39,7 +39,7 @@ class Source(models.Model):
     """
 
     # TODO slugify function
-    slug = models.SlugField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, unique=True, null=False, blank=False)
     name = models.CharField(max_length=128)
     shortname = models.CharField(max_length=40, blank=True, null=True)
     subtitle = models.CharField(max_length=30, blank=True, null=True)
@@ -94,45 +94,6 @@ class Source(models.Model):
         return reverse("source_detail", kwargs={"slug": self.slug})
 
 
-# class Branch(models.Model):
-#     """
-#     A Branch represents a branch of mathematics like Calculus or Algebra
-#     """
-
-#     name = models.CharField(max_length=128)
-#     description = models.TextField(blank=True, null=True)
-
-#     class Meta:
-#         verbose_name_plural = "Branches"
-
-#     def __str__(self):
-#         return self.name[:50]
-
-
-# class Type(models.Model):
-#     """
-#     A Type represents the general class of a problem. E.g. Word Problem, Integration
-#     """
-
-#     name = models.CharField(max_length=128)
-#     description = models.TextField(blank=True, null=True)
-
-#     def __str__(self):
-#         return self.name[:50]
-
-
-# class Technique(models.Model):
-#     """
-#     A Technique represents a trick or a book-method for solving a problem
-#     """
-
-#     name = models.CharField(max_length=128)
-#     description = models.TextField(blank=True)
-
-#     def __str__(self):
-#         return self.name[:50]
-
-
 class Problem(models.Model):
     """
     A Problem represents the description of a problem, including statement and answer
@@ -162,21 +123,13 @@ class Problem(models.Model):
     class Meta:
         unique_together = ["source", "number"]
 
-    # @property
-    # def techniques(self):
-    #     return Technique.objects.filter(
-    #         pk__in=self.solutions.all().values("techniques")
-    #     )
-
     def get_next(self):
         if self.source is None:
             return None
 
         if self.number:
             next_problem = (
-                Problem.objects.order_by("number")
-                .filter(source_id=self.source.pk, number__gt=self.number)
-                .first()
+                Problem.objects.order_by("number").filter(source_id=self.source.pk, number__gt=self.number).first()
             )
             return next_problem
         else:
@@ -188,9 +141,7 @@ class Problem(models.Model):
 
         if self.number:
             prev_problem = (
-                Problem.objects.order_by("number")
-                .filter(source_id=self.source.pk, number__lt=self.number)
-                .last()
+                Problem.objects.order_by("number").filter(source_id=self.source.pk, number__lt=self.number).last()
             )
             return prev_problem
         else:
@@ -209,9 +160,7 @@ class Problem(models.Model):
         return self.problem_text[:50]
 
     def get_absolute_url(self):
-        return reverse(
-            "problem_detail", kwargs={"slug": self.source.slug, "number": self.number}
-        )
+        return reverse("problem_detail", kwargs={"slug": self.source.slug, "number": self.number})
 
 
 class SolutionProblemHistoryShim(models.Model):
@@ -226,9 +175,7 @@ class SolutionProblemHistoryShim(models.Model):
 
 
 class Solution(models.Model):
-    problem = models.ForeignKey(
-        Problem, on_delete=models.CASCADE, related_name="solutions"
-    )
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="solutions")
     # techniques = models.ManyToManyField(Technique, blank=True, related_name="solutions")
     solution_text = models.TextField()
     history = HistoricalRecords(app="history", bases=[SolutionProblemHistoryShim])

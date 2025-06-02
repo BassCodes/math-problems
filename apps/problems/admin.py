@@ -39,12 +39,3 @@ class SourceAdmin(simple_history.admin.SimpleHistoryAdmin):
 @admin.register(SourceGroup)
 class SourceGroupAdmin(admin.ModelAdmin):
     list_display = ("pk", "name", "description", "url")
-
-
-# @admin.register(Technique)
-# class TechniqueAdmin(admin.ModelAdmin):
-#     list_display = ("pk", "name", "description")
-
-
-# admin.site.register(Branch)
-# admin.site.register(Type)

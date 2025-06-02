@@ -4,6 +4,12 @@ title: Open Source Licenses
 
 See the [Copyright Page](./copyright) for info about the copyright of this website.
 
+## Alegreya
+
+This project uses the font [Alegreya](https://huertatipografica.com/en/fonts/alegreya-ht-pro) ([Source](https://github.com/huertatipografica/Alegreya)) for most text.
+
+[OFL-1.1 License](https://github.com/huertatipografica/Alegreya/blob/2268f9e49bd8b13e095f76dd941792fa72d2d379/OFL.txt)
+
 ## MathJax
 
 This project uses [MathJax](https://www.mathjax.org/) ([Source](https://github.com/mathjax/MathJax)) to typeset math.

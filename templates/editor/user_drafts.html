@@ -2,25 +2,121 @@
 
 {% block header %}
     <header>
-        <h1 id="page-title">{{ user.username }}&rsquo;s Drafts</h1>
+        <h1 id="page-title"><span class="muted">{{ user.username }}</span>&rsquo;s Drafts</h1>
     </header>
 {% endblock %}
 
 {% block content %}
     <main>
-        <h2>Problem Drafts</h2>
-        {% for d in draft_problems %}
-        <div>
-            {{ d }}
+        <div class="flex row j-between a-center">
+            <h2>Source Drafts</h2>
+               <span class="aside-links">
+                <a href="{% url 'draft_source_new' %}">+</a>
+               </span>
         </div>
-        {% empty %}
-        <p class="muted">(No draft problems)</p>
-        {% endfor %}
-        <h2>Source Drafts</h2>
-        {% for d in draft_sources %}
-        {{ d }}
-        {% empty %}
-        <p class="muted">(No draft sources)</p>
-        {% endfor %}
+
+        <table>
+            {% for d in draft_sources %}
+            <tr>
+                <td>
+                    {{ d.name }}
+                </td>
+                <td>
+                    {{ d.shortname }}
+                </td>
+                <td>
+                    {{ d.subtitle }}
+                </td>
+                <td>
+                    {{ d.parent }}
+                    {{ d.draft_parent }}
+                </td>
+                <td>
+                    {{ d.is_draft }}
+                </td>
+                <td>
+                    <a href="{{ d.get_absolute_url }}" class="fbtn small">View</a>
+                    <a href="{{ d.get_absolute_edit_url }}" class="fbtn small">Edit</a>
+                    {% if d.is_user_deletable %}
+                    <a href="{{ d.get_absolute_delete_url }}" class="fbtn small">Delete</a>
+                    {% endif %}
+                    <a href="{{ d.get_absolute_force_publish_url }}" class="fbtn small admin-action">Force Publish</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="flex row j-between a-center">
+            <h2>Source Group Drafts</h2>
+               <span class="aside-links">
+                <a href="{% url 'draft_source_group_new' %}">+</a>
+               </span>
+        </div>
+
+        <table>
+            {% for d in draft_source_groups %}
+            <tr>
+                <td>
+                    {{ d.name }}
+                </td>
+                <td>
+                    {{ d.shortname }}
+                </td>
+                <td>
+                    {{ d.subtitle }}
+                </td>
+                <td>
+                    {{ d.parent }}
+                    {{ d.draft_parent }}
+                </td>
+                <td>
+                    {{ d.is_draft }}
+                </td>
+                <td>
+                    <a href="{{ d.get_absolute_url }}" class="fbtn">View</a>
+                    <a href="{{ d.get_absolute_edit_url }}" class="fbtn">Edit</a>
+                    {% if d.is_user_deletable %}
+                    <a href="{{ d.get_absolute_delete_url }}" class="fbtn">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="flex row j-between a-center">
+            <h2>Problem Drafts</h2>
+               <span class="aside-links">
+                <a href="{% url 'draft_problem_new' %}">+</a>
+               </span>
+        </div>
+
+        <table>
+            {% for d in draft_problems %}
+            <tr>
+                <td>
+                    {{ d.name }}
+                </td>
+                <td>
+                    {{ d.shortname }}
+                </td>
+                <td>
+                    {{ d.subtitle }}
+                </td>
+                <td>
+                    {{ d.parent }}
+                    {{ d.draft_parent }}
+                </td>
+                <td>
+                    {{ d.is_draft }}
+                </td>
+                <td>
+                    <a href="{{ d.get_absolute_url }}" class="fbtn">View</a>
+                    <a href="{{ d.get_absolute_edit_url }}" class="fbtn">Edit</a>
+                    {% if d.is_user_deletable %}
+                    <a href="{{ d.get_absolute_delete_url }}" class="fbtn">Delete</a>
+                    {% endif %}
+                    <a href="{{ d.get_absolute_force_publish_url }}" class="fbtn small admin-action">Force Publish</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
     </main>
 {% endblock content %}

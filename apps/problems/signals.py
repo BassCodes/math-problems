@@ -1,6 +1,6 @@
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Problem, Solution
+from .models import Solution
 
 
 @receiver(post_save, sender=Solution, dispatch_uid="link_solution_problem_history_save")

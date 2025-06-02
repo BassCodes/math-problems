@@ -9,6 +9,7 @@
   --background-secondary-color: light-dark(#fefefe, #0f0f0f);
   --border-primary-color: light-dark(black, #2b2e30);
   --border-secondary-color: light-dark(gray, #1c1e1f);
+  --admin-action-color: light-dark(red, red);
   /* buttons and such should be styled with the following radius */
   --interact-border-radius: 3px;
 }
@@ -70,6 +71,12 @@ body {
   max-width: calc(650px + 8em);
 }
 
+#layout-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
 #layout-sidebar {
   min-width: var(--width-sidebar-large);
   width: var(--width-sidebar-large);
@@ -87,6 +94,8 @@ main {
 /* NAV */
 
 nav {
+  font-family: Alegreya SC;
+
   ul {
     row-gap: 0.25em;
     column-gap: 0.25em;
@@ -103,18 +112,6 @@ nav {
     /* FUTURE WORK: Better font with small caps would look nice here */
     /* font-variant: small-caps; */
   }
-}
-
-button.link {
-  background: none !important;
-  padding: 0 !important;
-  border: none;
-  all: inherit;
-
-  color: var(--text-color);
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  cursor: pointer;
 }
 
 /* END NAV */
@@ -281,7 +278,7 @@ div#unpublished-problem-warning {
     margin-bottom: 0.2em;
   }
 
-  a.button {
+  a.fbtn {
     min-width: 10ch;
     margin-bottom: -1.33em;
   }
@@ -292,15 +289,76 @@ div#unpublished-problem-warning {
   }
 }
 
-a.button {
+a.fbtn {
   text-align: center;
   padding: 0.8ch;
   padding-inline: 1ch;
   border: 1px solid var(--text-muted-color);
   text-decoration-style: dotted;
+  box-sizing: content-box;
+  display: inline-block;
 }
-a.button[inert] {
+
+a.fbtn.small {
+  padding-inline: 0.5ch;
+}
+
+a.button,
+button.link {
+  background-color: red !important;
+  color: orange !important;
+}
+
+button.fbtn {
+  background: none !important;
+  all: inherit;
+  padding: 0.8ch !important;
+  padding-inline: 1ch !important;
+  color: var(--text-color);
+  border: 1px solid var(--text-muted-color) !important;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  display: inline-block;
+  cursor: pointer;
+  &:hover {
+    text-decoration-style: solid;
+  }
+}
+
+a.fbtn:hover {
+  text-decoration-style: solid;
+}
+
+a.fbtn[inert] {
   border: 1px solid var(--border-secondary-color);
+}
+
+a.fbtn.admin-action,
+button.fbtn.admin-action {
+  color: var(--background-color);
+  border: 1px solid var(--admin-action-color);
+  /* Must be !important for button.link.admin-action to show correctly */
+  background-color: var(--text-color) !important;
+  text-decoration-color: red;
+}
+
+a.admin-action {
+  color: var(--admin-action-color) !important;
+}
+
+button.link {
+  background: none !important;
+  padding: 0 !important;
+  border: none;
+  all: inherit;
+
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+  &:hover {
+    text-decoration-style: solid;
+  }
 }
 
 details:not([open]) summary h2::after {
@@ -364,6 +422,14 @@ details > summary::-webkit-details-marker {
   }
 }
 
+.shove-right {
+  margin-left: auto;
+}
+
+.shove-left {
+  margin-right: auto;
+}
+
 .borderunder {
   border-bottom: 1px solid var(--text-muted-color);
 }
@@ -374,6 +440,19 @@ details > summary::-webkit-details-marker {
 
 .muted {
   color: var(--text-muted-color);
+}
+
+/* System messages: user-facing text that describes the state of the system. Eg. "(no problems found)" */
+.system-msg {
+  color: var(--text-muted-color);
+  user-select: none;
+}
+.system-msg::before {
+  content: "(";
+}
+
+.system-msg::after {
+  content: ")";
 }
 
 .smcp {
@@ -432,3 +511,66 @@ mjx-assistive-mml {
 }
 
 /* END MATH STYLING */
+
+/* DRAFT WARNING HEADER */
+.draft-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  gap: 0.2em;
+  margin-top: 0.4em;
+  user-select: none;
+  .draft-header-text {
+    background-color: var(--background-color);
+    padding: 1em;
+  }
+  .draft-header-main {
+    width: 100%;
+    display: flex;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHUlEQVQI12P4/5/h////DP8ZoICJAQ0wIstiVQEA3CAI/c69TucAAAAASUVORK5CYII=");
+    border: 2px solid yellow;
+    image-rendering: pixelated;
+    &.angry {
+      filter: hue-rotate(-30deg);
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    .draft-header-main {
+      filter: hue-rotate(180deg);
+    }
+    .draft-header-main.angry {
+      filter: hue-rotate(-60deg);
+    }
+    .draft-header-text {
+      filter: hue-rotate(-180deg);
+    }
+  }
+
+  .draft-header-subtitle {
+    font-size: 0.9em;
+  }
+  .draft-header-control {
+    align-items: center;
+    gap: 1em;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .draft-control-buttons {
+    display: flex;
+    gap: 0.2em;
+  }
+}
+/* END DRAFT WARNING HEADER */
+
+/* Table */
+
+table {
+  width: 100%;
+}
+
+a.button {
+  margin: block;
+}
+/* END TABLE */

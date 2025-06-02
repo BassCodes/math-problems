@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "editor",
     "about",
     "history",
+    "utility",
 ]
 
 MIDDLEWARE = [

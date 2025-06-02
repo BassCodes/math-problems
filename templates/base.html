@@ -33,52 +33,24 @@
 
         <div id="layout-flex-container">
             <div id="layout-top-bar">
-                <nav>
-                    <ul class="flex noselect">
-                        <li>
-                            <a href="{% url 'home' %}">Home</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'problem_list' %}">Problems</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'source_list' %}">Sources</a>
-                        </li>
-                        {% if user.is_authenticated %}
-                            <li>
-                                <a href="{% url 'my_profile' %}">{{ user.username }}</a>
-                            </li>
-                            <li>
-                                <form action="{% url 'logout' %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="link" type="submit">Log Out</button>
-                                </form>
-                            </li>
-                            <li>
-                                <a href="{% url 'editor_home' %}">+</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href="{% url 'login' %}">Log In</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href="{% url 'about_page' %}">About</a>
-                        </li>
-                    </ul>
-                </nav>
+                {% include "includes/nav.html" %}
+                {% block after_nav %}
+                {% endblock %}
                 <header>
                     {% block header %}{% endblock %}
 
                     <span id="subtitle">
                         {% block subtitle %}{% endblock %}
-
                     </span>
                 </header>
             </div>
             <div id="layout-primary">
+                <div id="layout-content-container">
                     {% block content %}
                     {% endblock content %}
+                    {% block below %}
+                    {% endblock below %}
+                </div>
                 <div id="layout-sidebar">
                     {% block rsidebar %}
                     {% endblock rsidebar %}

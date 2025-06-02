@@ -1,10 +1,25 @@
 {% extends "base.html" %}
 
 {% load markdown_extras %}
+{% load utility %}
+
+{% block after_nav %}
+{% include "includes/draft_detail_header.html" %}
+{% endblock %}
 
 {% block header %}
     <h1 id="page-title">
-        <a class="incognito" href="{{ problem.source.get_absolute_url }}">{{ problem.source.name }}</a>
+        {% if problem.source %}
+        <a class="incognito" href="{{ problem.source.get_absolute_url }}">
+            {% if problem.source.name %}
+            {{ problem.source.name }}
+            {% else %}
+            <span class="system-msg">source has no name</span>
+            {% endif %}
+        </a>
+        {% else %}
+        <span class="system-msg">problem has no source</span>
+        {% endif %}
     </h1>
 {% endblock header %}
 
@@ -18,15 +33,17 @@
         <div class="flex row j-between a-center">
             <h1>Problem Statement</h1>
             <span class="aside-links">
-                {% if perms.problems.change_problem %}
-                    <a href="{% url 'problem_edit' pk=problem.pk %}" title="Edit">✐</a>
-                {% endif %}
-                {% if perms.problems.delete_problem %}
-                    <a href="{% url 'problem_delete' pk=problem.pk %}" title="Delete">␥</a>
-                {% endif %}
+                    {% if object.is_draft %}
+                        <a href="{% url 'draft_problem_edit' pk=object.id %}" title="Edit">✐</a>
+                    {% else %}
+                        <a href="{% url 'fork_problem' pk=problem.id %}" title="Edit">✐</a>
+
+                    {% endif %}
+                
                 {% if problem.history.all|length != 0 %}
-                    <a href="{% url 'problem_history' pk=problem.pk %}" title="History">↫</a>
+                    <a href="{% url 'problem_history' pk=problem.id %}" title="History">↫</a>
                 {% endif %}
+                <a href="{{ problem|admin_edit_url }}" class="admin-action">🕴</a>
             </span>
         </div>
         {{ problem.problem_text | markdown | safe }}
@@ -42,7 +59,7 @@
             </details>
         {% empty %}
             <h2 class="borderunder">Solutions</h2>
-            <p class="muted smcp noselect">(no solutions)</p>
+            <p class="system-msg smcp">no solutions</p>
         {% endfor %}
         {% if problem.has_answer %}
             <details>
@@ -99,7 +116,7 @@
                 {% for branch in problem.branches.all %}
                     <li>{{ branch }}</li>
                 {% empty %}
-                    <div class="muted">(No Branches)</div>
+                    <div class="system-msg">No Branches</div>
                 {% endfor %}
             </ul>
             <h3>Types</h3>
@@ -107,7 +124,7 @@
                 {% for type in problem.types.all %}
                     <li>{{ type }}</li>
                 {% empty %}
-                    <div class="muted">(No Types)</div>
+                    <div class="system-msg">No Types</div>
                 {% endfor %}
             </ul>
         </div>

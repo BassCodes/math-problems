@@ -29,7 +29,7 @@ class SignUpView(LoginImpermissibleMixin, CreateView):
     template_name = "registration/signup.html"
 
 
-class LogoutPageView(LoginRequiredMixin, TemplateView):
+class LogoutPageView(TemplateView):
     template_name = "registration/logout.html"
 
 

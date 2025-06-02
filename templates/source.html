@@ -3,9 +3,20 @@
 {% load markdown_extras %}
 {% load problem_list %}
 {% load static %}
+{% load utility %}
+
+{% block after_nav %}
+{% include "includes/draft_detail_header.html" %}
+{% endblock %}
 
 {% block header %}
-    <h1 id="page-title">{{ source.name }}</h1>
+    <h1 id="page-title">
+        {% if source.name %}
+            {{ source.name }}
+        {% else %}
+            <span class="system-msg">unnamed</span>
+        {% endif %}
+        </h1>
 {% endblock header %}
 
 {% block subtitle %}
@@ -22,17 +33,20 @@
             <h2>Description</h2>
             {% if user.is_authenticated %}
                 <span class="aside-links">
-                    {% if perms.problems.change_source %}
-                        <a href="{% url 'source_edit' pk=source.pk %}" title="Edit">✐</a>
+
+                    {% if object.is_draft %}
+                        <a href="{% url 'draft_source_edit' pk=object.id %}" title="Edit">✐</a>
+                    {% else %}
+                        <a href="{% url 'fork_source' slug=object.slug %}" title="Edit">✐</a>
                     {% endif %}
-                    {% if perms.problems.delete_source %}<a href="" title="Delete">␥</a>{% endif %}
+                    <a href="{{ object|admin_edit_url }}" class="admin-action">🕴</a>
                 </span>
             {% endif %}
         </div>
         {% if source.description %}
             {{ source.description | markdown | safe }}
         {% else %}
-            <p class="muted">(no description)</p>
+            <p class="system-msg">no description</p>
         {% endif %}
         {% if source.parent %}
             <p>
@@ -46,14 +60,14 @@
                 {% if source.publish_date %}
                     {{ source.publish_date }}
                 {% else %}
-                    <span class="muted">(unknown)</span>
+                    <span class="system-msg">unknown</span>
                 {% endif %}
             </li>
             <li>
                 {% if source.url %}
                     <a href="{{ source.url }}">Source URL</a>
                 {% else %}
-                    <span class="muted">(No URL available)</span>
+                    <span class="system-msg">No URL available</span>
                 {% endif %}
             </li>
             <li>
@@ -61,16 +75,18 @@
                 {% if source.problem_count %}
                     {{ source.problem_count }}
                 {% else %}
-                    <span class="muted">(unknown)</span>
+                    <span class="system-msg">unknown</span>
                 {% endif %}
             </li>
         </ul>
         <div class="flex j-between a-center">
             <h2>Problems</h2>
             <span class="aside-links">
+                {% if not source.is_draft %}
                 <a href="{% url 'missing_problem' slug=source.slug %}"
                    title="View missing problems">+</a>
-            </span>
+                {% endif %}
+                </span>
         </div>
         {% problem_list source.get_problems ord="true" %}
         </main>

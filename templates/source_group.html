@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% load markdown_extras %}
+{% load utility %}
+
+{% block after_nav %}
+{% include "includes/draft_detail_header.html" %}
+{% endblock %}
 
 {% block header %}
     <h1 id="page-title">{{ sourcegroup.name }}</h1>
@@ -8,18 +13,23 @@
 
 {% block content %}
     <main class="doc">
-        <h2>Series Information</h2>
+        <div class="flex j-between">
+            <h2>Series Information</h2>
+            <span class="aside-links">
+                <a href="{{ object|admin_edit_url }}" class="admin-action">🕴</a>
+            </span>    
+        </div>
         {% if sourcegroup.description %}
             {{ sourcegroup.description | markdown | safe }}
         {% else %}
-            <p class="muted">(no description)</p>
+            <p class="system-msg">no description</p>
         {% endif %}
         {% if sourcegroup.url %}<a href="{{ sourcegroup.url }}">Web URL</a>{% endif %}
         <div class="flex j-between a-center">
             <h2>Sources from series</h2>
             {% if perms.problems.add_source %}
                 <span class="aside-links">
-                    <a href="{% url 'source_create' %}?group={{ sourcegroup.id }}"
+                    <a href=""
                        title="New Source">+</a>
                 </span>
             {% endif %}
@@ -33,7 +43,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="muted">(no sources)</p>
+            <p class="system-msg">no sources</p>
         {% endif %}
     </main>
 {% endblock %}

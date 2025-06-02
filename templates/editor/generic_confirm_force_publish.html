@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block after_nav %}
+{% if object.is_draft %}
+<div class="draft-header">
+<div class="draft-header-main angry">
+<div class="draft-header-text">
+<div class="draft-header-text-title">
+Confirm force-publish
+</div>
+<div class="draft-header-subtitle muted">
+(for exception use only)
+</div>
+</div>
+</div>
+<div class="draft-header-control">
+<div class="draft-control-attribution">Created by 
+{% if user == object.draft_ref.draft_owner %}
+you
+{% else %}
+<span class="muted">
+{{ object.draft_ref.draft_owner}}
+</span>
+{% endif %}
+</div>
+</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block header %}
+    <h1 id="page-title">Force Publish {{ object }}</h1>
+{% endblock header %}
+
+{% block content %}
+    <main>
+        {% if  object.get_publish_errors %}
+        <h2>Cannot publish due to the following errors</h2>
+        <ul>
+            {% for e in object.get_publish_errors %}
+            <li>
+                {{ e }}
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'user_drafts' pk=user.pk %}" class="button">Back</a>
+        {% else %}
+        
+        <form method="post" id="force-publish-form">
+            {% csrf_token %}
+            <p>Do you really want to publish "{{ object }}"?</p>
+            <p>This is an administrator action. This will be recorded in the object's history</p>
+            {{ form }}
+        </form>
+        <div class="flex row j-between a-center">
+            <a href="{% url 'user_drafts' pk=user.pk %}" class="fbtn">Cancel</a>
+
+            <button type="submit" form="force-publish-form" class="fbtn admin-action">Force-publish</button>
+        </div>
+        {% endif %}
+    </main>
+{% endblock content %}

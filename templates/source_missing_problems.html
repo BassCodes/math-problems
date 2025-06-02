@@ -20,7 +20,7 @@
         </div>
         {% if not source.problem_count %}
             <p>
-                NOTE: This source does not specify how many problems are within. Extrapolating by existing problems. To fix this <a href="{% url 'source_edit' pk=source.pk %}">edit the source</a>
+                NOTE: This source does not specify how many problems are within. Extrapolating by existing problems. To fix this <a href="TODO">edit the source</a>
             </p>
         {% endif %}
         {% if problems %}
@@ -31,16 +31,16 @@
                             <a href="{{ problem.get_absolute_url }}" class="muted">View problem</a>
                         {% else %}
                             {% if perms.problems.add_problem %}
-                                <a href="{% url 'problem_create' %}?src={{ source.pk }}&no={{ forloop.counter }}">Create problem</a>
+                                <a href="{% url 'draft_problem_new' %}?src={{ source.pk }}&no={{ forloop.counter }}">Create problem</a>
                             {% else %}
-                                <div class="muted">(problem not entered)</div>
+                                <div class="system-msg">problem not entered</div>
                             {% endif %}
                         {% endif %}
                     </li>
                 {% endfor %}
             </ol>
         {% else %}
-            <p class="muted">(no problems)</p>
+            <p class="system-msg">no problems</p>
         {% endif %}
     </main>
 {% endblock content %}

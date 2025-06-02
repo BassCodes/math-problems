@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load utility %}
+
+{% block after_nav %}
+<div class="draft-header">
+<div class="draft-header-main">
+<div class="draft-header-text">
+<div class="draft-header-text-title">
+Confirm fork
+</div>
+<div class="draft-header-subtitle system-msg">
+Changes are not published until reviewed
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block header %}
+    <h1 id="page-title">Fork {{ object|verbose_name|title }}</h1>
+{% endblock header %}
+
+{% block content %}
+    <main>
+        {% if existing %}
+        <p>
+            You have already forked this {{ object|verbose_name|title }}.
+        </p>
+        <a href="{{ existing.get_absolute_url }}" class="fbtn">View</a>
+        <a href="{{ existing.get_absolute_edit_url }}" class="fbtn">Edit</a>
+
+        {% else %}
+        <form method="post" id="object-fork-form">
+            {% csrf_token %}
+            <p>Do you want to fork  the {{ object|verbose_name|title}} "{{ object }}"?</p>
+            {{ form }}
+        </form>
+        {% endif %}
+    </main>
+    {% endblock content %}
+    
+    {% block below %}
+    {% if not existing %}
+    <div class="flex row j-between a-center">
+        <a href="{{ object.get_absolute_url }}" class="fbtn">Cancel</a>
+        <button type="submit" form="object-fork-form" class="fbtn">Fork {{ object|verbose_name|title }}</button>
+    </div>
+    {% endif %}
+{% endblock below %}

@@ -1,0 +1,35 @@
+
+{% if object.is_draft %}
+<div class="draft-header">
+<div class="draft-header-main">
+<div class="draft-header-text">
+<div class="draft-header-text-title">
+This is a draft preview
+</div>
+<div class="draft-header-subtitle system-msg">
+viewable to all logged-in users
+</div>
+</div>
+</div>
+<div class="draft-header-control">
+<div class="draft-control-attribution">Created by 
+{% if user == object.draft_ref.draft_owner %}
+you
+{% else %}
+<span class="muted">
+{{ object.draft_ref.draft_owner}}
+</span>
+{% endif %}
+</div>
+<div class="draft-control-buttons">
+<a href="{{ object.get_absolute_edit_url }}" class="fbtn">Edit</a>
+<a href="{{ object.get_absolute_delete_url }}" class="fbtn">Delete</a>
+<a href="" class="fbtn">Request Review</a>
+{% if object.get_absolute_forked_from_url %}
+<a href="{{ object.get_absolute_forked_from_url }}" class="fbtn">View Original</a>
+{% endif %}
+<a href="{{ object.get_absolute_force_publish_url }}" class="fbtn small admin-action">Force Publish</a>
+</div>
+</div>
+</div>
+{% endif %}

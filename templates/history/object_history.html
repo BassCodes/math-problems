@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load markdown_extras %}
+{% load problem_list %}
+
+{% block pagehead %}
+    <link rel="stylesheet" href="{% static 'history_style.css' %}">
+{% endblock pagehead %}
+
+{% block header %}
+    <h1 id="page-title">
+        {{ object.name }}
+    </h1>
+{% endblock header %}
+
+{% block content %}
+    <main class="doc">
+        <h2>{{ object|verbose_name }} History</h2>
+        {% if diffs %}
+            <history-box>
+            <ul>
+                {% for h in diffs %}
+                    <li>
+                        <history-marker></history-marker>
+                        <history-contents>
+                        <history-top>
+                        <history-edit-icon>{{ h.history.history_type }}</history-edit-icon>
+                        <history-edit-name>
+                        {% if h.history.history_type == "+" %}
+                            Created
+                        {% elif h.history.history_type == "~" %}
+                            Edited
+                        {% elif h.history.history_type == "-" %}
+                            Deleted
+                        {% else %}
+                            Unknown action
+                        {% endif %}
+                        </history-edit-name>
+                        <history-inline-text>by</history-inline-text>
+                        <history-user class="muted">{{ h.history.history_user }}</history-user>
+                        <history-time>{{ h.history.history_date|date:"y/m/d g:mA" }}</history-time>
+                        </history-top>
+                        <history-bottom>
+                        {% if h.diff %}
+                            <history-changed>
+                            Changed
+                            {{ h.diff.changed_fields }}
+                            </history-changed>
+                        {% endif %}
+                        </history-bottom>
+                        </history-contents>
+                    </li>
+                {% endfor %}
+            </ul>
+            </history-box>
+        {% else %}
+            <p class="system-msg">No History</p>
+        {% endif %}
+    </main>
+{% endblock content %}

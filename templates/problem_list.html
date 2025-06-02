@@ -21,7 +21,7 @@
                 <h2 class="small-heading smcp tolower">{{ source.get_short_name }}</h2>
                 {% problem_list problem_group ord="true" %}
                 {% empty %}
-                    <p class="muted">(No results found)</p>
+                    <p class="system-msg">No results found</p>
                 {% endfor %}
             </main>
         {% endblock content %}

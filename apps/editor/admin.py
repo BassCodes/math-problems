@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from .models import DraftProblem, DraftSource
+from .models import DraftProblem, DraftSource, DraftSourceGroup, DraftSolution, DraftRef
+
+
+@admin.register(DraftRef)
+class DraftRefAdmin(admin.ModelAdmin):
+    list_display = ("pk", "draft_owner", "draft_created", "draft_edited", "draft_state")
 
 
 @admin.register(DraftProblem)
@@ -31,3 +36,13 @@ class DraftSourceAdmin(admin.ModelAdmin):
         "publish_date",
         "url",
     )
+
+
+@admin.register(DraftSourceGroup)
+class SourceGroupAdmin(admin.ModelAdmin):
+    list_display = ("pk", "name", "description", "url")
+
+
+@admin.register(DraftSolution)
+class SolutionAdmin(admin.ModelAdmin):
+    list_display = ("pk", "problem", "draft_problem", "solution_text")

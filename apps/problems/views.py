@@ -30,7 +30,7 @@ def problem_list_view(request):
 
     query = Q()
     solution_query = Q()
-
+    # TODO reimplement tags
     # filter_by_solution = False
     # if search_form.is_valid():
     #     source_query = Q()
@@ -72,9 +72,7 @@ def problem_list_view(request):
     # Also, without this branch, a bug arises when problems have no
     # solutions. Without the branch those problems would simply be lost.
     context["problems"] = (
-        Problem.objects.prefetch_related("source")
-        .filter(query)
-        .order_by("source", "number")
+        Problem.objects.prefetch_related("source").filter(query).order_by("source", "number")
     )
 
     context["search_form"] = search_form
@@ -141,11 +139,3 @@ class SourceMissingProblemsView(DetailView):
         context["problems"] = ordered_problems_and_blanks
 
         return context
-
-
-def tags_view(request):
-    context = {}
-    # context["techniques"] = Technique.objects.all().order_by("name")
-    # context["types"] = Type.objects.all().order_by("name")
-    # context["branches"] = Branch.objects.all().order_by("name")
-    return render(request, "tag_listing.html", context)

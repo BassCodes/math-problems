@@ -18,6 +18,7 @@ dependencies = [
 
 [tool.ruff]
 extend-exclude = ["migrations"]
+line-length = 120
 
 [tool.djlint]
 blank_line_after_tag="load,endblock,extends"

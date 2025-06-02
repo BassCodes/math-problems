@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+
+{% block after_nav %}
+<div class="draft-header">
+<div class="draft-header-main">
+<div class="draft-header-text">
+<div class="draft-header-text-title">
+Creating a draft
+</div>
+<div class="draft-header-subtitle system-msg">
+contents viewable to all logged-in users
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% load utility %}
+
+{% block header %}
+    <h1 id="page-title">Create {{ form.instance|verbose_name|title }}</h1>
+{% endblock header %}
+
+{% block content %}
+    <main>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Create">
+        </form>
+    </main>
+{% endblock content %}

@@ -18,10 +18,19 @@
                 <li>{{ group.name }}</li>
             {% empty %}
                 <li>
-                    <div class="muted">(No Groups)</div>
+                    <div class="system-msg">No Groups</div>
                 </li>
             {% endfor %}
         </ul>
+        {% if request.user == user %}
+            <a href="{% url 'user_drafts' pk=object.pk  %}" class="fbtn">My Drafts</a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="fbtn" type="submit">Log Out</button>
+                </form>
+        {% else %}
+            <a href="{% url 'user_drafts' pk=object.pk  %}" class="fbtn">View User&rsquo;s Drafts</a>
+        {% endif %}
     </main>
 {% endblock %}
 
