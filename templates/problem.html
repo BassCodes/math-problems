@@ -87,27 +87,25 @@
 {% block sidebar %}
     <div id="sidebar" class="left">
         <div id="sidebar-meta-container">
-            {% if problem.source.pk == problem.source.get_default_pk %}
-            {% else %}
-                <div id="meta-sidebar-title">Other Problems</div>
-                <ol id="meta-source-problem-list">
-                    {% for p in problem.source.get_problems %}
-                        <li value="{{ p.number }}"
-                            {% if p.number == problem.number %}id="meta-current-problem-no"{% endif %}>
-                            <a href="{{ p.get_absolute_url }}"
-                               {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
-                        </li>
-                    {% endfor %}
-                </ol>
-                <div id="next-prev-button-box">
-                    <a href="{{ problem.get_prev.get_absolute_url }}"
-                       class="next button"
-                       {% if problem.get_prev.get_absolute_url is None %}inert{% endif %}>Previous</a>
-                    <a href="{{ problem.get_next.get_absolute_url }}"
-                       class="prev button"
-                       {% if problem.get_next.get_absolute_url is None %}inert{% endif %}>Next</a>
-                </div>
-            {% endif %}
+
+            <div id="meta-sidebar-title">Other Problems</div>
+            <ol id="meta-source-problem-list">
+                {% for p in problem.source.get_problems %}
+                    <li value="{{ p.number }}"
+                        {% if p.number == problem.number %}id="meta-current-problem-no"{% endif %}>
+                        <a href="{{ p.get_absolute_url }}"
+                            {% if p.number == problem.number %}inert{% endif %}>Problem {{ p.number }}</a>
+                    </li>
+                {% endfor %}
+            </ol>
+            <div id="next-prev-button-box">
+                <a href="{{ problem.get_prev.get_absolute_url }}"
+                    class="next button"
+                    {% if problem.get_prev.get_absolute_url is None %}inert{% endif %}>Previous</a>
+                <a href="{{ problem.get_next.get_absolute_url }}"
+                    class="prev button"
+                    {% if problem.get_next.get_absolute_url is None %}inert{% endif %}>Next</a>
+            </div>
         </div>
         <div id="sidebar-meta-container">
             <div id="meta-sidebar-title">Meta</div>

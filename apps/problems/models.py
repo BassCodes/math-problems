@@ -2,17 +2,6 @@ from django.db import models
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
 
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=128)
-    description = models.TextField()
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveBigIntegerField()
-    content_object = GenericForeignKey("content_type", "object_id")
-
 
 class SourceGroup(models.Model):
     """
@@ -25,6 +14,7 @@ class SourceGroup(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
+    history = HistoricalRecords(app="history")
 
     def __str__(self):
         return self.name[:50]
@@ -60,14 +50,6 @@ class Source(models.Model):
     class Meta:
         ordering = ["parent", "name"]
         unique_together = [["shortname", "subtitle"], ["name", "subtitle"]]
-
-    # Source https://stackoverflow.com/a/62697872
-    @classmethod
-    def get_default_pk(cls):
-        source, created = cls.objects.get_or_create(
-            name="Assorted",
-        )
-        return source.pk
 
     def get_problems(self):
         return self.problems.order_by("number")
@@ -111,7 +93,6 @@ class Problem(models.Model):
     source = models.ForeignKey(
         Source,
         on_delete=models.CASCADE,
-        default=Source.get_default_pk,
         related_name="problems",
     )
     number = models.PositiveSmallIntegerField()
